@@ -14,5 +14,6 @@ namespace SchoolWebAPI.Models
         public Int16 YearLevel { get; set; }
         public DateTime BirthDate { get; set; }
         public string Gender { get; set; }
+        public byte[] Photo { get; set; }
     }
 }
