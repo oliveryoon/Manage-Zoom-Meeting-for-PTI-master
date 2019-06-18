@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using SchoolWebApi.Models.SickBays;
 using SchoolWebAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace School_Web_Api.Controllers
 {
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SickBaysController : ControllerBase
@@ -29,10 +31,10 @@ namespace School_Web_Api.Controllers
         }
 
         // GET: api/SickBays/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<SickBay>> GetSickBay(int id)
+        [HttpGet("{seq}")]
+        public async Task<ActionResult<SickBay>> GetSickBay(int seq)
         {
-            var sickBay = await _context.SickBays.FindAsync(id);
+            var sickBay = await _context.SickBays.FindAsync(seq);
 
             if (sickBay == null)
             {
@@ -43,10 +45,10 @@ namespace School_Web_Api.Controllers
         }
 
         // PUT: api/SickBays/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutSickBay(int id, SickBay sickBay)
+        [HttpPut("{seq}")]
+        public async Task<IActionResult> PutSickBay(int seq, SickBay sickBay)
         {
-            if (id != sickBay.Id)
+            if (seq != sickBay.Seq)
             {
                 return BadRequest();
             }
@@ -59,7 +61,7 @@ namespace School_Web_Api.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!SickBayExists(id))
+                if (!SickBayExists(seq))
                 {
                     return NotFound();
                 }
@@ -72,21 +74,30 @@ namespace School_Web_Api.Controllers
             return NoContent();
         }
 
+        //// POST: api/SickBays
+        //[HttpPost]
+        //public async Task<ActionResult<SickBay>> PostSickBay(SickBay sickBay)
+        //{
+        //    _context.SickBays.Add(sickBay);
+        //    await _context.SaveChangesAsync();
+
+        //    return CreatedAtAction("GetSickBay", new { id = sickBay.Id }, sickBay);
+        //}
+
         // POST: api/SickBays
         [HttpPost]
-        public async Task<ActionResult<SickBay>> PostSickBay(SickBay sickBay)
+        public async Task<ActionResult<SickBay>> PostSickBay(SickBaySimple sickBay)
         {
-            _context.SickBays.Add(sickBay);
+            _context.UpdateSickBayInOutAsync(sickBay);
             await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetSickBay", new { id = sickBay.Id }, sickBay);
+            return CreatedAtAction("GetSickBay", new { seq = sickBay.Seq }, sickBay);
         }
 
         // DELETE: api/SickBays/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<SickBay>> DeleteSickBay(int id)
+        [HttpDelete("{seq}")]
+        public async Task<ActionResult<SickBay>> DeleteSickBay(int seq)
         {
-            var sickBay = await _context.SickBays.FindAsync(id);
+            var sickBay = await _context.SickBays.FindAsync(seq);
             if (sickBay == null)
             {
                 return NotFound();
@@ -98,9 +109,9 @@ namespace School_Web_Api.Controllers
             return sickBay;
         }
 
-        private bool SickBayExists(int id)
+        private bool SickBayExists(int seq)
         {
-            return _context.SickBays.Any(e => e.Id == id);
+            return _context.SickBays.Any(e => e.Seq == seq);
         }
     }
 }

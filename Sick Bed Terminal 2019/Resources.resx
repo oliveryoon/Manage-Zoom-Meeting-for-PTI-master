@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="aadInstance" xml:space="preserve">
+    <value />
+  </data>
   <data name="AbsenceEventTypeCode" xml:space="preserve">
     <value>SignOut,SignIn</value>
   </data>
@@ -125,6 +128,21 @@
   </data>
   <data name="AbsenceTypeCode" xml:space="preserve">
     <value>Pa S</value>
+  </data>
+  <data name="App ID URI" xml:space="preserve">
+    <value />
+  </data>
+  <data name="appKey" xml:space="preserve">
+    <value>N+fr2qatwEw7m30iU+gZrIbwk*ETMk+G</value>
+  </data>
+  <data name="BaseAPIAddress" xml:space="preserve">
+    <value>https://webapi.joeys.org</value>
+  </data>
+  <data name="clientId" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tenant" xml:space="preserve">
+    <value>joeysorg.onmicrosoft.com</value>
   </data>
   <data name="Terminal_Code" xml:space="preserve">
     <value>HEALTH_CENTRE</value>

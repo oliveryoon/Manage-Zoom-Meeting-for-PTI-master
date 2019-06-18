@@ -22,7 +22,7 @@ namespace SchoolWebAPI.Models
         /// Gets or sets to product detail by product Id property.  
         /// </summary>  
         [Display(Name = "SickBay Simple")]
-        public UspSickBayInOutUpdate SickBaySimple { get; set; }
+        public UspSickBayInOutUpdate SickBayUpdate { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,37 +36,46 @@ namespace SchoolWebAPI.Models
             modelBuilder.Entity<Student>().Property(s => s.Id).HasColumnName("StudentID");
             modelBuilder.Entity<Student>().Property(s => s.Photo).HasColumnName("Photo");
 
-            modelBuilder.Entity<SickBay>().ToTable("vMedicalIncidents", "dbo"); //8213
+            modelBuilder.Entity<SickBay>().ToTable("uvMedicalIncidents", "webapi"); //8213
+            modelBuilder.Entity<SickBay>().Property(s => s.Seq).HasColumnName("Seq");
+            modelBuilder.Entity<SickBay>().Property(s => s.Id).HasColumnName("ID");
             modelBuilder.Entity<SickBay>().Property(s => s.IncidentDate).HasColumnName("IncidentDate");
-            modelBuilder.Entity<SickBay>().Property(s => s.TimeIn).HasColumnName("CheckIn");
-            modelBuilder.Entity<SickBay>().Property(s => s.TimeOut).HasColumnName("CheckOut");
+            modelBuilder.Entity<SickBay>().Property(s => s.TimeIn).HasColumnName("TimeIn");
+            modelBuilder.Entity<SickBay>().Property(s => s.TimeOut).HasColumnName("TimeOut");
             modelBuilder.Entity<SickBay>().Property(s => s.DateModified).HasColumnName("ModifiedDate");
             modelBuilder.Entity<SickBay>().Property(s => s.UsernameModified).HasColumnName("ModifiedBy");
 
             modelBuilder.Query<UspSickBayInOutUpdate>();
         }
-        #region Get products whose price is greater than equal to 1000 store procedure method.  
+        #region Create Sign In and Sign Out.  
 
         /// <summary>  
-        /// Get products whose price is greater than equal to 1000 store procedure method.  
+        /// Create Sign In and Sign Out.  
         /// </summary>  
-        /// <returns>Returns - List of products whose price is greater than equal to 1000</returns>  
-        public async void PostSickBayInOutUpdate(SickBaySimple sickBay)
+        /// <returns>Returns - Incident Record created or updated.</returns>  
+        public SickBaySimple UpdateSickBayInOutAsync(SickBaySimple sickBaySimple)
         {
             // Initialization.              
 
             try
             {
                 // Set params.
-                SqlParameter iDParam = new SqlParameter("@ID", sickBay.Id);
-                SqlParameter incidentDateParam = new SqlParameter("@IncidentDate", sickBay.IncidentDate);
-                SqlParameter timeParam = new SqlParameter("@Time", sickBay.Time);
-                SqlParameter usernameParam = new SqlParameter("@Username", sickBay.UsernameModified);
+                SqlParameter iDParam = new SqlParameter("@ID", sickBaySimple.Id);
+                SqlParameter incidentDateParam = new SqlParameter("@IncidentDate", sickBaySimple.IncidentDate);
+                SqlParameter timeParam = new SqlParameter("@Time", sickBaySimple.Time);
+                SqlParameter usernameParam = new SqlParameter("@Username", sickBaySimple.UsernameModified);
+                SqlParameter venueCodeParam = new SqlParameter("@VenueCode", "test");
 
                 // Processing.  
-                string sqlQuery = "EXEC [dbo].[GetProductByPriceGreaterThan1000] @ID, @IncidentDate, @Time, @Username";
+                string sqlQuery = "EXEC webapi.uspSickBayInOutUpdate @ID, @IncidentDate, @Time, @Username, @VenueCode";
 
-                await this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam).ToListAsync();
+                //Task<int> x = this.Database.ExecuteSqlCommandAsync(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam);
+                //await this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam).ToListAsync();
+                var sickbayInOut = this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam).FirstOrDefault();
+                sickBaySimple.Seq = sickbayInOut.Seq;
+                return sickBaySimple;
+
+
             }
             catch (Exception ex)
             {

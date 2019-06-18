@@ -61,6 +61,15 @@ namespace Sick_Bed_Terminal_2019 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string aadInstance {
+            get {
+                return ResourceManager.GetString("aadInstance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SignOut,SignIn.
         /// </summary>
         internal static string AbsenceEventTypeCode {
@@ -84,6 +93,51 @@ namespace Sick_Bed_Terminal_2019 {
         internal static string AbsenceTypeCode {
             get {
                 return ResourceManager.GetString("AbsenceTypeCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string App_ID_URI {
+            get {
+                return ResourceManager.GetString("App ID URI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to N+fr2qatwEw7m30iU+gZrIbwk*ETMk+G.
+        /// </summary>
+        internal static string appKey {
+            get {
+                return ResourceManager.GetString("appKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://webapi.joeys.org.
+        /// </summary>
+        internal static string BaseAPIAddress {
+            get {
+                return ResourceManager.GetString("BaseAPIAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string clientId {
+            get {
+                return ResourceManager.GetString("clientId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to joeysorg.onmicrosoft.com.
+        /// </summary>
+        internal static string tenant {
+            get {
+                return ResourceManager.GetString("tenant", resourceCulture);
             }
         }
         
