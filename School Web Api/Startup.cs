@@ -47,7 +47,7 @@ namespace SchoolWebApi
             {
                 app.UseDeveloperExceptionPage();
             }
-
+           
             app.UseAuthentication();
             app.UseMvc();
         }

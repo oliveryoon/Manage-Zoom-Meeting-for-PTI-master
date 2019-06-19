@@ -42,8 +42,8 @@ namespace SchoolWebAPI.Models
             modelBuilder.Entity<SickBay>().Property(s => s.IncidentDate).HasColumnName("IncidentDate");
             modelBuilder.Entity<SickBay>().Property(s => s.TimeIn).HasColumnName("TimeIn");
             modelBuilder.Entity<SickBay>().Property(s => s.TimeOut).HasColumnName("TimeOut");
-            modelBuilder.Entity<SickBay>().Property(s => s.DateModified).HasColumnName("ModifiedDate");
-            modelBuilder.Entity<SickBay>().Property(s => s.UsernameModified).HasColumnName("ModifiedBy");
+            modelBuilder.Entity<SickBay>().Property(s => s.DateModified).HasColumnName("DateModified");
+            modelBuilder.Entity<SickBay>().Property(s => s.UsernameModified).HasColumnName("UsernameModified");
 
             modelBuilder.Query<UspSickBayInOutUpdate>();
         }

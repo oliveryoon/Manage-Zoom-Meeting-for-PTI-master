@@ -44,6 +44,21 @@ namespace School_Web_Api.Controllers
             return sickBay;
         }
 
+        // GET: api/SickBaysById/5
+        [Route("{id:int}/details")]        
+        public async Task<ActionResult<SickBay>> GetSickBayDetail(int id)
+        {            
+            var sickBay = await _context.SickBays.Where(x => x.Id == id && x.TimeOut == null).FirstOrDefaultAsync();
+
+            if (sickBay == null)
+            {
+                return NotFound();
+            }
+
+            return sickBay;
+        }
+
+
         // PUT: api/SickBays/5
         [HttpPut("{seq}")]
         public async Task<IActionResult> PutSickBay(int seq, SickBay sickBay)
