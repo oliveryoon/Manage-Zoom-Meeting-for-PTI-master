@@ -17,7 +17,7 @@ namespace SchoolWebApi.Models.SickBays
         public DateTime DateModified { get; set; }
         public string UsernameModified { get; set; }        
     }
-    public class SickBaySimple // for Time in/out SickBay.
+    public class SickBayDTO // for Time in/out SickBay.
     {
         [Key]
         public int Seq { get; set; }

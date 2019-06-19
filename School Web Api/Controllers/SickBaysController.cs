@@ -101,7 +101,7 @@ namespace School_Web_Api.Controllers
 
         // POST: api/SickBays
         [HttpPost]
-        public async Task<ActionResult<SickBay>> PostSickBay(SickBaySimple sickBay)
+        public async Task<ActionResult<SickBay>> PostSickBay(SickBayDTO sickBay)
         {
             _context.UpdateSickBayInOutAsync(sickBay);
             await _context.SaveChangesAsync();

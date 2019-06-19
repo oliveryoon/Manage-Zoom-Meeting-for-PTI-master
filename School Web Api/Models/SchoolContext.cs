@@ -53,7 +53,7 @@ namespace SchoolWebAPI.Models
         /// Create Sign In and Sign Out.  
         /// </summary>  
         /// <returns>Returns - Incident Record created or updated.</returns>  
-        public SickBaySimple UpdateSickBayInOutAsync(SickBaySimple sickBaySimple)
+        public SickBayDTO UpdateSickBayInOutAsync(SickBayDTO sickBaySimple)
         {
             // Initialization.              
 
