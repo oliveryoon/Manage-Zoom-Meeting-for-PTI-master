@@ -65,13 +65,14 @@ namespace SchoolWebAPI.Models
                 SqlParameter timeParam = new SqlParameter("@Time", sickBaySimple.Time);
                 SqlParameter usernameParam = new SqlParameter("@Username", sickBaySimple.UsernameModified);
                 SqlParameter venueCodeParam = new SqlParameter("@VenueCode", "test");
-
+                SqlParameter RequestedJobCodeParam = new SqlParameter("@RequestedJobCode", sickBaySimple.RequestedJobCode);
+                
                 // Processing.  
-                string sqlQuery = "EXEC webapi.uspSickBayInOutUpdate @ID, @IncidentDate, @Time, @Username, @VenueCode";
+                string sqlQuery = "EXEC webapi.uspSickBayInOutUpdate @ID, @IncidentDate, @Time, @Username, @VenueCode, @RequestedJobCode";
 
                 //Task<int> x = this.Database.ExecuteSqlCommandAsync(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam);
                 //await this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam).ToListAsync();
-                var sickbayInOut = this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam).FirstOrDefault();
+                var sickbayInOut = this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam, RequestedJobCodeParam).FirstOrDefault();
                 sickBaySimple.Seq = sickbayInOut.Seq;
                 return sickBaySimple;
 

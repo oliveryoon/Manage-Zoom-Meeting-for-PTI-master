@@ -20,6 +20,7 @@ namespace Sick_Bed_Terminal_2019.Models.SickBays
         public int Id { get; set; }
         public DateTime IncidentDate { get; set; }
         public TimeSpan Time { get; set; }
+        public string RequestedJobCode { get; set; }
         public string UsernameModified { get; set; }
     }
 }

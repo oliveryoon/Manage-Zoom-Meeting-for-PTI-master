@@ -27,7 +27,7 @@ namespace School_Web_Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SickBay>>> GetSickBays()
         {
-            return await _context.SickBays.Take(10).ToListAsync();
+            return await _context.SickBays.Take(10).OrderBy(x=>x.IncidentDate).ThenBy(x=>x.TimeIn).ThenBy(x=>x.TimeOut).ToListAsync();
         }
 
         // GET: api/SickBays/5
@@ -43,12 +43,11 @@ namespace School_Web_Api.Controllers
 
             return sickBay;
         }
-
-        // GET: api/SickBaysById/5
-        [Route("{id:int}/details")]        
+        // GET: api/SickBays/5/detail
+        [Route("detail/{id:int}")]
         public async Task<ActionResult<SickBay>> GetSickBayDetail(int id)
-        {            
-            var sickBay = await _context.SickBays.Where(x => x.Id == id && x.TimeOut == null).FirstOrDefaultAsync();
+        {
+            var sickBay = await _context.SickBays.Where(x => x.Id == id && x.TimeOut == new TimeSpan()).FirstOrDefaultAsync();
 
             if (sickBay == null)
             {
@@ -57,7 +56,50 @@ namespace School_Web_Api.Controllers
 
             return sickBay;
         }
+        // GET: api/SickBays/5/detail
+        // Incident Details by ID.
+        [Route("{id:int}/detailById")]        
+        public async Task<ActionResult<SickBay>> GetSickBayDetailByID(int id)
+        {            
+            var sickBay = await _context.SickBays.Where(x => x.Id == id && x.TimeOut == new TimeSpan()).FirstOrDefaultAsync();
 
+            if (sickBay == null)
+            {
+                return NotFound();
+            }
+
+            return sickBay;
+        }
+        // GET: api/SickBays/5/StatusById
+        // This will return the current acceptable sick bay status by student Id.
+        [Route("{id:int}/StatusById")]
+        public async Task<ActionResult<SickBayStatusDTO>> GetSickBayStatusByID(int id)
+        {
+            var sickBay = await _context.SickBays.Where(x => x.Id == id && x.TimeOut == new TimeSpan()).FirstOrDefaultAsync();
+
+            // P => Pending Check out because he signed in yesterday or before. The student must check out first. 
+            // I=> It is ok to sign in.
+            // O=> It is ok to sign out.
+            SickBayStatusDTO dto = new SickBayStatusDTO();
+            dto.Id = id;
+            if (sickBay == null)
+            {
+                dto.Code = "SI";
+                dto.Description = "Sign In";
+            }
+            else if (sickBay.IncidentDate.Day != DateTime.Now.Day) //not at the same day, then a nurse must have a look at it.
+            {
+                dto.Code = "PN";
+                dto.Description = "Overdue. Please see a nurse for sign out first.";
+            }
+            else
+            {
+                dto.Code = "SO";
+                dto.Description = "Sign Out";
+            }
+                       
+            return dto;
+        }
 
         // PUT: api/SickBays/5
         [HttpPut("{seq}")]
@@ -100,12 +142,20 @@ namespace School_Web_Api.Controllers
         //}
 
         // POST: api/SickBays
+        // Create a sick bay entry in Synergetic and sign out a student as well.
         [HttpPost]
         public async Task<ActionResult<SickBay>> PostSickBay(SickBayDTO sickBay)
         {
-            _context.UpdateSickBayInOutAsync(sickBay);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction("GetSickBay", new { seq = sickBay.Seq }, sickBay);
+            try
+            {
+                _context.UpdateSickBayInOutAsync(sickBay);
+                await _context.SaveChangesAsync();
+                return CreatedAtAction("GetSickBay", new { seq = sickBay.Seq }, sickBay);
+            }
+            catch (Exception e)
+            {
+                return new SickBay { Id = 0, DateModified = DateTime.Now, IncidentDate = DateTime.Now, Seq = 0, TimeIn = new TimeSpan(), TimeOut = new TimeSpan(), UsernameModified = e.Message.Substring(50) };
+            }
         }
 
         // DELETE: api/SickBays/5
