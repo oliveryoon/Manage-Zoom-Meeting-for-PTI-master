@@ -11,7 +11,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace School_Web_Api.Controllers
 {
-    //[Authorize]
+    //[Authorize(Roles = "sec.All Staff")]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SickBaysController : ControllerBase
@@ -75,14 +76,15 @@ namespace School_Web_Api.Controllers
         [Route("{id:int}/StatusById")]
         public async Task<ActionResult<SickBayStatusDTO>> GetSickBayStatusByID(int id)
         {
-            var sickBay = await _context.SickBays.Where(x => x.Id == id && x.TimeOut == new TimeSpan()).FirstOrDefaultAsync();
+            var sickBay = await _context.SickBays.Where(x => x.Id == id).OrderByDescending(x=>x.DateModified).FirstOrDefaultAsync();
+            //var sickBay = await _context.SickBays.Where(x => x.Id == id && x.TimeOut == new TimeSpan()).FirstOrDefaultAsync();
 
             // P => Pending Check out because he signed in yesterday or before. The student must check out first. 
             // I=> It is ok to sign in.
             // O=> It is ok to sign out.
             SickBayStatusDTO dto = new SickBayStatusDTO();
             dto.Id = id;
-            if (sickBay == null)
+            if (sickBay == null || sickBay.TimeIn != new TimeSpan() && sickBay.TimeOut != new TimeSpan())
             {
                 dto.Code = "SI";
                 dto.Description = "Sign In";

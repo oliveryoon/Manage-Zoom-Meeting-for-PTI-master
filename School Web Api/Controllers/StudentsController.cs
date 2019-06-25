@@ -10,7 +10,8 @@ using SchoolWebAPI.Models;
 
 namespace School_Web_Api.Controllers
 {
-    //[Authorize]
+    //[Authorize(Roles = "sec.All Staff")]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class StudentsController : ControllerBase
@@ -105,3 +106,4 @@ namespace School_Web_Api.Controllers
         }
     }
 }
+

@@ -14,6 +14,7 @@ namespace School_Web_Api.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
+            var test = User.Identity;
             return new string[] { "value1", "value2" };
         }
 

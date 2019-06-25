@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SchoolWebAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Web;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SchoolWebApi
 {
@@ -31,13 +33,17 @@ namespace SchoolWebApi
             services.AddDbContext<SchoolContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddAuthentication(sharedOptions =>
-            {
-                sharedOptions.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddAzureAdBearer(options => Configuration.Bind("AzureAd", options));
+            //services.AddAuthentication(sharedOptions =>
+            //{
+            //    sharedOptions.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            //})
+            //.AddAzureAdBearer(options => Configuration.Bind("AzureAd", options));
 
-            services.AddMvc();
+            //services.AddMvc();
+
+            services.AddProtectWebApiWithMicrosoftIdentityPlatformV2(Configuration);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

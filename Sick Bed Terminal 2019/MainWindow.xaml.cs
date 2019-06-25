@@ -70,13 +70,16 @@ namespace Sick_Bed_Terminal_2019
         string graphAPIEndpoint = "https://graph.microsoft.com/v1.0/me";
 
         //Set the scope for API call to user.read
-        string[] scopes = new string[] { "user.read" };
+        //string[] scopes = new string[] { "user.read" };
+        string[] scopes = new string[] { "https://joeysorg.onmicrosoft.com/WebApi/user_impersonation" };       
 
 
         private MediaPlayer mediaPlayer = new MediaPlayer();
         //private static HttpClient httpClient = new HttpClient();
 
-        const string WebApiBaseAddress = "http://localhost:5000";
+        //const string WebApiBaseAddress = "http://localhost:5000";
+        const string WebApiBaseAddress = "https://webapi.joeys.org";
+        //private static AuthenticationContext authContext = null;
 
         public MainWindow()
         {
@@ -142,6 +145,7 @@ namespace Sick_Bed_Terminal_2019
             }
             return "";
         }
+        
         /// <summary>
         /// Perform an HTTP GET request to a URL using an HTTP Authorization header
         /// </summary>
@@ -199,10 +203,9 @@ namespace Sick_Bed_Terminal_2019
                 //TokenInfoText.Text += $"Token Expires: {authResult.ExpiresOn.ToLocalTime()}" + Environment.NewLine;
             }
         }
-        private void txtCardNumber_KeyUp(object sender, KeyEventArgs e)
+        private async void txtCardNumber_KeyUp(object sender, KeyEventArgs e)
         {
-            
-            
+
             
             PasswordBox txt = (PasswordBox)txtCardNumber;
             if (e != null && e.Key == Key.Enter)
@@ -210,13 +213,16 @@ namespace Sick_Bed_Terminal_2019
 
                 if (txt.Password != "")
                 {
+                    //get a token.
+                    token = await GetToken();
+
 
                     int studentId = 0;
                     //txtCardNumber.Password = "8213";
                     int.TryParse(txtCardNumber.Password, out studentId);
                     StudentId = studentId;
-                    DisplayStudentDetails(StudentId);
-                    DisplayStudentMedicalIncidentStatus(StudentId);
+                    DisplayStudentDetails(StudentId, token);
+                    DisplayStudentMedicalIncidentStatus(StudentId, token);
                     //                    UpdateSickBay(Id);
                 }
 
@@ -227,8 +233,9 @@ namespace Sick_Bed_Terminal_2019
         }
         private int StudentId { get; set; }
         private string RequestedJobCode { get; set; }
+        private string token { get; set; }
 
-        private async void DisplayStudentDetails(int Id)
+        private async void DisplayStudentDetails(int Id, string token)
         {
             var httpClient = new System.Net.Http.HttpClient();
             System.Net.Http.HttpResponseMessage response;
@@ -238,10 +245,9 @@ namespace Sick_Bed_Terminal_2019
             try
             {
                 string url = WebApiBaseAddress + "/api/Students/{0}";
+                //url = WebApiBaseAddress + "/api/values";
                 url = string.Format(url, Id);
-
-                //get a token.
-                string token = await GetToken();
+                               
 
                 var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, url);
                 //Add the token in Authorization header
@@ -293,7 +299,7 @@ namespace Sick_Bed_Terminal_2019
             }
         }
 
-        private async void DisplayStudentMedicalIncidentStatus(int Id)
+        private async void DisplayStudentMedicalIncidentStatus(int Id, string token)
         {
 
             var httpClient = new System.Net.Http.HttpClient();
@@ -308,11 +314,7 @@ namespace Sick_Bed_Terminal_2019
 
                 string url = WebApiBaseAddress + "/api/SickBays/{0}/StatusById";
                 url = string.Format(url, Id);
-
-                //get a token.
-                string token = await GetToken();
-
-
+                                
                 var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, url);
                 //Add the token in Authorization header
                 request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
@@ -386,10 +388,10 @@ namespace Sick_Bed_Terminal_2019
             Uri uri = ResourceAccessor.GetFileUri("Assets/Joeys Terminal.JPG");
             imgStudentPhoto.Source = new BitmapImage(uri);
 
-            txtStudentName.Text = string.Empty;
+            ////txtStudentName.Text = string.Empty;
 
 
-            StudentId = 0;
+            //StudentId = 0;
             RequestedJobCode = string.Empty;
             lblMsg.Content = string.Empty;
             btnCancel.IsEnabled = false;

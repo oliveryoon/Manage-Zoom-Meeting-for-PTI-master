@@ -29,4 +29,8 @@
     <Folder Include="Models\Sports\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Microsoft.Identity.Web\Microsoft.Identity.Web.csproj" />
+  </ItemGroup>
+
 </Project>
