@@ -77,8 +77,8 @@ namespace Sick_Bed_Terminal_2019
         private MediaPlayer mediaPlayer = new MediaPlayer();
         //private static HttpClient httpClient = new HttpClient();
 
-        //const string WebApiBaseAddress = "http://localhost:5000";
-        const string WebApiBaseAddress = "https://webapi.joeys.org";
+        const string WebApiBaseAddress = "http://localhost:5000";
+        //const string WebApiBaseAddress = "https://webapi.joeys.org";
         //private static AuthenticationContext authContext = null;
 
         public MainWindow()
@@ -264,7 +264,7 @@ namespace Sick_Bed_Terminal_2019
                     if (student == null)
                     {
 
-                        ActionWhenFailed(true);
+                        ActionWhenFailed(true, "Student Not found");
 
                         return;
                     }
@@ -292,10 +292,14 @@ namespace Sick_Bed_Terminal_2019
                     }
 
                 }
+                else
+                {
+                    ActionWhenFailed(true, response.StatusCode.ToString());
+                }
             }
             catch (Exception e)
             {
-                ActionWhenFailed(true);
+                ActionWhenFailed(true, e.Message);
             }
         }
 
@@ -330,48 +334,58 @@ namespace Sick_Bed_Terminal_2019
                     // Show Failed message.
                     if (status == null)
                     {
-                        ActionWhenFailed(true);
+                        ActionWhenFailed(true, status.Description);
 
                         return;
                     }
                     else
                     {
-                        RequestedJobCode = status.Code; // need this code when update requested.
+                        if (status.Code == "SI") // current status is SI, then requested job will be sign out.
+                        {
+                            RequestedJobCode = "SO"; // need this code when update requested.
+                        }
+                            
+                        else if (status.Code == "SO")
+                            RequestedJobCode = "SI"; // need this code when update requested.
+                        else
+                            RequestedJobCode = "";
 
                         if (status.Code == "SI" || status.Code == "SO")
                         {
-                            btnSignInOut.Content = status.Description;
+                            btnSignInOut.Content = RequestedJobCode == "SO"? "Sign Out": "Sign In";
                             btnSignInOut.IsEnabled = true;
                             btnCancel.IsEnabled = true;
                             
                         }
 
-                        else if (status.Code == "PN")
+                        else //if (status.Code == "PN" || "ER" )
                         {
                             btnCancel.IsEnabled = true;
                             btnSignInOut.IsEnabled = false;
                             lblMsg.Content = status.Description;
 
-                            ActionWhenFailed(true);
+                            ActionWhenFailed(true, status.Description);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                ActionWhenFailed(true);
+                ActionWhenFailed(true, ex.Message);
             }
         }
-        private void ActionWhenFailed(bool ClearAllFlag)
+        private void ActionWhenFailed(bool clearAllFlag, string message)
         {
             
             Uri uri = ResourceAccessor.GetFileUri("Assets/Fail sound effect 3.wav");
             PlaySound(uri);
 
-            if (ClearAllFlag)
+            if (clearAllFlag)
             {
                 ClearAllControls();
             }
+
+            lblMsg.Content = message;
 
         }
         private void ActionWhenSucceeded()
@@ -384,7 +398,7 @@ namespace Sick_Bed_Terminal_2019
         }
         private void ClearAllControls()
         {
-            txtCardNumber.Password = "";
+            //txtCardNumber.Password = "";
             Uri uri = ResourceAccessor.GetFileUri("Assets/Joeys Terminal.JPG");
             imgStudentPhoto.Source = new BitmapImage(uri);
 
@@ -450,12 +464,17 @@ namespace Sick_Bed_Terminal_2019
                 }
                 else
                 {
-                    ActionWhenFailed(false);
+                    var content = await response.Content.ReadAsStringAsync();
+                    SickBay sickBay = JsonConvert.DeserializeObject<SickBay>(content);
+                    if (sickBay != null)
+                        ActionWhenFailed(false, sickBay.Description);
+                    else
+                        ActionWhenFailed(false, "Failed. Try again");
                 }
             }
             catch (Exception e)
             {
-                ActionWhenFailed(false);
+                ActionWhenFailed(false, e.Message);
             }
 
 

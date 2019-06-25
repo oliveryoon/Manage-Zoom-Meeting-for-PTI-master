@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Sick_Bed_Terminal_2019.Models.SickBays
+namespace SchoolWebApi.Models.SickBays
 {
-    class SickBayStatusDTO
+    public class UspSickBayStatusSelect
     {
         public int Id { get; set; }
         public string Code { get; set; } // ER => Pending Check out. The student must check out first. A=> The student didn't sign out and a nurse must sign out because he signed in yesterday. 

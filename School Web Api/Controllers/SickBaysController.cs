@@ -76,31 +76,51 @@ namespace School_Web_Api.Controllers
         [Route("{id:int}/StatusById")]
         public async Task<ActionResult<SickBayStatusDTO>> GetSickBayStatusByID(int id)
         {
-            var sickBay = await _context.SickBays.Where(x => x.Id == id).OrderByDescending(x=>x.DateModified).FirstOrDefaultAsync();
-            //var sickBay = await _context.SickBays.Where(x => x.Id == id && x.TimeOut == new TimeSpan()).FirstOrDefaultAsync();
+            
 
-            // P => Pending Check out because he signed in yesterday or before. The student must check out first. 
-            // I=> It is ok to sign in.
-            // O=> It is ok to sign out.
-            SickBayStatusDTO dto = new SickBayStatusDTO();
-            dto.Id = id;
-            if (sickBay == null || sickBay.TimeIn != new TimeSpan() && sickBay.TimeOut != new TimeSpan())
+            try
             {
-                dto.Code = "SI";
-                dto.Description = "Sign In";
+
+                SickBayStatusDTO dto = _context.GetSickBayStatusAsync(id);
+                await _context.SaveChangesAsync();
+                return dto;
+                
+                ////var sickBay = await _context.SickBays.Where(x => x.Id == id).OrderByDescending(x => x.DateModified).FirstOrDefaultAsync();
+                //////var sickBay = await _context.SickBays.Where(x => x.Id == id && x.TimeOut == new TimeSpan()).FirstOrDefaultAsync();
+
+                ////// P => Pending Check out because he signed in yesterday or before. The student must check out first. 
+                ////// I=> It is ok to sign in.
+                ////// O=> It is ok to sign out.
+
+                ////dto.Id = id;
+                ////if (sickBay != null && (System.DateTime.Now.Ticks - sickBay.DateModified.Ticks) <= 20)
+                ////{
+                ////    dto.Code = "ER";
+                ////    dto.Description = "Scaned just. Please try again later.";
+                ////}
+                ////else if (sickBay == null || sickBay.TimeIn != new TimeSpan() && sickBay.TimeOut != new TimeSpan())
+                ////{
+                ////    dto.Code = "SI";
+                ////    dto.Description = "Sign In";
+                ////}
+                ////else if (sickBay.IncidentDate.Day != DateTime.Now.Day) //not at the same day, then a nurse must have a look at it.
+                ////{
+                ////    dto.Code = "ER";
+                ////    dto.Description = "Overdue. Please see a nurse for sign out first.";
+                ////}
+                ////else
+                ////{
+                ////    dto.Code = "SO";
+                ////    dto.Description = "Sign Out";
+                ////}
+
+                ////return dto;
             }
-            else if (sickBay.IncidentDate.Day != DateTime.Now.Day) //not at the same day, then a nurse must have a look at it.
+            catch (Exception e)
             {
-                dto.Code = "PN";
-                dto.Description = "Overdue. Please see a nurse for sign out first.";
+                throw new Exception(e.Message);
             }
-            else
-            {
-                dto.Code = "SO";
-                dto.Description = "Sign Out";
-            }
-                       
-            return dto;
+            
         }
 
         // PUT: api/SickBays/5

@@ -23,7 +23,8 @@ namespace SchoolWebAPI.Models
         /// </summary>  
         [Display(Name = "SickBay Simple")]
         public UspSickBayInOutUpdate SickBayUpdate { get; set; }
-
+        [Display(Name = "SickBay Simple")]
+        public UspSickBayStatusSelect SickBayStatus { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Student>().ToTable("uvStudents", "webapi"); //8213
@@ -44,8 +45,11 @@ namespace SchoolWebAPI.Models
             modelBuilder.Entity<SickBay>().Property(s => s.TimeOut).HasColumnName("TimeOut");
             modelBuilder.Entity<SickBay>().Property(s => s.DateModified).HasColumnName("DateModified");
             modelBuilder.Entity<SickBay>().Property(s => s.UsernameModified).HasColumnName("UsernameModified");
+            //modelBuilder.Entity<SickBay>().Property(s => s.Code).HasColumnName("Code");
+            //modelBuilder.Entity<SickBay>().Property(s => s.Description).HasColumnName("Description");
 
             modelBuilder.Query<UspSickBayInOutUpdate>();
+            modelBuilder.Query<UspSickBayStatusSelect>();
         }
         #region Create Sign In and Sign Out.  
 
@@ -84,6 +88,38 @@ namespace SchoolWebAPI.Models
             }
 
             
+        }
+        /// <summary>  
+        /// Create Sign In and Sign Out.  
+        /// </summary>  
+        /// <returns>Returns - Incident Record created or updated.</returns>  
+        public SickBayStatusDTO GetSickBayStatusAsync(int Id)
+        {
+            // Initialization.              
+
+            try
+            {
+                // Set params.
+                SqlParameter iDParam = new SqlParameter("@ID", Id);
+                
+                // Processing.  
+                string sqlQuery = "EXEC webapi.uspSickBayStatusSelect @ID";
+
+                //Task<int> x = this.Database.ExecuteSqlCommandAsync(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam);
+                //await this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam).ToListAsync();
+                var sickbayStatusSelect = this.Query<UspSickBayStatusSelect>().FromSql(sqlQuery, iDParam).FirstOrDefault();
+                SickBayStatusDTO status = new SickBayStatusDTO(){ Id = sickbayStatusSelect.Id, Code = sickbayStatusSelect.Code, Description = sickbayStatusSelect.Description };
+                
+                return status;
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
         }
 
         #endregion

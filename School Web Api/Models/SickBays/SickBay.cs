@@ -15,7 +15,9 @@ namespace SchoolWebApi.Models.SickBays
         public TimeSpan TimeIn { get; set; }
         public TimeSpan TimeOut { get; set; }
         public DateTime DateModified { get; set; }
-        public string UsernameModified { get; set; }        
+        public string UsernameModified { get; set; }
+        public string Code { get; set; }
+        public string Description { get; set; }
     }
     public class SickBayDTO // for Time in/out SickBay.
     {
