@@ -176,7 +176,8 @@ namespace School_Web_Api.Controllers
             }
             catch (Exception e)
             {
-                return new SickBay { Id = 0, DateModified = DateTime.Now, IncidentDate = DateTime.Now, Seq = 0, TimeIn = new TimeSpan(), TimeOut = new TimeSpan(), UsernameModified = e.Message.Substring(50) };
+                throw new Exception(e.Message);
+                //return new SickBay { Id = 0, DateModified = DateTime.Now, IncidentDate = DateTime.Now, Seq = 0, TimeIn = new TimeSpan(), TimeOut = new TimeSpan(), UsernameModified = e.Message.Substring(50) };
             }
         }
 

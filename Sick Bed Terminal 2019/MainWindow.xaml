@@ -8,7 +8,7 @@
         WindowState="Maximized"
         WindowStyle="ToolWindow"
         ResizeMode="NoResize"
-        Title="MainWindow"                 
+        Title="MainWindow" GotFocus="Window_GotFocus"                 
         >
     
     <Grid>
@@ -55,7 +55,7 @@
             <Border Name="popupButtonCancel" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" VerticalAlignment="Center" Padding="13,0,0,0" >
                 <Button Name="btnCancel" KeyboardNavigation.IsTabStop="False" Content="Cancel" FontSize="50" Click="BtnCancel_Click" IsCancel="True" IsEnabled="False"></Button>
             </Border>
-            <Label Name="lblMsg" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="Error Message" FontSize="30"></Label>
+            
             <!--<Image x:Name="imgStudentPhoto2" Source="/Assets/Joeys Terminal.JPG" Grid.Row="2"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="Auto" Height="Auto" Opacity="0.2" />--><!--
                 
                 <Border Name="popupPhoto" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" VerticalAlignment="Center" Opacity="1" Visibility="Visible" HorizontalAlignment="Center" CornerRadius="0" >
@@ -74,18 +74,18 @@
         </Grid>
 
         <Grid Margin="0,0,0,0" Grid.Row="2">
-            
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>                    
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-            <TextBlock TextWrapping="Wrap"  Grid.Row="0" FontSize="26" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Center">
-                    Scan your student card or enter your Student ID
-                </TextBlock>
-                <Border Background="Pink"  Grid.Row="1"  Visibility="Visible">
-                <PasswordBox x:Name="txtCardNumber" InputScope="Number" FontSize="30" Password="8213" HorizontalContentAlignment="Center" MaxLength="10" PasswordChar="X" IsTabStop="True" 
-                        KeyUp="txtCardNumber_KeyUp" />
-                </Border>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>                    
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <!--<TextBlock TextWrapping="Wrap"  Grid.Row="0" FontSize="26" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Center">
+                Scan your student card or enter your Student ID
+            </TextBlock>-->
+            <Border Background="Pink"  Grid.Row="1"  Visibility="Visible">
+            <PasswordBox x:Name="txtCardNumber" InputScope="Number" FontSize="30" Password="8213" HorizontalContentAlignment="Center" MaxLength="10" PasswordChar="X" IsTabStop="True" 
+                    KeyUp="txtCardNumber_KeyUp" />
+            </Border>
+            <Label Name="lblMsg" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="Error Message" FontSize="30"></Label>
             
         </Grid>
 

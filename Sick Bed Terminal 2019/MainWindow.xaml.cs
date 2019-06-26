@@ -77,72 +77,104 @@ namespace Sick_Bed_Terminal_2019
         private MediaPlayer mediaPlayer = new MediaPlayer();
         //private static HttpClient httpClient = new HttpClient();
 
-        const string WebApiBaseAddress = "http://localhost:5000";
-        //const string WebApiBaseAddress = "https://webapi.joeys.org";
+        //const string WebApiBaseAddress = "http://localhost:5000";
+        const string WebApiBaseAddress = "https://webapi.joeys.org";
         //private static AuthenticationContext authContext = null;
 
+        private DateTime lastActivityTime = System.DateTime.Now;
         public MainWindow()
         {
-            InitializeComponent();
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(1000);
-            timer.Tick += timer_Tick;
-            timer.Start();
+            try
+            {
+                InitializeComponent();
+                DispatcherTimer timer = new DispatcherTimer();
+                timer.Interval = TimeSpan.FromMilliseconds(1000);
+                timer.Tick += timer_Tick;
+                timer.Start();
+            }
+            catch(Exception e)
+            {
+                lblMsg.Content = "1. " + e.Message;
+            }
+            
 
         }
         void timer_Tick(object sender, EventArgs e)
         {
-            lblTime.Content = DateTime.Now.ToString("HH:mm:ss");
+            try
+            {
+                lblTime.Content = DateTime.Now.ToString("HH:mm:ss");
+
+                if ((System.DateTime.Now - lastActivityTime).TotalSeconds > 5)
+                {
+                    ClearAllControls();
+                }
+            }
+            catch (Exception ex)
+            {
+                lblMsg.Content = "2. " + ex.Message;
+            }
+            
         }
         /// <summary>
         /// Call AcquireToken - to acquire a token requiring user to sign-in
         /// </summary>
         private async Task<string> GetToken()
         {
-            AuthenticationResult authResult = null;
-            var app = App.PublicClientApp;
-            lblMsg.Content = string.Empty;
-
-            var accounts = await app.GetAccountsAsync();
-            var firstAccount = accounts.FirstOrDefault();
-
             try
             {
-                authResult = await app.AcquireTokenSilent(scopes, firstAccount)
-                    .ExecuteAsync();
-            }
-            catch (MsalUiRequiredException ex)
-            {
-                // A MsalUiRequiredException happened on AcquireTokenSilent. 
-                // This indicates you need to call AcquireTokenInteractive to acquire a token
-                System.Diagnostics.Debug.WriteLine($"MsalUiRequiredException: {ex.Message}");
+                AuthenticationResult authResult = null;
+                var app = App.PublicClientApp;
+                lblMsg.Content = string.Empty;
+
+                var accounts = await app.GetAccountsAsync();
+                var firstAccount = accounts.FirstOrDefault();
+
 
                 try
                 {
-                    authResult = await app.AcquireTokenInteractive(scopes)
-                        .WithAccount(accounts.FirstOrDefault())
-                        .WithParentActivityOrWindow(new WindowInteropHelper(this).Handle) // optional, used to center the browser on the window
-                        .WithPrompt(Prompt.SelectAccount)
+
+                    authResult = await app.AcquireTokenSilent(scopes, firstAccount)
                         .ExecuteAsync();
                 }
-                catch (MsalException msalex)
+                catch (MsalUiRequiredException ex)
                 {
-                    lblMsg.Content = $"Error Acquiring Token:{System.Environment.NewLine}{msalex}";
+                    // A MsalUiRequiredException happened on AcquireTokenSilent. 
+                    // This indicates you need to call AcquireTokenInteractive to acquire a token
+                    System.Diagnostics.Debug.WriteLine($"MsalUiRequiredException: {ex.Message}");
+
+                    try
+                    {
+                        authResult = await app.AcquireTokenInteractive(scopes)
+                            .WithAccount(accounts.FirstOrDefault())
+                            .WithParentActivityOrWindow(new WindowInteropHelper(this).Handle) // optional, used to center the browser on the window
+                            .WithPrompt(Prompt.SelectAccount)
+                            .ExecuteAsync();
+                    }
+                    catch (MsalException msalex)
+                    {
+                        lblMsg.Content = $"Error Acquiring Token:{System.Environment.NewLine}{msalex}";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lblMsg.Content = $"Error Acquiring Token Silently:{System.Environment.NewLine}{ex}";
+                    return "";
+                }
+
+                if (authResult != null)
+                {
+                    //lblMsg.Content = await GetHttpContentWithToken(graphAPIEndpoint, authResult.AccessToken);
+                    //DisplayBasicTokenInfo(authResult);
+                    //this.SignOutButton.Visibility = Visibility.Visible;
+                    return authResult.AccessToken;
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                lblMsg.Content = $"Error Acquiring Token Silently:{System.Environment.NewLine}{ex}";
-                return "";
+                lblMsg.Content = e.Message;
             }
 
-            if (authResult != null)
-            {
-                //lblMsg.Content = await GetHttpContentWithToken(graphAPIEndpoint, authResult.AccessToken);
-                //DisplayBasicTokenInfo(authResult);
-                //this.SignOutButton.Visibility = Visibility.Visible;
-                return authResult.AccessToken;
-            }
             return "";
         }
         
@@ -154,10 +186,11 @@ namespace Sick_Bed_Terminal_2019
         /// <returns>String containing the results of the GET operation</returns>
         public async Task<string> GetHttpContentWithToken(string url, string token)
         {
-            var httpClient = new System.Net.Http.HttpClient();
-            System.Net.Http.HttpResponseMessage response;
             try
             {
+                var httpClient = new System.Net.Http.HttpClient();
+                System.Net.Http.HttpResponseMessage response;
+            
                 var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, url);
                 //Add the token in Authorization header
                 request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
@@ -205,37 +238,49 @@ namespace Sick_Bed_Terminal_2019
         }
         private async void txtCardNumber_KeyUp(object sender, KeyEventArgs e)
         {
-
-            
-            PasswordBox txt = (PasswordBox)txtCardNumber;
-            if (e != null && e.Key == Key.Enter)
+            try
             {
 
-                if (txt.Password != "")
+                lastActivityTime = System.DateTime.Now; // stop initializing the screen.
+
+                PasswordBox txt = (PasswordBox)txtCardNumber;
+                if (e != null && e.Key == Key.Enter)
                 {
-                    //get a token.
-                    token = await GetToken();
+
+                    if (txt.Password != "")
+                    {
+                        //get a token.
+                        token = await GetToken();
 
 
-                    int studentId = 0;
-                    //txtCardNumber.Password = "8213";
-                    int.TryParse(txtCardNumber.Password, out studentId);
-                    StudentId = studentId;
-                    DisplayStudentDetails(StudentId, token);
-                    DisplayStudentMedicalIncidentStatus(StudentId, token);
-                    //                    UpdateSickBay(Id);
+                        long studentId = 0;
+                        //txtCardNumber.Password = "8213";
+                        long.TryParse(txtCardNumber.Password, out studentId);
+                        //StudentId = studentId;
+                        
+                        DisplayStudentDetails(studentId, token); // use the local variable.
+                        lastActivityTime = System.DateTime.Now; // stop initializing the screen.
+                        DisplayStudentMedicalIncidentStatus(StudentId, token); // use the variable returned from api in DisplayStudentDetails().
+                        lastActivityTime = System.DateTime.Now; // stop initializing the screen.
+                        //                    UpdateSickBay(Id);
+                    }
+
+
+
                 }
-
-
-
+                txt.Focus();
             }
-            txt.Focus();
+            catch (Exception ex)
+            {
+                lblMsg.Content = "1. " + ex.Message;
+            }
+
         }
         private int StudentId { get; set; }
         private string RequestedJobCode { get; set; }
         private string token { get; set; }
 
-        private async void DisplayStudentDetails(int Id, string token)
+        private async void DisplayStudentDetails(long Id, string token)
         {
             var httpClient = new System.Net.Http.HttpClient();
             System.Net.Http.HttpResponseMessage response;
@@ -264,13 +309,14 @@ namespace Sick_Bed_Terminal_2019
                     if (student == null)
                     {
 
-                        ActionWhenFailed(true, "Student Not found");
+                        ActionWhenFailed(true, "8. " + "Student Not found");
 
                         return;
                     }
                     else
                     {
                         txtStudentName.Text = student.Given1 + " " + student.Surname;
+                        StudentId = student.Id; // if a card is used, then the student ID will be one from API.
                         if (student.Photo != null)
                         {
                             using (MemoryStream ms = new MemoryStream(student.Photo))
@@ -294,47 +340,51 @@ namespace Sick_Bed_Terminal_2019
                 }
                 else
                 {
-                    ActionWhenFailed(true, response.StatusCode.ToString());
+                    ActionWhenFailed(true, "9. " + response.StatusCode.ToString());
                 }
             }
             catch (Exception e)
             {
-                ActionWhenFailed(true, e.Message);
+                ActionWhenFailed(true, "10. " + e.Message);
             }
         }
 
-        private async void DisplayStudentMedicalIncidentStatus(int Id, string token)
+        private async void DisplayStudentMedicalIncidentStatus(long Id, string token)
         {
 
             var httpClient = new System.Net.Http.HttpClient();
             System.Net.Http.HttpResponseMessage response;
 
+            int pos = 0;
             try
             {
                 // Initialize buttons.
                 btnSignInOut.IsEnabled = false;
                 btnCancel.IsEnabled = false;
                 lblMsg.Content = "";
-
+                pos = 1;
                 string url = WebApiBaseAddress + "/api/SickBays/{0}/StatusById";
                 url = string.Format(url, Id);
-                                
+                pos = 2;
                 var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, url);
                 //Add the token in Authorization header
                 request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                pos = 3;
                 response = await httpClient.SendAsync(request);
 
+
+                pos = 4 ;
                 SickBayStatusDTO status;
                 if (response.IsSuccessStatusCode)
                 {
 
                     var content = await response.Content.ReadAsStringAsync();
                     status = JsonConvert.DeserializeObject<SickBayStatusDTO>(content);
-
+                    pos = pos + 1;
                     // Show Failed message.
                     if (status == null)
                     {
-                        ActionWhenFailed(true, status.Description);
+                        ActionWhenFailed(true, "6. " + status.Description);
 
                         return;
                     }
@@ -363,67 +413,97 @@ namespace Sick_Bed_Terminal_2019
                             btnCancel.IsEnabled = true;
                             btnSignInOut.IsEnabled = false;
                             lblMsg.Content = status.Description;
-
-                            ActionWhenFailed(true, status.Description);
+                            pos = pos + 1;
+                            ActionWhenFailed(true, "7. " + status.Description);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                ActionWhenFailed(true, ex.Message);
+                ActionWhenFailed(true, pos.ToString() + "=> 5. " + ex.Message);
             }
         }
         private void ActionWhenFailed(bool clearAllFlag, string message)
         {
-            
-            Uri uri = ResourceAccessor.GetFileUri("Assets/Fail sound effect 3.wav");
-            PlaySound(uri);
-
-            if (clearAllFlag)
+            try
             {
-                ClearAllControls();
-            }
+                Uri uri = ResourceAccessor.GetFileUri("Assets/Fail sound effect 3.wav");
+                PlaySound(uri);
 
-            lblMsg.Content = message;
+                if (clearAllFlag)
+                {
+                    ClearAllControls();
+                }
+
+                lblMsg.Content = message;
+            }
+            catch(Exception e)
+            {
+                lblMsg.Content = "11. " + e.Message;
+            }
+            
 
         }
         private void ActionWhenSucceeded()
         {
-            Uri uri = ResourceAccessor.GetFileUri("Assets/You win sound effect 3.wav");
-            PlaySound(uri);
+            try { 
+                Uri uri = ResourceAccessor.GetFileUri("Assets/You win sound effect 3.wav");
+                PlaySound(uri);
 
 
-            ClearAllControls();
+                ClearAllControls();
+            }
+            catch (Exception e)
+            {
+                lblMsg.Content = "12. " + e.Message;
+            }
         }
         private void ClearAllControls()
         {
-            //txtCardNumber.Password = "";
-            Uri uri = ResourceAccessor.GetFileUri("Assets/Joeys Terminal.JPG");
-            imgStudentPhoto.Source = new BitmapImage(uri);
+            try
+            {
 
-            ////txtStudentName.Text = string.Empty;
+            
+                txtCardNumber.Password = "";
+                Uri uri = ResourceAccessor.GetFileUri("Assets/Joeys Terminal.JPG");
+                imgStudentPhoto.Source = new BitmapImage(uri);
+
+                txtStudentName.Text = string.Empty;
 
 
-            //StudentId = 0;
-            RequestedJobCode = string.Empty;
-            lblMsg.Content = string.Empty;
-            btnCancel.IsEnabled = false;
-            btnSignInOut.IsEnabled = false;
+                //StudentId = 0;
+                RequestedJobCode = string.Empty;
+                lblMsg.Content = string.Empty;
+                btnCancel.IsEnabled = false;
+                btnSignInOut.IsEnabled = false;
 
-            txtCardNumber.Focus();
+                txtCardNumber.Focus();
+            }
+            catch (Exception e)
+            {
+                lblMsg.Content = "13. " + e.Message;
+            }
         }
         private void PlaySound(Uri uri)//            --async private Task PlaySound(Uri uri)
         {
-            Debug.Print(uri.ToString());
-
-            mediaPlayer.MediaFailed += (o, args) =>
+            try
             {
-                MessageBox.Show("Media Failed!!" + args.ErrorException.Message);
-            };
-            mediaPlayer.Open(uri);
-            mediaPlayer.Play();
 
+            
+                Debug.Print(uri.ToString());
+
+                mediaPlayer.MediaFailed += (o, args) =>
+                {
+                    MessageBox.Show("Media Failed!!" + args.ErrorException.Message);
+                };
+                mediaPlayer.Open(uri);
+                mediaPlayer.Play();
+            }
+            catch (Exception e)
+            {
+                lblMsg.Content = "14. " + e.Message;
+            }
 
 
 
@@ -469,12 +549,12 @@ namespace Sick_Bed_Terminal_2019
                     if (sickBay != null)
                         ActionWhenFailed(false, sickBay.Description);
                     else
-                        ActionWhenFailed(false, "Failed. Try again");
+                        ActionWhenFailed(false, "15. " + "Failed. Try again");
                 }
             }
             catch (Exception e)
             {
-                ActionWhenFailed(false, e.Message);
+                ActionWhenFailed(false, "16. " + e.Message);
             }
 
 
@@ -484,26 +564,47 @@ namespace Sick_Bed_Terminal_2019
 
         private void BtnSignInOut_Click(object sender, RoutedEventArgs e)
         {
-            txtCardNumber.Focus();
-            UpdateSickBay(StudentId);
+            try { 
+                txtCardNumber.Focus();
+                lastActivityTime = System.DateTime.Now; // stop initializing the screen.
+                UpdateSickBay(StudentId);
+                ClearAllControls();
+            }
+            catch (Exception ex)
+            {
+                lblMsg.Content = "17. " + ex.Message;
+            }
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-            txtCardNumber.Focus();
-            ClearAllControls();
+            try { 
+                txtCardNumber.Focus();
+                ClearAllControls();
+            }
+            catch (Exception ex)
+            {
+                lblMsg.Content = "18. " + ex.Message;
+            }
         }
 
         internal static class ResourceAccessor
         {
             public static Uri GetFileUri(string path)
             {
-                var uri = string.Format(
-                    "pack://siteoforigin:,,,/{0}"
-                    , path
-                );
+                try {
+                    var uri = string.Format(
+                        "pack://siteoforigin:,,,/{0}"
+                        , path
+                    );
 
-                return new Uri(uri);
+                    return new Uri(uri);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("19. " + e.Message);
+                }
+                
             }
             //public static Uri GetImageUri(string path)
             //{
@@ -515,6 +616,11 @@ namespace Sick_Bed_Terminal_2019
 
             //    return new Uri(uri);
             //}
+        }
+
+        private void Window_GotFocus(object sender, RoutedEventArgs e)
+        {
+            txtCardNumber.Focus();
         }
     }
 }

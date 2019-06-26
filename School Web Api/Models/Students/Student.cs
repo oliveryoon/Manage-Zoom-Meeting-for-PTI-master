@@ -10,6 +10,7 @@ namespace SchoolWebAPI.Models
     {
         [Key]
         public int Id { get; set; }
+        public string Barcode { get; set; }
         public string Surname { get; set; }
         public string Given1 { get; set; }
         public string Preferred { get; set; }

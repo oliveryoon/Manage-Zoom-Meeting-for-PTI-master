@@ -32,9 +32,12 @@ namespace School_Web_Api.Controllers
 
         // GET: api/Students/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Student>> GetStudent(int id)
+        public async Task<ActionResult<Student>> GetStudent(long id)
         {
-            var student = await _context.Students.FindAsync(id);
+            //var student = await _context.Students.FindAsync(id);
+            int localId = 0;
+            int.TryParse(id.ToString(), out localId);
+            Student student = await _context.Students.FirstOrDefaultAsync(x=>x.Id == localId || x.Barcode == id.ToString());
 
             if (student == null)
             {

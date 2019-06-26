@@ -35,6 +35,7 @@ namespace SchoolWebAPI.Models
             modelBuilder.Entity<Student>().Property(s => s.Surname).HasColumnName("StudentSurname");
             modelBuilder.Entity<Student>().Property(s => s.YearLevel).HasColumnName("StudentYearLevel");
             modelBuilder.Entity<Student>().Property(s => s.Id).HasColumnName("StudentID");
+            modelBuilder.Entity<Student>().Property(s => s.Barcode).HasColumnName("StudentBarcode");
             modelBuilder.Entity<Student>().Property(s => s.Photo).HasColumnName("Photo");
 
             modelBuilder.Entity<SickBay>().ToTable("uvMedicalIncidents", "webapi"); //8213
