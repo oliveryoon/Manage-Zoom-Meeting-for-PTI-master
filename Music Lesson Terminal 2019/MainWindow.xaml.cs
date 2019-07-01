@@ -1,12 +1,10 @@
 ﻿using Microsoft.Identity.Client;
+using Music_Lesson_Terminal_2019.Models.MusicLessons;
+using Music_Lesson_Terminal_2019.Models.Students;
 using Newtonsoft.Json;
-using Sick_Bed_Terminal_2019.Models;
-using Sick_Bed_Terminal_2019.Models.SickBays;
-using Sick_Bed_Terminal_2019.Models.Students;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IdentityModel.Tokens;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -17,19 +15,14 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows.Media.Animation;
-//using System.Windows.Media;//..Core;
 using System.Windows.Threading;
-using System.Reflection;
-using System.Media;
-using System.Diagnostics;
-using System.Windows.Interop;
 
-namespace Sick_Bed_Terminal_2019
+namespace Music_Lesson_Terminal_2019
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -71,7 +64,7 @@ namespace Sick_Bed_Terminal_2019
 
         //Set the scope for API call to user.read
         //string[] scopes = new string[] { "user.read" };
-        string[] scopes = new string[] { "https://joeysorg.onmicrosoft.com/WebApi/user_impersonation" };       
+        string[] scopes = new string[] { "https://joeysorg.onmicrosoft.com/WebApi/user_impersonation" };
 
 
         private MediaPlayer mediaPlayer = new MediaPlayer();
@@ -92,11 +85,11 @@ namespace Sick_Bed_Terminal_2019
                 timer.Tick += timer_Tick;
                 timer.Start();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 lblMsg.Content = "1. " + e.Message;
             }
-            
+
 
         }
         void timer_Tick(object sender, EventArgs e)
@@ -114,7 +107,7 @@ namespace Sick_Bed_Terminal_2019
             {
                 lblMsg.Content = "2. " + ex.Message;
             }
-            
+
         }
         /// <summary>
         /// Call AcquireToken - to acquire a token requiring user to sign-in
@@ -177,7 +170,7 @@ namespace Sick_Bed_Terminal_2019
 
             return "";
         }
-        
+
         ///// <summary>
         ///// Perform an HTTP GET request to a URL using an HTTP Authorization header
         ///// </summary>
@@ -190,7 +183,7 @@ namespace Sick_Bed_Terminal_2019
         //    {
         //        var httpClient = new System.Net.Http.HttpClient();
         //        System.Net.Http.HttpResponseMessage response;
-            
+
         //        var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, url);
         //        //Add the token in Authorization header
         //        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
@@ -259,12 +252,12 @@ namespace Sick_Bed_Terminal_2019
                         //txtCardNumber.Password = "8213";
                         long.TryParse(txtCardNumber.Password, out studentId);
                         //StudentId = studentId;
-                        
+
                         DisplayStudentDetails(studentId, token); // use the local variable.
                         lastActivityTime = System.DateTime.Now; // stop initializing the screen.
                         DisplayStudentMedicalIncidentStatus(StudentId, token); // use the variable returned from api in DisplayStudentDetails().
                         lastActivityTime = System.DateTime.Now; // stop initializing the screen.
-                        //                    UpdateSickBay(Id);
+                        //                    UpdateMusicLesson(Id);
                     }
 
 
@@ -294,7 +287,7 @@ namespace Sick_Bed_Terminal_2019
                 string url = WebApiBaseAddress + "/api/Students/{0}";
                 //url = WebApiBaseAddress + "/api/values";
                 url = string.Format(url, Id);
-                               
+
 
                 var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, url);
                 //Add the token in Authorization header
@@ -365,7 +358,7 @@ namespace Sick_Bed_Terminal_2019
                 btnCancel.IsEnabled = false;
                 lblMsg.Content = "";
                 pos = 1;
-                string url = WebApiBaseAddress + "/api/SickBays/{0}/StatusById";
+                string url = WebApiBaseAddress + "/api/MusicLessons/{0}/StatusById";
                 url = string.Format(url, Id);
                 pos = 2;
                 var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, url);
@@ -375,13 +368,13 @@ namespace Sick_Bed_Terminal_2019
                 response = await httpClient.SendAsync(request);
 
 
-                pos = 4 ;
-                SickBayStatusDTO status;
+                pos = 4;
+                MusicLessonStatusDTO status;
                 if (response.IsSuccessStatusCode)
                 {
 
                     var content = await response.Content.ReadAsStringAsync();
-                    status = JsonConvert.DeserializeObject<SickBayStatusDTO>(content);
+                    status = JsonConvert.DeserializeObject<MusicLessonStatusDTO>(content);
                     pos = pos + 1;
                     // Show Failed message.
                     if (status == null)
@@ -396,7 +389,7 @@ namespace Sick_Bed_Terminal_2019
                         {
                             RequestedJobCode = "SO"; // need this code when update requested.
                         }
-                            
+
                         else if (status.Code == "SO")
                             RequestedJobCode = "SI"; // need this code when update requested.
                         else
@@ -404,10 +397,10 @@ namespace Sick_Bed_Terminal_2019
 
                         if (status.Code == "SI" || status.Code == "SO")
                         {
-                            btnSignInOut.Content = RequestedJobCode == "SO"? "Sign Out": "Sign In";
+                            btnSignInOut.Content = RequestedJobCode == "SO" ? "Sign Out" : "Sign In";
                             btnSignInOut.IsEnabled = true;
                             btnCancel.IsEnabled = true;
-                            
+
                         }
 
                         else //if (status.Code == "PN" || "ER" )
@@ -440,16 +433,17 @@ namespace Sick_Bed_Terminal_2019
 
                 lblMsg.Content = message;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 lblMsg.Content = "11. " + e.Message;
             }
-            
+
 
         }
         private void ActionWhenSucceeded()
         {
-            try { 
+            try
+            {
                 Uri uri = ResourceAccessor.GetFileUri("Assets/You win sound effect 3.wav");
                 PlaySound(uri);
 
@@ -466,7 +460,7 @@ namespace Sick_Bed_Terminal_2019
             try
             {
 
-            
+
                 txtCardNumber.Password = "";
                 Uri uri = ResourceAccessor.GetFileUri("Assets/Joeys Terminal.JPG");
                 imgStudentPhoto.Source = new BitmapImage(uri);
@@ -492,7 +486,7 @@ namespace Sick_Bed_Terminal_2019
             try
             {
 
-            
+
                 Debug.Print(uri.ToString());
 
                 mediaPlayer.MediaFailed += (o, args) =>
@@ -511,7 +505,7 @@ namespace Sick_Bed_Terminal_2019
 
         }
 
-        private async void UpdateSickBay(int Id)
+        private async void UpdateMusicLesson(int Id)
         {
 
             var httpClient = new System.Net.Http.HttpClient();
@@ -519,14 +513,11 @@ namespace Sick_Bed_Terminal_2019
 
             try
             {
-                SickBaySimple data = new SickBaySimple();
-                data.Id = Id; // Student ID.                
-                data.IncidentDate = DateTime.Today;
-                data.Time = DateTime.Now.TimeOfDay;
-                data.UsernameModified = @"joeys\oyoon";
+                MusicLessonDTO data = new MusicLessonDTO();
+                data.Id = Id; // Student ID.                                
                 data.RequestedJobCode = RequestedJobCode;
-                
-                string url = WebApiBaseAddress + "/api/SickBays";
+
+                string url = WebApiBaseAddress + "/api/MusicLessons";
                 //url = string.Format(url, Id);
 
                 //get a token.
@@ -547,9 +538,9 @@ namespace Sick_Bed_Terminal_2019
                 else
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    SickBay sickBay = JsonConvert.DeserializeObject<SickBay>(content);
-                    if (sickBay != null)
-                        ActionWhenFailed(false, sickBay.Description);
+                    MusicLesson musicLesson = JsonConvert.DeserializeObject<MusicLesson>(content);
+                    if (musicLesson != null)
+                        ActionWhenFailed(false, musicLesson.Description);
                     else
                         ActionWhenFailed(false, "15. " + "Failed. Try again");
                 }
@@ -566,10 +557,11 @@ namespace Sick_Bed_Terminal_2019
 
         private void BtnSignInOut_Click(object sender, RoutedEventArgs e)
         {
-            try { 
+            try
+            {
                 txtCardNumber.Focus();
                 lastActivityTime = System.DateTime.Now; // stop initializing the screen.
-                UpdateSickBay(StudentId);
+                UpdateMusicLesson(StudentId);
                 ClearAllControls();
             }
             catch (Exception ex)
@@ -580,7 +572,8 @@ namespace Sick_Bed_Terminal_2019
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-            try { 
+            try
+            {
                 txtCardNumber.Focus();
                 ClearAllControls();
             }
@@ -594,7 +587,8 @@ namespace Sick_Bed_Terminal_2019
         {
             public static Uri GetFileUri(string path)
             {
-                try {
+                try
+                {
                     var uri = string.Format(
                         "pack://siteoforigin:,,,/{0}"
                         , path
@@ -606,7 +600,7 @@ namespace Sick_Bed_Terminal_2019
                 {
                     throw new Exception("19. " + e.Message);
                 }
-                
+
             }
             //public static Uri GetImageUri(string path)
             //{

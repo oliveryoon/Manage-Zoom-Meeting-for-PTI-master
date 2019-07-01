@@ -33,15 +33,15 @@ namespace SchoolWebApi
             services.AddDbContext<SchoolContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            //services.AddAuthentication(sharedOptions =>
-            //{
-            //    sharedOptions.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            //})
-            //.AddAzureAdBearer(options => Configuration.Bind("AzureAd", options));
+            services.AddAuthentication(sharedOptions =>
+            {
+                sharedOptions.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddAzureAdBearer(options => Configuration.Bind("AzureAd", options));
 
             //services.AddMvc();
-
-            services.AddProtectWebApiWithMicrosoftIdentityPlatformV2(Configuration);
+            
+            //services.AddProtectWebApiWithMicrosoftIdentityPlatformV2(Configuration);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
         }

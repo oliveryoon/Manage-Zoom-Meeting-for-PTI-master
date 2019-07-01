@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Sick_Bed_Terminal_2019
+namespace Music_Lesson_Terminal_2019
 {
     /// <summary>
     /// Interaction logic for App.xaml

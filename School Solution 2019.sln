@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sick Bed Terminal 2019", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Identity.Web", "Microsoft.Identity.Web\Microsoft.Identity.Web.csproj", "{83EDBEA0-CBED-433E-8DE2-4AD6CBFE657A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Music Lesson Terminal 2019", "Music Lesson Terminal 2019\Music Lesson Terminal 2019.csproj", "{8CC2DA29-6552-426A-AA26-122EDA4B7D4D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{83EDBEA0-CBED-433E-8DE2-4AD6CBFE657A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83EDBEA0-CBED-433E-8DE2-4AD6CBFE657A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83EDBEA0-CBED-433E-8DE2-4AD6CBFE657A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CC2DA29-6552-426A-AA26-122EDA4B7D4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CC2DA29-6552-426A-AA26-122EDA4B7D4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CC2DA29-6552-426A-AA26-122EDA4B7D4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CC2DA29-6552-426A-AA26-122EDA4B7D4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

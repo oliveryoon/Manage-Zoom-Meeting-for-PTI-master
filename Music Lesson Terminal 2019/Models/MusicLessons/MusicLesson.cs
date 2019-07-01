@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace SchoolWebApi.Models.SickBays
+namespace Music_Lesson_Terminal_2019.Models.MusicLessons
 {
-    public class SickBay
+    public class MusicLesson
     {
-        [Key]
+        
         public int Seq { get; set; }
         public int Id { get; set; }
         public DateTime IncidentDate { get; set; }
@@ -19,15 +19,15 @@ namespace SchoolWebApi.Models.SickBays
         public string Code { get; set; }
         public string Description { get; set; }
     }
-    public class SickBayDTO // for Time in/out SickBay.
+    public class MusicLessonDTO // for Time in/out MusicLesson.
     {
-        [Key]
+        
         public int Seq { get; set; }
         public int Id { get; set; }
-        public DateTime IncidentDate { get; set; }
-        public TimeSpan Time { get; set; }
+        //public DateTime IncidentDate { get; set; }
+        //public TimeSpan Time { get; set; }
         public string RequestedJobCode { get; set; }
         public string TerminalCode { get; set; }
-        public string UsernameModified { get; set; }
+        //public string UsernameModified { get; set; }
     }
 }
