@@ -48,15 +48,15 @@ namespace SchoolWebAPI.Models
             modelBuilder.Entity<SickBay>().Property(s => s.IncidentDate).HasColumnName("IncidentDate");
             modelBuilder.Entity<SickBay>().Property(s => s.TimeIn).HasColumnName("TimeIn");
             modelBuilder.Entity<SickBay>().Property(s => s.TimeOut).HasColumnName("TimeOut");
-            modelBuilder.Entity<SickBay>().Property(s => s.DateModified).HasColumnName("DateModified");
+            modelBuilder.Entity<SickBay>().Property(s => s.DateTimeModified).HasColumnName("DateTimeModified");
             modelBuilder.Entity<SickBay>().Property(s => s.UsernameModified).HasColumnName("UsernameModified");
 
             modelBuilder.Entity<MusicLesson>().ToTable("uvMedicalIncidents", "webapi"); //8213
             modelBuilder.Entity<MusicLesson>().Property(s => s.Seq).HasColumnName("Seq");            
             modelBuilder.Entity<MusicLesson>().Property(s => s.DateTimeIn).HasColumnName("DateTimeIn");
             modelBuilder.Entity<MusicLesson>().Property(s => s.DateTimeOut).HasColumnName("DateTimeOut");
-            modelBuilder.Entity<MusicLesson>().Property(s => s.DateModified).HasColumnName("DateModified");
-            modelBuilder.Entity<MusicLesson>().Property(s => s.DateCreated).HasColumnName("DateCreated");
+            modelBuilder.Entity<MusicLesson>().Property(s => s.DateTimeModified).HasColumnName("DateTimeModified");
+            modelBuilder.Entity<MusicLesson>().Property(s => s.DateTimeCreated).HasColumnName("DateTimeCreated");
 
 
             //modelBuilder.Entity<SickBay>().Property(s => s.Code).HasColumnName("Code");
