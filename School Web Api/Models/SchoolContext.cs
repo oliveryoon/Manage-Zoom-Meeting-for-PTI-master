@@ -51,19 +51,21 @@ namespace SchoolWebAPI.Models
             modelBuilder.Entity<SickBay>().Property(s => s.DateTimeModified).HasColumnName("DateTimeModified");
             modelBuilder.Entity<SickBay>().Property(s => s.UsernameModified).HasColumnName("UsernameModified");
 
-            modelBuilder.Entity<MusicLesson>().ToTable("uvMedicalIncidents", "webapi"); //8213
-            modelBuilder.Entity<MusicLesson>().Property(s => s.Seq).HasColumnName("Seq");            
+            modelBuilder.Entity<MusicLesson>().ToTable("uvMusicLessons", "webapi"); //8213            
+            modelBuilder.Entity<MusicLesson>().Property(s => s.Seq).HasColumnName("Seq"); // staff schedule seq.
+            modelBuilder.Entity<MusicLesson>().Property(s => s.Id).HasColumnName("ID");
             modelBuilder.Entity<MusicLesson>().Property(s => s.DateTimeIn).HasColumnName("DateTimeIn");
             modelBuilder.Entity<MusicLesson>().Property(s => s.DateTimeOut).HasColumnName("DateTimeOut");
             modelBuilder.Entity<MusicLesson>().Property(s => s.DateTimeModified).HasColumnName("DateTimeModified");
             modelBuilder.Entity<MusicLesson>().Property(s => s.DateTimeCreated).HasColumnName("DateTimeCreated");
-
-
+            
             //modelBuilder.Entity<SickBay>().Property(s => s.Code).HasColumnName("Code");
             //modelBuilder.Entity<SickBay>().Property(s => s.Description).HasColumnName("Description");
 
             modelBuilder.Query<UspSickBayInOutUpdate>();
             modelBuilder.Query<UspSickBayStatusSelect>();
+            modelBuilder.Query<UspMusicLessonInOutUpdate>();
+            modelBuilder.Query<UspMusicLessonStatusSelect>();
         }
         #region Create Sign In and Sign Out.  
 
@@ -83,6 +85,8 @@ namespace SchoolWebAPI.Models
                 SqlParameter TerminalCodeParam = new SqlParameter("@TerminalCode", musicLessonDTO.TerminalCode);
 
                 // Processing.  
+                //;Workstation ID={0}|{1}\{2}
+                
                 string sqlQuery = "EXEC webapi.uspMusicLessonInOutUpdate @ID, @RequestedJobCode, @TerminalCode";
 
                 //Task<int> x = this.Database.ExecuteSqlCommandAsync(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam);
@@ -138,22 +142,23 @@ namespace SchoolWebAPI.Models
         /// Get a status.  
         /// </summary>  
         /// <returns>Returns - Music Lesson Record created or updated.</returns>  
-        public MusicLessonStatusDTO GetMusicLessonStatusAsync(int Id)
+        public MusicLessonStatusDTO GetMusicLessonStatusAsync(MusicLessonStatusDTO status)
         {
             // Initialization.              
 
             try
             {
                 // Set params.
-                SqlParameter iDParam = new SqlParameter("@ID", Id);
+                SqlParameter iDParam = new SqlParameter("@ID", status.Id);
+                SqlParameter terminalCodeParam = new SqlParameter("@TerminalCode", status.TerminalCode);
 
                 // Processing.  
-                string sqlQuery = "EXEC webapi.uspMusicLessonStatusSelect @ID";
+                string sqlQuery = "EXEC webapi.uspMusicLessonStatusSelect @ID, @TerminalCode";
 
                 //Task<int> x = this.Database.ExecuteSqlCommandAsync(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam);
                 //await this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam).ToListAsync();
-                var musicLessonStatusSelect = this.Query<UspMusicLessonStatusSelect>().FromSql(sqlQuery, iDParam).FirstOrDefault();
-                MusicLessonStatusDTO status = new MusicLessonStatusDTO() { Id = musicLessonStatusSelect.Id, Code = musicLessonStatusSelect.Code, Description = musicLessonStatusSelect.Description };
+                var musicLessonStatusSelect = this.Query<UspMusicLessonStatusSelect>().FromSql(sqlQuery, iDParam, terminalCodeParam).FirstOrDefault();
+                status = new MusicLessonStatusDTO() { Id = musicLessonStatusSelect.Id, Seq = musicLessonStatusSelect.Seq, Code = musicLessonStatusSelect.Code, Description = musicLessonStatusSelect.Description, TerminalCode = status.TerminalCode };
 
                 return status;
 

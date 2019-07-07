@@ -27,7 +27,7 @@
                 <ColumnDefinition Width="150*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock FontSize="48" FontWeight="Bold" Text="Sick Bay Terminal" Grid.Column="1" TextAlignment="Center" />
+            <TextBlock FontSize="48" FontWeight="Bold" Text="Music Centre Terminal" Grid.Column="1" TextAlignment="Center" />
             <Border Grid.Column="2">
                 <!--<TextBlock x:Name="clock"  TextWrapping="Wrap" Foreground="Black" VerticalAlignment="Center" Text="5:00" TextAlignment="Right" Margin="01" FontSize="30" />-->
                 <Label Name="lblTime" FontSize="48" HorizontalAlignment="Center" VerticalAlignment="Center" Content="5:00" />

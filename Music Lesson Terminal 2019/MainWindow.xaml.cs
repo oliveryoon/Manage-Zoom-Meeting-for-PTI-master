@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -98,7 +99,7 @@ namespace Music_Lesson_Terminal_2019
             {
                 lblTime.Content = DateTime.Now.ToString("HH:mm:ss");
 
-                if ((System.DateTime.Now - lastActivityTime).TotalSeconds > 5)
+                if ((System.DateTime.Now - lastActivityTime).TotalSeconds > 500)
                 {
                     ClearAllControls();
                 }
@@ -253,11 +254,16 @@ namespace Music_Lesson_Terminal_2019
                         long.TryParse(txtCardNumber.Password, out studentId);
                         //StudentId = studentId;
 
-                        DisplayStudentDetails(studentId, token); // use the local variable.
-                        lastActivityTime = System.DateTime.Now; // stop initializing the screen.
-                        DisplayStudentMedicalIncidentStatus(StudentId, token); // use the variable returned from api in DisplayStudentDetails().
-                        lastActivityTime = System.DateTime.Now; // stop initializing the screen.
-                        //                    UpdateMusicLesson(Id);
+                        bool successFlag = await DisplayStudentDetails(studentId, token); // use the local variable.
+                        if (successFlag)
+                        {
+                            lastActivityTime = System.DateTime.Now; // stop initializing the screen.
+
+                            DisplayMusicLessonStatus(StudentId, token); // use the variable returned from api in DisplayStudentDetails().
+                            lastActivityTime = System.DateTime.Now; // stop initializing the screen.
+                                                                    
+                        }
+
                     }
 
 
@@ -275,7 +281,7 @@ namespace Music_Lesson_Terminal_2019
         private string RequestedJobCode { get; set; }
         private string token { get; set; }
 
-        private async void DisplayStudentDetails(long Id, string token)
+        private async Task<bool> DisplayStudentDetails(long Id, string token)
         {
             var httpClient = new System.Net.Http.HttpClient();
             System.Net.Http.HttpResponseMessage response;
@@ -306,7 +312,7 @@ namespace Music_Lesson_Terminal_2019
 
                         ActionWhenFailed(true, "8. " + "Student Not found");
 
-                        return;
+                        return false;
                     }
                     else
                     {
@@ -330,6 +336,7 @@ namespace Music_Lesson_Terminal_2019
 
                             }
                         }
+                        return true;
                     }
 
                 }
@@ -342,9 +349,19 @@ namespace Music_Lesson_Terminal_2019
             {
                 ActionWhenFailed(true, "10. " + e.Message);
             }
+            return false;
         }
+        private string GetResource(string resourceKey)
+        {
+            string resxFile = @".\Resource.resx";
 
-        private async void DisplayStudentMedicalIncidentStatus(long Id, string token)
+            using (ResXResourceSet resxSet = new ResXResourceSet(resxFile))
+            {
+                // Retrieve the image.
+                return  resxSet.GetObject(resourceKey, true).ToString();                
+            }
+        }
+        private async void DisplayMusicLessonStatus(int Id, string token)
         {
 
             var httpClient = new System.Net.Http.HttpClient();
@@ -358,10 +375,20 @@ namespace Music_Lesson_Terminal_2019
                 btnCancel.IsEnabled = false;
                 lblMsg.Content = "";
                 pos = 1;
-                string url = WebApiBaseAddress + "/api/MusicLessons/{0}/StatusById";
-                url = string.Format(url, Id);
+
+                MusicLessonStatusDTO status = new MusicLessonStatusDTO();
+                status.Id = Id;
+                status.TerminalCode = GetResource("TerminalCode");
+                //StringContent statusContent = new StringContent(JsonConvert.SerializeObject(status), Encoding.UTF8, "application/json");
+                string statusContent = string.Format("?Id={0}&TerminalCode={1}", status.Id, status.TerminalCode);
+
+                string url = WebApiBaseAddress + "/api/MusicLessons/Status{0}";
+                
+
+                url = string.Format(url, statusContent);
                 pos = 2;
                 var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, url);
+                
                 //Add the token in Authorization header
                 request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
                 pos = 3;
@@ -369,7 +396,7 @@ namespace Music_Lesson_Terminal_2019
 
 
                 pos = 4;
-                MusicLessonStatusDTO status;
+                
                 if (response.IsSuccessStatusCode)
                 {
 
@@ -516,6 +543,7 @@ namespace Music_Lesson_Terminal_2019
                 MusicLessonDTO data = new MusicLessonDTO();
                 data.Id = Id; // Student ID.                                
                 data.RequestedJobCode = RequestedJobCode;
+                data.TerminalCode = GetResource("TerminalCode");
 
                 string url = WebApiBaseAddress + "/api/MusicLessons";
                 //url = string.Format(url, Id);

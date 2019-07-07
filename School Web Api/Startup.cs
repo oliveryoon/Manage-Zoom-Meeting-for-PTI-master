@@ -14,6 +14,7 @@ using SchoolWebAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNet.OData.Extensions;
 
 namespace SchoolWebApi
 {
@@ -39,11 +40,12 @@ namespace SchoolWebApi
             })
             .AddAzureAdBearer(options => Configuration.Bind("AzureAd", options));
 
-            //services.AddMvc();
+            
             
             //services.AddProtectWebApiWithMicrosoftIdentityPlatformV2(Configuration);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
+            services.AddOData();
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,7 +55,13 @@ namespace SchoolWebApi
             {
                 app.UseDeveloperExceptionPage();
             }
-           
+            app.UseMvc(routeBuilder => {
+
+                routeBuilder.EnableDependencyInjection();
+
+                routeBuilder.Expand().Select().OrderBy().Filter();
+
+            });
             app.UseAuthentication();
             app.UseMvc();
         }

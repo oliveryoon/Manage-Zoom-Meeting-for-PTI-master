@@ -8,7 +8,7 @@ namespace SchoolWebApi.Models.MusicLessons
 {
     public class UspMusicLessonInOutUpdate
     {
-        public int Seq { get; set; }
+        public int Seq { get; set; } // staff schedule seq.
         public int Id { get; set; }
         public DateTime DateTimeIn { get; set; }
         public DateTime DateTimeOut { get; set; }

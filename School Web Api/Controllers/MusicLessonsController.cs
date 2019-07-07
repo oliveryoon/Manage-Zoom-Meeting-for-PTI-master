@@ -25,14 +25,13 @@ namespace School_Web_Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MusicLesson>>> GetMusicLesson()
         {
-            return await _context.MusicLesson.ToListAsync();
+            return await _context.MusicLesson.OrderBy(x =>x.Id).ThenBy(x=> x.StaffScheduleDateTimeFrom).ThenBy(x => x.DateTimeIn).ToListAsync();
         }
-
         // GET: api/MusicLessons/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<MusicLesson>> GetMusicLesson(int id)
+        [HttpGet("{seq}")]
+        public async Task<ActionResult<MusicLesson>> GetMusicLesson(int seq)
         {
-            var musicLesson = await _context.MusicLesson.FindAsync(id);
+            var musicLesson = await _context.MusicLesson.FindAsync(seq);
 
             if (musicLesson == null)
             {
@@ -41,6 +40,43 @@ namespace School_Web_Api.Controllers
 
             return musicLesson;
         }
+        // GET: api/MusicLessons/5
+        //[Route("detail/{id:int}")]
+        [HttpGet("detail/{id:int}")]
+        public async Task<ActionResult<MusicLesson>> GetMusicLessonDetailById(int id)
+        {
+            var musicLesson = await _context.MusicLesson.Where(x=>x.Id == id).FirstOrDefaultAsync();
+
+            if (musicLesson == null)
+            {
+                return NotFound();
+            }
+
+            return musicLesson;
+        }
+        // GET: api/MusicLessons/5/StatusById
+        // This will return the current acceptable sick bay status by student Id.       
+        [HttpGet]
+        [Route("status")]
+        public async Task<ActionResult<MusicLessonStatusDTO>> GetMusicLesson([FromQuery] MusicLessonStatusDTO status)
+        {
+
+
+            try
+            {
+
+                MusicLessonStatusDTO dto = _context.GetMusicLessonStatusAsync(status);
+                await _context.SaveChangesAsync();
+                return dto;
+               
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+        }
+
 
         // PUT: api/MusicLessons/5
         [HttpPut("{id}")]
@@ -72,14 +108,32 @@ namespace School_Web_Api.Controllers
             return NoContent();
         }
 
-        // POST: api/MusicLessons
-        [HttpPost]
-        public async Task<ActionResult<MusicLesson>> PostMusicLesson(MusicLesson musicLesson)
-        {
-            _context.MusicLesson.Add(musicLesson);
-            await _context.SaveChangesAsync();
+        //// POST: api/MusicLessons
+        //[HttpPost]
+        //public async Task<ActionResult<MusicLesson>> PostMusicLesson(MusicLesson musicLesson)
+        //{
+        //    _context.MusicLesson.Add(musicLesson);
+        //    await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetMusicLesson", new { id = musicLesson.Seq }, musicLesson);
+        //    return CreatedAtAction("GetMusicLesson", new { id = musicLesson.Seq }, musicLesson);
+        //}
+
+        // POST: api/MusicLessons
+        // Create a music lesson entry in Synergetic and sign out a student as well.
+        [HttpPost]
+        public async Task<ActionResult<MusicLesson>> PostMusicLesson(MusicLessonDTO musicLesson)
+        {
+            try
+            {
+                _context.UpdateMusicLessonInOutAsync(musicLesson);
+                await _context.SaveChangesAsync();
+                return CreatedAtAction("GetMusicLesson", new { seq = musicLesson.Seq }, musicLesson);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+                
+            }
         }
 
         // DELETE: api/MusicLessons/5
@@ -98,9 +152,9 @@ namespace School_Web_Api.Controllers
             return musicLesson;
         }
 
-        private bool MusicLessonExists(int id)
+        private bool MusicLessonExists(int seq)
         {
-            return _context.MusicLesson.Any(e => e.Seq == id);
+            return _context.MusicLesson.Any(e => e.Seq == seq);
         }
     }
 }

@@ -9,8 +9,10 @@ namespace SchoolWebApi.Models.MusicLessons
     public class MusicLesson
     {
         [Key]
-        public int Seq { get; set; }
-        public int Id { get; set; }        
+        public int Seq { get; set; } // staff schedule seq.
+        public int Id { get; set; }
+        public DateTime StaffScheduleDateTimeFrom { get; set; }
+        public DateTime StaffScheduleDateTimeTo { get; set; }
         public DateTime DateTimeIn { get; set; }
         public DateTime DateTimeOut { get; set; }
         public DateTime DateTimeModified { get; set; }
@@ -21,7 +23,7 @@ namespace SchoolWebApi.Models.MusicLessons
     public class MusicLessonDTO // for Time in/out MusicLesson.
     {
         [Key]
-        public int Seq { get; set; }
+        public int Seq { get; set; } // staff schedule seq.
         public int Id { get; set; }
         //public DateTime IncidentDate { get; set; }
         //public TimeSpan Time { get; set; }

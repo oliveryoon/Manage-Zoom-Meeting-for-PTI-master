@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,8 +11,9 @@ using SchoolWebAPI.Models;
 
 namespace School_Web_Api.Controllers
 {
+    
     //[Authorize(Roles = "sec.All Staff")]
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class StudentsController : ControllerBase
@@ -25,6 +27,7 @@ namespace School_Web_Api.Controllers
 
         // GET: api/Students
         [HttpGet]
+        [EnableQuery]
         public async Task<ActionResult<IEnumerable<Student>>> GetStudents()
         {
             return await _context.Students.Take(10).ToListAsync();
