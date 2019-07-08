@@ -117,7 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ClientId" xml:space="preserve">
+    <value>d446190b-740f-4ec3-b249-fc0b85f2ebbf</value>
+  </data>
+  <data name="IntervalSecondsClearControls" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="Tenant" xml:space="preserve">
+    <value>315c37fc-27dc-4021-9c67-a92e8878d455</value>
+  </data>
   <data name="TerminalCode" xml:space="preserve">
     <value>MUSIC_CENTRE1</value>
+  </data>
+  <data name="WebApiBaseAddress" xml:space="preserve">
+    <value>http://localhost:5000</value>
+  </data>
+  <data name="WebApiBaseAddress2" xml:space="preserve">
+    <value>https://webapi.joeys.org</value>
   </data>
 </root>

@@ -22,14 +22,14 @@ namespace Music_Lesson_Terminal_2019 {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resource {
+    internal class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resource() {
+        internal Resources() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Music_Lesson_Terminal_2019 {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Music_Lesson_Terminal_2019.Resource", typeof(Resource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Music_Lesson_Terminal_2019.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,11 +61,56 @@ namespace Music_Lesson_Terminal_2019 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to d446190b-740f-4ec3-b249-fc0b85f2ebbf.
+        /// </summary>
+        internal static string ClientId {
+            get {
+                return ResourceManager.GetString("ClientId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 5.
+        /// </summary>
+        internal static string IntervalSecondsClearControls {
+            get {
+                return ResourceManager.GetString("IntervalSecondsClearControls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 315c37fc-27dc-4021-9c67-a92e8878d455.
+        /// </summary>
+        internal static string Tenant {
+            get {
+                return ResourceManager.GetString("Tenant", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to MUSIC_CENTRE1.
         /// </summary>
         internal static string TerminalCode {
             get {
                 return ResourceManager.GetString("TerminalCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to http://localhost:5000.
+        /// </summary>
+        internal static string WebApiBaseAddress {
+            get {
+                return ResourceManager.GetString("WebApiBaseAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://webapi.joeys.org.
+        /// </summary>
+        internal static string WebApiBaseAddress2 {
+            get {
+                return ResourceManager.GetString("WebApiBaseAddress2", resourceCulture);
             }
         }
     }

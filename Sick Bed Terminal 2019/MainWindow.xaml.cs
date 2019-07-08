@@ -651,6 +651,8 @@ namespace Sick_Bed_Terminal_2019
             int.TryParse(GetResource("IntervalSecondsClearControls"), out tempInt);
             _IntervalSecondsClearControls = tempInt;
             _TerminalCode = GetResource("TerminalCode");
+            string scope = GetResource("Scope");
+            string[] _Scopes = new string[] { scope };
 
             await GetToken();
 

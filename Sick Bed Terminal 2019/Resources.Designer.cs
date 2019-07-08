@@ -79,6 +79,15 @@ namespace Sick_Bed_Terminal_2019 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://joeysorg.onmicrosoft.com/WebApi/user_impersonation.
+        /// </summary>
+        internal static string Scope {
+            get {
+                return ResourceManager.GetString("Scope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 315c37fc-27dc-4021-9c67-a92e8878d455.
         /// </summary>
         internal static string Tenant {
@@ -97,11 +106,20 @@ namespace Sick_Bed_Terminal_2019 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://webapi.joeys.org.
+        ///   Looks up a localized string similar to http://localhost:5000.
         /// </summary>
         internal static string WebApiBaseAddress {
             get {
                 return ResourceManager.GetString("WebApiBaseAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://webapi.joeys.org.
+        /// </summary>
+        internal static string WebApiBaseAddress3 {
+            get {
+                return ResourceManager.GetString("WebApiBaseAddress3", resourceCulture);
             }
         }
     }

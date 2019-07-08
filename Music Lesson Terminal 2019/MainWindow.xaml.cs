@@ -354,7 +354,7 @@ namespace Music_Lesson_Terminal_2019
         }
         private string GetResource(string resourceKey)
         {
-            string resxFile = @".\Resource.resx";
+            string resxFile = @".\Resources.resx";
 
             using (ResXResourceSet resxSet = new ResXResourceSet(resxFile))
             {
@@ -662,5 +662,6 @@ namespace Music_Lesson_Terminal_2019
 
 
         }
+
     }
 }

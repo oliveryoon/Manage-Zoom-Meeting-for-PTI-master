@@ -17,8 +17,8 @@ namespace Sick_Bed_Terminal_2019
     {
         static App()
         {
-            ClientId = GetResource("ClientId");
-            Tenant = GetResource("Tenant");
+            //ClientId = GetResource("ClientId");
+            //Tenant = GetResource("Tenant");
 
             _clientApp = PublicClientApplicationBuilder.Create(ClientId)
                 .WithAuthority(AzureCloudInstance.AzurePublic, Tenant)

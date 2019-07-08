@@ -8,7 +8,7 @@
         WindowState="Maximized"
         WindowStyle="ToolWindow"
         ResizeMode="NoResize"
-        Title="MainWindow" GotFocus="Window_GotFocus"                 
+        Title="MainWindow" GotFocus="Window_GotFocus" Loaded="Window_Loaded"                 
         >
 
     <Grid>
