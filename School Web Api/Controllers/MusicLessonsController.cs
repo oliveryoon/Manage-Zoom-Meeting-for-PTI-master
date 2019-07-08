@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SchoolWebAPI.Models;
 using SchoolWebApi.Models.MusicLessons;
+using Microsoft.AspNetCore.Authorization;
 
 namespace School_Web_Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class MusicLessonsController : ControllerBase

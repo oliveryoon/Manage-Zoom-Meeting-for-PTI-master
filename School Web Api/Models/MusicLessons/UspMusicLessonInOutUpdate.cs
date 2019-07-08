@@ -12,8 +12,8 @@ namespace SchoolWebApi.Models.MusicLessons
         public int Id { get; set; }
         public DateTime DateTimeIn { get; set; }
         public DateTime DateTimeOut { get; set; }
-        public DateTime DateModified { get; set; }
-        public DateTime DateCreate { get; set; }
+        public DateTime DateTimeModified { get; set; }
+        public DateTime DateTimeCreated { get; set; }
         public string Code { get; set; }
         public string Description { get; set; }
     }

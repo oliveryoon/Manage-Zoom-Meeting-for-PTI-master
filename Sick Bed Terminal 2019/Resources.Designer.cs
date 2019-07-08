@@ -61,101 +61,47 @@ namespace Sick_Bed_Terminal_2019 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to d446190b-740f-4ec3-b249-fc0b85f2ebbf.
         /// </summary>
-        internal static string aadInstance {
+        internal static string ClientId {
             get {
-                return ResourceManager.GetString("aadInstance", resourceCulture);
+                return ResourceManager.GetString("ClientId", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SignOut,SignIn.
+        ///   Looks up a localized string similar to 5.
         /// </summary>
-        internal static string AbsenceEventTypeCode {
+        internal static string IntervalSecondsClearControls {
             get {
-                return ResourceManager.GetString("AbsenceEventTypeCode", resourceCulture);
+                return ResourceManager.GetString("IntervalSecondsClearControls", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to I.
+        ///   Looks up a localized string similar to 315c37fc-27dc-4021-9c67-a92e8878d455.
         /// </summary>
-        internal static string AbsenceReasonCode {
+        internal static string Tenant {
             get {
-                return ResourceManager.GetString("AbsenceReasonCode", resourceCulture);
+                return ResourceManager.GetString("Tenant", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pa S.
+        ///   Looks up a localized string similar to HEALTH_CENTRE1.
         /// </summary>
-        internal static string AbsenceTypeCode {
+        internal static string TerminalCode {
             get {
-                return ResourceManager.GetString("AbsenceTypeCode", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string App_ID_URI {
-            get {
-                return ResourceManager.GetString("App ID URI", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to N+fr2qatwEw7m30iU+gZrIbwk*ETMk+G.
-        /// </summary>
-        internal static string appKey {
-            get {
-                return ResourceManager.GetString("appKey", resourceCulture);
+                return ResourceManager.GetString("TerminalCode", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to https://webapi.joeys.org.
         /// </summary>
-        internal static string BaseAPIAddress {
+        internal static string WebApiBaseAddress {
             get {
-                return ResourceManager.GetString("BaseAPIAddress", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string clientId {
-            get {
-                return ResourceManager.GetString("clientId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to joeysorg.onmicrosoft.com.
-        /// </summary>
-        internal static string tenant {
-            get {
-                return ResourceManager.GetString("tenant", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to HEALTH_CENTRE.
-        /// </summary>
-        internal static string Terminal_Code {
-            get {
-                return ResourceManager.GetString("Terminal_Code", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to SickBay.
-        /// </summary>
-        internal static string Terminal_Mode {
-            get {
-                return ResourceManager.GetString("Terminal_Mode", resourceCulture);
+                return ResourceManager.GetString("WebApiBaseAddress", resourceCulture);
             }
         }
     }

@@ -20,15 +20,5 @@ namespace SchoolWebApi.Models.MusicLessons
         public string Code { get; set; }
         public string Description { get; set; }
     }
-    public class MusicLessonDTO // for Time in/out MusicLesson.
-    {
-        [Key]
-        public int Seq { get; set; } // staff schedule seq.
-        public int Id { get; set; }
-        //public DateTime IncidentDate { get; set; }
-        //public TimeSpan Time { get; set; }
-        public string RequestedJobCode { get; set; }
-        public string TerminalCode { get; set; }
-        //public string UsernameModified { get; set; }
-    }
+   
 }

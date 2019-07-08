@@ -61,7 +61,7 @@ namespace Music_Lesson_Terminal_2019 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Music1.
+        ///   Looks up a localized string similar to MUSIC_CENTRE1.
         /// </summary>
         internal static string TerminalCode {
             get {

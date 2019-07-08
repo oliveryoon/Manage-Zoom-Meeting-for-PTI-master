@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Resources;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -16,6 +17,9 @@ namespace Music_Lesson_Terminal_2019
     {
         static App()
         {
+            ClientId = GetResource("ClientId");
+            Tenant = GetResource("Tenant");
+
             _clientApp = PublicClientApplicationBuilder.Create(ClientId)
                 .WithAuthority(AzureCloudInstance.AzurePublic, Tenant)
                 .Build();
@@ -42,5 +46,16 @@ namespace Music_Lesson_Terminal_2019
         private static IPublicClientApplication _clientApp;
 
         public static IPublicClientApplication PublicClientApp { get { return _clientApp; } }
+
+        private static string GetResource(string resourceKey)
+        {
+            string resxFile = @".\Resources.resx";
+
+            using (ResXResourceSet resxSet = new ResXResourceSet(resxFile))
+            {
+                // Retrieve the image.
+                return resxSet.GetObject(resourceKey, true).ToString();
+            }
+        }
     }
 }

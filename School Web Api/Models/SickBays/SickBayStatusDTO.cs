@@ -12,5 +12,6 @@ namespace SchoolWebApi.Models.SickBays
             //SI=> It is ok to ign out.
             //SO=> It is ok to sign in.
         public string Description { get; set; } //Exists
+        
     }
 }

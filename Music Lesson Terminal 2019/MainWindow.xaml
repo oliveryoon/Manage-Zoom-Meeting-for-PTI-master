@@ -85,7 +85,7 @@
                 Scan your student card or enter your Student ID
             </TextBlock>-->
             <Border Background="Pink"  Grid.Row="1"  Visibility="Visible">
-                <PasswordBox x:Name="txtCardNumber" InputScope="Number" FontSize="30" Password="8213" HorizontalContentAlignment="Center" MaxLength="10" PasswordChar="X" IsTabStop="True" 
+                <PasswordBox x:Name="txtCardNumber" InputScope="Number" FontSize="30" Password="70479" HorizontalContentAlignment="Center" MaxLength="10" PasswordChar="X" IsTabStop="True" 
                     KeyUp="txtCardNumber_KeyUp" />
             </Border>
             <Label Name="lblMsg" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="Error Message" FontSize="30"></Label>

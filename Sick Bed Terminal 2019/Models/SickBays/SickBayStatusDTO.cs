@@ -13,5 +13,6 @@ namespace Sick_Bed_Terminal_2019.Models.SickBays
                                          //SI=> It is ok to ign out.
                                          //SO=> It is ok to sign in.
         public string Description { get; set; } //Exists
+        
     }
 }

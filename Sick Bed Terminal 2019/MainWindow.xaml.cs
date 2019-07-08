@@ -28,6 +28,7 @@ using System.Reflection;
 using System.Media;
 using System.Diagnostics;
 using System.Windows.Interop;
+using System.Resources;
 
 namespace Sick_Bed_Terminal_2019
 {
@@ -67,30 +68,35 @@ namespace Sick_Bed_Terminal_2019
         //private Uri redirectURI = null;
 
         //Set the API Endpoint to Graph 'me' endpoint
-        string graphAPIEndpoint = "https://graph.microsoft.com/v1.0/me";
+        //string graphAPIEndpoint = "https://graph.microsoft.com/v1.0/me";
 
         //Set the scope for API call to user.read
         //string[] scopes = new string[] { "user.read" };
-        string[] scopes = new string[] { "https://joeysorg.onmicrosoft.com/WebApi/user_impersonation" };       
+        string[] _Scopes = new string[] { "https://joeysorg.onmicrosoft.com/WebApi/user_impersonation" };       
 
 
-        private MediaPlayer mediaPlayer = new MediaPlayer();
+        private MediaPlayer _MediaPlayer = new MediaPlayer();
         //private static HttpClient httpClient = new HttpClient();
 
-        const string WebApiBaseAddress = "http://localhost:5000";
+        string _WebApiBaseAddress = "http://localhost:5000";
         //const string WebApiBaseAddress = "https://webapi.joeys.org";
         //private static AuthenticationContext authContext = null;
 
-        private DateTime lastActivityTime = System.DateTime.Now;
+        private DateTime _LastActivityTime = System.DateTime.Now;
+
+        private int _IntervalSecondsClearControls = 5;
+        private string _TerminalCode = "";
         public MainWindow()
         {
             try
             {
                 InitializeComponent();
                 DispatcherTimer timer = new DispatcherTimer();
-                timer.Interval = TimeSpan.FromMilliseconds(1000);
+                timer.Interval = TimeSpan.FromMilliseconds(_IntervalSecondsClearControls);
                 timer.Tick += timer_Tick;
                 timer.Start();
+
+                
             }
             catch(Exception e)
             {
@@ -105,7 +111,7 @@ namespace Sick_Bed_Terminal_2019
             {
                 lblTime.Content = DateTime.Now.ToString("HH:mm:ss");
 
-                if ((System.DateTime.Now - lastActivityTime).TotalSeconds > 5)
+                if ((System.DateTime.Now - _LastActivityTime).TotalSeconds > 5)
                 {
                     ClearAllControls();
                 }
@@ -134,7 +140,7 @@ namespace Sick_Bed_Terminal_2019
                 try
                 {
 
-                    authResult = await app.AcquireTokenSilent(scopes, firstAccount)
+                    authResult = await app.AcquireTokenSilent(_Scopes, firstAccount)
                         .ExecuteAsync();
                 }
                 catch (MsalUiRequiredException ex)
@@ -145,7 +151,7 @@ namespace Sick_Bed_Terminal_2019
 
                     try
                     {
-                        authResult = await app.AcquireTokenInteractive(scopes)
+                        authResult = await app.AcquireTokenInteractive(_Scopes)
                             .WithAccount(accounts.FirstOrDefault())
                             .WithParentActivityOrWindow(new WindowInteropHelper(this).Handle) // optional, used to center the browser on the window
                             .WithPrompt(Prompt.SelectAccount)
@@ -177,7 +183,17 @@ namespace Sick_Bed_Terminal_2019
 
             return "";
         }
-        
+        private string GetResource(string resourceKey)
+        {
+            string resxFile = @".\Resources.resx";
+
+            using (ResXResourceSet resxSet = new ResXResourceSet(resxFile))
+            {
+                // Retrieve the image.
+                return resxSet.GetObject(resourceKey, true).ToString();
+            }
+        }
+
         ///// <summary>
         ///// Perform an HTTP GET request to a URL using an HTTP Authorization header
         ///// </summary>
@@ -190,7 +206,7 @@ namespace Sick_Bed_Terminal_2019
         //    {
         //        var httpClient = new System.Net.Http.HttpClient();
         //        System.Net.Http.HttpResponseMessage response;
-            
+
         //        var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, url);
         //        //Add the token in Authorization header
         //        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
@@ -243,7 +259,7 @@ namespace Sick_Bed_Terminal_2019
             try
             {
 
-                lastActivityTime = System.DateTime.Now; // stop initializing the screen.
+                _LastActivityTime = System.DateTime.Now; // stop initializing the screen.
 
                 PasswordBox txt = (PasswordBox)txtCardNumber;
                 if (e != null && e.Key == Key.Enter)
@@ -261,9 +277,9 @@ namespace Sick_Bed_Terminal_2019
                         //StudentId = studentId;
                         
                         DisplayStudentDetails(studentId, token); // use the local variable.
-                        lastActivityTime = System.DateTime.Now; // stop initializing the screen.
+                        _LastActivityTime = System.DateTime.Now; // stop initializing the screen.
                         DisplayStudentMedicalIncidentStatus(StudentId, token); // use the variable returned from api in DisplayStudentDetails().
-                        lastActivityTime = System.DateTime.Now; // stop initializing the screen.
+                        _LastActivityTime = System.DateTime.Now; // stop initializing the screen.
                         //                    UpdateSickBay(Id);
                     }
 
@@ -291,7 +307,7 @@ namespace Sick_Bed_Terminal_2019
 
             try
             {
-                string url = WebApiBaseAddress + "/api/Students/{0}";
+                string url = _WebApiBaseAddress + "/api/Students/{0}";
                 //url = WebApiBaseAddress + "/api/values";
                 url = string.Format(url, Id);
                                
@@ -365,7 +381,7 @@ namespace Sick_Bed_Terminal_2019
                 btnCancel.IsEnabled = false;
                 lblMsg.Content = "";
                 pos = 1;
-                string url = WebApiBaseAddress + "/api/SickBays/{0}/StatusById";
+                string url = _WebApiBaseAddress + "/api/SickBays/{0}/StatusById";
                 url = string.Format(url, Id);
                 pos = 2;
                 var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, url);
@@ -495,12 +511,12 @@ namespace Sick_Bed_Terminal_2019
             
                 Debug.Print(uri.ToString());
 
-                mediaPlayer.MediaFailed += (o, args) =>
+                _MediaPlayer.MediaFailed += (o, args) =>
                 {
                     MessageBox.Show("Media Failed!!" + args.ErrorException.Message);
                 };
-                mediaPlayer.Open(uri);
-                mediaPlayer.Play();
+                _MediaPlayer.Open(uri);
+                _MediaPlayer.Play();
             }
             catch (Exception e)
             {
@@ -519,14 +535,14 @@ namespace Sick_Bed_Terminal_2019
 
             try
             {
-                SickBaySimple data = new SickBaySimple();
+                SickBayDTO data = new SickBayDTO();
                 data.Id = Id; // Student ID.                
                 data.IncidentDate = DateTime.Today;
                 data.Time = DateTime.Now.TimeOfDay;
                 data.UsernameModified = @"joeys\oyoon";
                 data.RequestedJobCode = RequestedJobCode;
-                
-                string url = WebApiBaseAddress + "/api/SickBays";
+                data.TerminalCode = _TerminalCode;
+                string url = _WebApiBaseAddress + "/api/SickBays";
                 //url = string.Format(url, Id);
 
                 //get a token.
@@ -568,7 +584,7 @@ namespace Sick_Bed_Terminal_2019
         {
             try { 
                 txtCardNumber.Focus();
-                lastActivityTime = System.DateTime.Now; // stop initializing the screen.
+                _LastActivityTime = System.DateTime.Now; // stop initializing the screen.
                 UpdateSickBay(StudentId);
                 ClearAllControls();
             }
@@ -623,6 +639,22 @@ namespace Sick_Bed_Terminal_2019
         private void Window_GotFocus(object sender, RoutedEventArgs e)
         {
             txtCardNumber.Focus();
+        }
+
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            int tempInt = 0;
+            txtCardNumber.Focus();
+
+            _WebApiBaseAddress = GetResource("WebApiBaseAddress");
+
+            int.TryParse(GetResource("IntervalSecondsClearControls"), out tempInt);
+            _IntervalSecondsClearControls = tempInt;
+            _TerminalCode = GetResource("TerminalCode");
+
+            await GetToken();
+
+
         }
     }
 }

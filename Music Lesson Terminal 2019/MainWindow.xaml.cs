@@ -60,22 +60,23 @@ namespace Music_Lesson_Terminal_2019
 
         //private Uri redirectURI = null;
 
-        //Set the API Endpoint to Graph 'me' endpoint
-        string graphAPIEndpoint = "https://graph.microsoft.com/v1.0/me";
-
         //Set the scope for API call to user.read
         //string[] scopes = new string[] { "user.read" };
-        string[] scopes = new string[] { "https://joeysorg.onmicrosoft.com/WebApi/user_impersonation" };
+        string[] _Scopes = new string[] { "https://joeysorg.onmicrosoft.com/WebApi/user_impersonation" };
 
 
-        private MediaPlayer mediaPlayer = new MediaPlayer();
+        private MediaPlayer _MediaPlayer = new MediaPlayer();
         //private static HttpClient httpClient = new HttpClient();
 
-        const string WebApiBaseAddress = "http://localhost:5000";
+        string _WebApiBaseAddress = "http://localhost:5000";
         //const string WebApiBaseAddress = "https://webapi.joeys.org";
         //private static AuthenticationContext authContext = null;
 
-        private DateTime lastActivityTime = System.DateTime.Now;
+        private DateTime _LastActivityTime = System.DateTime.Now;
+
+        private int _IntervalSecondsClearControls = 5;
+        private string _TerminalCode = "";
+
         public MainWindow()
         {
             try
@@ -99,7 +100,7 @@ namespace Music_Lesson_Terminal_2019
             {
                 lblTime.Content = DateTime.Now.ToString("HH:mm:ss");
 
-                if ((System.DateTime.Now - lastActivityTime).TotalSeconds > 500)
+                if ((System.DateTime.Now - _LastActivityTime).TotalSeconds > 500)
                 {
                     ClearAllControls();
                 }
@@ -128,7 +129,7 @@ namespace Music_Lesson_Terminal_2019
                 try
                 {
 
-                    authResult = await app.AcquireTokenSilent(scopes, firstAccount)
+                    authResult = await app.AcquireTokenSilent(_Scopes, firstAccount)
                         .ExecuteAsync();
                 }
                 catch (MsalUiRequiredException ex)
@@ -139,7 +140,7 @@ namespace Music_Lesson_Terminal_2019
 
                     try
                     {
-                        authResult = await app.AcquireTokenInteractive(scopes)
+                        authResult = await app.AcquireTokenInteractive(_Scopes)
                             .WithAccount(accounts.FirstOrDefault())
                             .WithParentActivityOrWindow(new WindowInteropHelper(this).Handle) // optional, used to center the browser on the window
                             .WithPrompt(Prompt.SelectAccount)
@@ -237,7 +238,7 @@ namespace Music_Lesson_Terminal_2019
             try
             {
 
-                lastActivityTime = System.DateTime.Now; // stop initializing the screen.
+                _LastActivityTime = System.DateTime.Now; // stop initializing the screen.
 
                 PasswordBox txt = (PasswordBox)txtCardNumber;
                 if (e != null && e.Key == Key.Enter)
@@ -257,10 +258,10 @@ namespace Music_Lesson_Terminal_2019
                         bool successFlag = await DisplayStudentDetails(studentId, token); // use the local variable.
                         if (successFlag)
                         {
-                            lastActivityTime = System.DateTime.Now; // stop initializing the screen.
+                            _LastActivityTime = System.DateTime.Now; // stop initializing the screen.
 
                             DisplayMusicLessonStatus(StudentId, token); // use the variable returned from api in DisplayStudentDetails().
-                            lastActivityTime = System.DateTime.Now; // stop initializing the screen.
+                            _LastActivityTime = System.DateTime.Now; // stop initializing the screen.
                                                                     
                         }
 
@@ -290,7 +291,7 @@ namespace Music_Lesson_Terminal_2019
 
             try
             {
-                string url = WebApiBaseAddress + "/api/Students/{0}";
+                string url = _WebApiBaseAddress + "/api/Students/{0}";
                 //url = WebApiBaseAddress + "/api/values";
                 url = string.Format(url, Id);
 
@@ -382,7 +383,7 @@ namespace Music_Lesson_Terminal_2019
                 //StringContent statusContent = new StringContent(JsonConvert.SerializeObject(status), Encoding.UTF8, "application/json");
                 string statusContent = string.Format("?Id={0}&TerminalCode={1}", status.Id, status.TerminalCode);
 
-                string url = WebApiBaseAddress + "/api/MusicLessons/Status{0}";
+                string url = _WebApiBaseAddress + "/api/MusicLessons/Status{0}";
                 
 
                 url = string.Format(url, statusContent);
@@ -516,12 +517,12 @@ namespace Music_Lesson_Terminal_2019
 
                 Debug.Print(uri.ToString());
 
-                mediaPlayer.MediaFailed += (o, args) =>
+                _MediaPlayer.MediaFailed += (o, args) =>
                 {
                     MessageBox.Show("Media Failed!!" + args.ErrorException.Message);
                 };
-                mediaPlayer.Open(uri);
-                mediaPlayer.Play();
+                _MediaPlayer.Open(uri);
+                _MediaPlayer.Play();
             }
             catch (Exception e)
             {
@@ -545,7 +546,7 @@ namespace Music_Lesson_Terminal_2019
                 data.RequestedJobCode = RequestedJobCode;
                 data.TerminalCode = GetResource("TerminalCode");
 
-                string url = WebApiBaseAddress + "/api/MusicLessons";
+                string url = _WebApiBaseAddress + "/api/MusicLessons";
                 //url = string.Format(url, Id);
 
                 //get a token.
@@ -588,7 +589,7 @@ namespace Music_Lesson_Terminal_2019
             try
             {
                 txtCardNumber.Focus();
-                lastActivityTime = System.DateTime.Now; // stop initializing the screen.
+                _LastActivityTime = System.DateTime.Now; // stop initializing the screen.
                 UpdateMusicLesson(StudentId);
                 ClearAllControls();
             }
@@ -645,6 +646,21 @@ namespace Music_Lesson_Terminal_2019
         private void Window_GotFocus(object sender, RoutedEventArgs e)
         {
             txtCardNumber.Focus();
+        }
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            int tempInt = 0;
+            txtCardNumber.Focus();
+
+            _WebApiBaseAddress = GetResource("WebApiBaseAddress");
+
+            int.TryParse(GetResource("IntervalSecondsClearControls"), out tempInt);
+            _IntervalSecondsClearControls = tempInt;
+            _TerminalCode = GetResource("TerminalCode");
+
+            await GetToken();
+
+
         }
     }
 }

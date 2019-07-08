@@ -18,7 +18,7 @@ namespace Sick_Bed_Terminal_2019.Models.SickBays
         public string Code { get; set; }
         public string Description { get; set; }
     }
-    public class SickBaySimple // for Time in/out SickBay.
+    public class SickBayDTO // for Time in/out SickBay.
     {
         public int Seq { get; set; }
         public int Id { get; set; }
@@ -26,5 +26,6 @@ namespace Sick_Bed_Terminal_2019.Models.SickBays
         public TimeSpan Time { get; set; }
         public string RequestedJobCode { get; set; }
         public string UsernameModified { get; set; }
+        public string TerminalCode { get; set; }
     }
 }

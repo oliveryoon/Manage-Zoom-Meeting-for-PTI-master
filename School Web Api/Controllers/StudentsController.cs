@@ -13,7 +13,7 @@ namespace School_Web_Api.Controllers
 {
     
     //[Authorize(Roles = "sec.All Staff")]
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class StudentsController : ControllerBase
