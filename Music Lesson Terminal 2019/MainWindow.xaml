@@ -10,7 +10,46 @@
         ResizeMode="NoResize"
         Title="MainWindow" GotFocus="Window_GotFocus" Loaded="Window_Loaded"                 
         >
-
+    <Window.Resources>
+        
+        <!--<ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles\Style.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>-->
+        
+        <!-- Animates the rectangle's opacity. -->
+        <Storyboard x:Uid="blinkPopupSimpleMessage" x:Name="blinkPopupSimpleMessage" x:Key="blinkPopupSimpleMessage">
+            <DoubleAnimation
+              Storyboard.TargetName="popupSimpleMessage"
+              Storyboard.TargetProperty="Opacity"
+              From="2.0" To="0.0" Duration="0:0:2"/>
+        </Storyboard>
+        <Storyboard x:Name="blinkPopupStop" x:Key="blinkPopupStop">
+            <DoubleAnimation
+              Storyboard.TargetName="popupStop"
+              Storyboard.TargetProperty="Opacity"
+              From="2.0" To="0.0" Duration="0:0:1.2"/>
+        </Storyboard>
+        <Storyboard x:Name="blinkPopupSuccess" x:Key="blinkPopupSuccess">
+            <DoubleAnimation
+              Storyboard.TargetName="popupSuccess"
+              Storyboard.TargetProperty="Opacity"
+              From="2.0" To="0.0" Duration="0:0:1.2"/>
+        </Storyboard>
+        <Storyboard x:Name="blinkPopupPhoto" x:Key="blinkPopupPhoto">
+            <DoubleAnimation
+              Storyboard.TargetName="popupPhoto"
+              Storyboard.TargetProperty="Opacity"
+              From="2.0" To="0.0" Duration="0:0:2.5"/>
+        </Storyboard>
+        <Storyboard x:Name="blinkPopupStudentName" x:Key="blinkPopupStudentName">
+            <DoubleAnimation
+              Storyboard.TargetName="popupStudentName"
+              Storyboard.TargetProperty="Opacity"
+              From="2.0" To="0.0" Duration="0:0:3.5"/>
+        </Storyboard>
+    </Window.Resources>
     <Grid>
         <!--<Grid.Background>
             <ImageBrush ImageSource="/Assets/Joeys Terminal.JPG" Stretch="UniformToFill" ></ImageBrush>
@@ -28,9 +67,9 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock FontSize="48" FontWeight="Bold" Text="Music Centre Terminal" Grid.Column="1" TextAlignment="Center" />
-            <Border Grid.Column="2">
+            <Border Grid.Column="2" HorizontalAlignment="Right">
                 <!--<TextBlock x:Name="clock"  TextWrapping="Wrap" Foreground="Black" VerticalAlignment="Center" Text="5:00" TextAlignment="Right" Margin="01" FontSize="30" />-->
-                <Label Name="lblTime" FontSize="48" HorizontalAlignment="Center" VerticalAlignment="Center" Content="5:00" />
+                <Label Name="lblTime" FontSize="48" HorizontalAlignment="Right" VerticalAlignment="Center" Content="5:00" />
             </Border>
 
         </Grid>
@@ -98,7 +137,7 @@
         <!--<Border x:Name="ErrorBorder" Background="Red" Grid.Row="2"/>
         <TextBlock x:Name="StatusBlock" Grid.Row="2" Margin="12, 10, 12, 10" Visibility="Collapsed"/>-->
 
-        <!--<StackPanel x:Name="popupStop" Grid.Row="3" Grid.RowSpan="2" VerticalAlignment="Center" Opacity="0" Visibility="Visible" HorizontalAlignment="Stretch" Background="White" >
+        <StackPanel x:Name="popupStop" Grid.Row="1" Grid.ColumnSpan="3" VerticalAlignment="Center" Opacity="0" Visibility="Visible" HorizontalAlignment="Stretch" Background="White" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -108,22 +147,22 @@
                 <TextBlock x:Name="textBlockStop"  Grid.Row="1" TextWrapping="Wrap" Foreground="Red" Text="" FontSize="50" VerticalAlignment="Center" TextAlignment="Center" Margin="03" />
             </Grid>
         </StackPanel>
-        <StackPanel x:Name="popupSuccess" Grid.Row="3" Grid.RowSpan="2" VerticalAlignment="Center" Opacity="0" Visibility="Visible" HorizontalAlignment="Stretch" Background="White" >
+        <StackPanel x:Name="popupSuccess" Grid.Row="1" Grid.ColumnSpan="3" VerticalAlignment="Center" Opacity="0" Visibility="Visible" HorizontalAlignment="Stretch" Background="White" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                -->
-        <!--<Grid.ColumnDefinitions>
+                
+                <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="110" />
                     <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>-->
-        <!--
+                </Grid.ColumnDefinitions>
+        
                 <Image x:Name="imgSuccess" Grid.Row="0" Height="100" Width="100"  Source="/Assets/success.png"  Margin="10,10,0,10.2"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
                 <TextBlock x:Name="textBlockSuccess"  Grid.Row="1" TextWrapping="Wrap" Foreground="Green" Text="Welcome to C# Corner" FontSize="50" VerticalAlignment="Center" TextAlignment="Center" Margin="03" />
             </Grid>
-        </StackPanel>-->
+        </StackPanel>
 
     </Grid>
 

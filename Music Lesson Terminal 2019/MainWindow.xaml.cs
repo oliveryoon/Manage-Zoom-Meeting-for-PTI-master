@@ -453,6 +453,9 @@ namespace Music_Lesson_Terminal_2019
             {
                 Uri uri = ResourceAccessor.GetFileUri("Assets/Fail sound effect 3.wav");
                 PlaySound(uri);
+                textBlockStop.Text = "Failed! ";
+                BlinkPopupStop.Begin();
+                
 
                 if (clearAllFlag)
                 {
@@ -489,8 +492,8 @@ namespace Music_Lesson_Terminal_2019
             {
 
 
-                txtCardNumber.Password = "";
-                Uri uri = ResourceAccessor.GetFileUri("Assets/Joeys Terminal.JPG");
+                //txtCardNumber.Password = "";
+                Uri uri = ResourceAccessor.GetFileUri("Assets/student.png");
                 imgStudentPhoto.Source = new BitmapImage(uri);
 
                 txtStudentName.Text = string.Empty;
@@ -519,7 +522,7 @@ namespace Music_Lesson_Terminal_2019
 
                 _MediaPlayer.MediaFailed += (o, args) =>
                 {
-                    MessageBox.Show("Media Failed!!" + args.ErrorException.Message);
+                    MessageBox.Show("Media Failed!!" + args.ErrorException.Message);                    
                 };
                 _MediaPlayer.Open(uri);
                 _MediaPlayer.Play();
@@ -545,6 +548,7 @@ namespace Music_Lesson_Terminal_2019
                 data.Id = Id; // Student ID.                                
                 data.RequestedJobCode = RequestedJobCode;
                 data.TerminalCode = GetResource("TerminalCode");
+                data.DateTimeCardSwiped = System.DateTime.Now;
 
                 string url = _WebApiBaseAddress + "/api/MusicLessons";
                 //url = string.Format(url, Id);
@@ -663,5 +667,6 @@ namespace Music_Lesson_Terminal_2019
 
         }
 
+       
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.OData;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -26,8 +26,7 @@ namespace School_Web_Api.Controllers
         }
 
         // GET: api/Students
-        [HttpGet]
-        [EnableQuery]
+        [HttpGet]        
         public async Task<ActionResult<IEnumerable<Student>>> GetStudents()
         {
             return await _context.Students.Take(10).ToListAsync();

@@ -14,7 +14,7 @@ using SchoolWebAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNet.OData.Extensions;
+
 
 namespace SchoolWebApi
 {
@@ -39,12 +39,10 @@ namespace SchoolWebApi
                 sharedOptions.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddAzureAdBearer(options => Configuration.Bind("AzureAd", options));
-
             
+            services.AddProtectWebApiWithMicrosoftIdentityPlatformV2(Configuration);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
             
-            //services.AddProtectWebApiWithMicrosoftIdentityPlatformV2(Configuration);
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddOData();
             services.AddMvc();
         }
 
@@ -55,13 +53,13 @@ namespace SchoolWebApi
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseMvc(routeBuilder => {
+            //app.UseMvc(routeBuilder => {
 
-                routeBuilder.EnableDependencyInjection();
+            //    routeBuilder.EnableDependencyInjection();
 
-                routeBuilder.Expand().Select().OrderBy().Filter();
+            //    routeBuilder.Expand().Select().OrderBy().Filter();
 
-            });
+            //});
             app.UseAuthentication();
             app.UseMvc();
         }

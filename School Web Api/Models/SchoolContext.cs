@@ -80,18 +80,20 @@ namespace SchoolWebAPI.Models
             try
             {
                 // Set params.
-                SqlParameter iDParam = new SqlParameter("@ID", musicLessonDTO.Id);                
+                SqlParameter iDParam = new SqlParameter("@ID", musicLessonDTO.Id);
+                
+                SqlParameter DateTimeCardSwipedParam = new SqlParameter("@DateTimeCardSwiped", musicLessonDTO.DateTimeCardSwiped);
                 SqlParameter RequestedJobCodeParam = new SqlParameter("@RequestedJobCode", musicLessonDTO.RequestedJobCode);
                 SqlParameter TerminalCodeParam = new SqlParameter("@TerminalCode", musicLessonDTO.TerminalCode);
 
                 // Processing.  
                 //;Workstation ID={0}|{1}\{2}
                 
-                string sqlQuery = "EXEC webapi.uspMusicLessonInOutUpdate @ID, @RequestedJobCode, @TerminalCode";
+                string sqlQuery = "EXEC webapi.uspMusicLessonInOutUpdate @ID, @RequestedJobCode, @TerminalCode, @DateTimeCardSwiped";
 
                 //Task<int> x = this.Database.ExecuteSqlCommandAsync(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam);
                 //await this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam).ToListAsync();
-                var sickbayInOut = this.Query<UspMusicLessonInOutUpdate>().FromSql(sqlQuery, iDParam, RequestedJobCodeParam, TerminalCodeParam).FirstOrDefault();
+                var sickbayInOut = this.Query<UspMusicLessonInOutUpdate>().FromSql(sqlQuery, iDParam, RequestedJobCodeParam, TerminalCodeParam, DateTimeCardSwipedParam).FirstOrDefault();
                 musicLessonDTO.Seq = sickbayInOut.Seq;
                 return musicLessonDTO;
             }
@@ -117,17 +119,16 @@ namespace SchoolWebAPI.Models
                 SqlParameter iDParam = new SqlParameter("@ID", sickBaySimple.Id);
                 SqlParameter incidentDateParam = new SqlParameter("@IncidentDate", sickBaySimple.IncidentDate);
                 SqlParameter timeParam = new SqlParameter("@Time", sickBaySimple.Time);
-                SqlParameter usernameParam = new SqlParameter("@Username", sickBaySimple.UsernameModified);
-                SqlParameter venueCodeParam = new SqlParameter("@VenueCode", "test");
+                SqlParameter usernameParam = new SqlParameter("@Username", sickBaySimple.UsernameModified);                
                 SqlParameter RequestedJobCodeParam = new SqlParameter("@RequestedJobCode", sickBaySimple.RequestedJobCode);
                 SqlParameter TerminalCodeParam = new SqlParameter("@TerminalCode", sickBaySimple.TerminalCode);
 
                 // Processing.  
-                string sqlQuery = "EXEC webapi.uspSickBayInOutUpdate @ID, @IncidentDate, @Time, @Username, @VenueCode, @RequestedJobCode, @TerminalCode";
+                string sqlQuery = "EXEC webapi.uspSickBayInOutUpdate @ID, @IncidentDate, @Time, @Username, @RequestedJobCode, @TerminalCode";
 
                 //Task<int> x = this.Database.ExecuteSqlCommandAsync(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam);
                 //await this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam).ToListAsync();
-                var sickbayInOut = this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam, RequestedJobCodeParam, TerminalCodeParam).FirstOrDefault();
+                var sickbayInOut = this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, RequestedJobCodeParam, TerminalCodeParam).FirstOrDefault();
                 sickBaySimple.Seq = sickbayInOut.Seq;
                 return sickBaySimple;
             }

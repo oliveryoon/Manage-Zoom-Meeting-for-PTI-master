@@ -24,10 +24,10 @@ namespace Music_Lesson_Terminal_2019.Models.MusicLessons
         
         public int Seq { get; set; }
         public int Id { get; set; }
-        //public DateTime IncidentDate { get; set; }
-        //public TimeSpan Time { get; set; }
+        public DateTime DateTimeCardSwiped { get; set; }
+        
         public string RequestedJobCode { get; set; }
         public string TerminalCode { get; set; }
-        //public string UsernameModified { get; set; }
+
     }
 }

@@ -483,8 +483,8 @@ namespace Sick_Bed_Terminal_2019
             {
 
             
-                txtCardNumber.Password = "";
-                Uri uri = ResourceAccessor.GetFileUri("Assets/Joeys Terminal.JPG");
+                //txtCardNumber.Password = "";
+                Uri uri = ResourceAccessor.GetFileUri("Assets/student.png");
                 imgStudentPhoto.Source = new BitmapImage(uri);
 
                 txtStudentName.Text = string.Empty;
