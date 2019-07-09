@@ -101,7 +101,7 @@ namespace Music_Lesson_Terminal_2019
             {
                 lblTime.Content = DateTime.Now.ToString("HH:mm:ss");
 
-                if ((System.DateTime.Now - _LastActivityTime).TotalSeconds > 500)
+                if ((System.DateTime.Now - _LastActivityTime).TotalSeconds > _IntervalSecondsClearControls)
                 {
                     ClearAllControls();
                 }
@@ -499,7 +499,7 @@ namespace Music_Lesson_Terminal_2019
             {
 
 
-                //txtCardNumber.Password = "";
+                txtCardNumber.Password = "";
                 Uri uri = ResourceAccessor.GetFileUri("Assets/student.png");
                 imgStudentPhoto.Source = new BitmapImage(uri);
 
@@ -516,7 +516,7 @@ namespace Music_Lesson_Terminal_2019
             }
             catch (Exception e)
             {
-                lblMsg.Content = "13. " + e.Message;
+                lblMsg.Content = e.Message + ". (13)";
             }
         }
         async private void PlaySound(Uri uri)//            --async private Task PlaySound(Uri uri)
@@ -531,15 +531,16 @@ namespace Music_Lesson_Terminal_2019
                 {
                     MessageBox.Show("Media Failed!!" + args.ErrorException.Message);                    
                 };
+                
                 _MediaPlayer.Open(uri);
-                _MediaPlayer.Volume = 1.0f;
+                await Task.Delay(500);
                 _MediaPlayer.Play();
 
-                await Task.Delay(1500);
+                
             }
             catch (Exception e)
             {
-                lblMsg.Content = "14. " + e.Message;
+                lblMsg.Content = e.Message + ". (14)";
             }
 
 
@@ -674,9 +675,7 @@ namespace Music_Lesson_Terminal_2019
 
             await GetToken();
 
-
-        }
-
-       
+            ActionWhenSucceeded();
+        }       
     }
 }

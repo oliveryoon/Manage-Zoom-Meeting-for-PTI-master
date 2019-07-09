@@ -72,10 +72,10 @@ namespace Sick_Bed_Terminal_2019
 
         //Set the scope for API call to user.read
         //string[] scopes = new string[] { "user.read" };
-        string[] _Scopes = new string[] { "https://joeysorg.onmicrosoft.com/WebApi/user_impersonation" };       
+        string[] _Scopes = new string[] { "https://joeysorg.onmicrosoft.com/WebApi/user_impersonation" };
 
 
-        private MediaPlayer _MediaPlayer = new MediaPlayer();
+
         //private static HttpClient httpClient = new HttpClient();
 
         string _WebApiBaseAddress = "http://localhost:5000";
@@ -86,23 +86,25 @@ namespace Sick_Bed_Terminal_2019
 
         private int _IntervalSecondsClearControls = 5;
         private string _TerminalCode = "";
+
+        static MediaPlayer _mediaPlayer = new MediaPlayer();
         public MainWindow()
         {
             try
             {
                 InitializeComponent();
                 DispatcherTimer timer = new DispatcherTimer();
-                timer.Interval = TimeSpan.FromMilliseconds(_IntervalSecondsClearControls);
+                timer.Interval = TimeSpan.FromMilliseconds(1000);
                 timer.Tick += timer_Tick;
                 timer.Start();
 
-                
+
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 lblMsg.Content = "1. " + e.Message;
             }
-            
+
 
         }
         void timer_Tick(object sender, EventArgs e)
@@ -111,7 +113,7 @@ namespace Sick_Bed_Terminal_2019
             {
                 lblTime.Content = DateTime.Now.ToString("HH:mm:ss");
 
-                if ((System.DateTime.Now - _LastActivityTime).TotalSeconds > 5)
+                if ((System.DateTime.Now - _LastActivityTime).TotalSeconds > _IntervalSecondsClearControls)
                 {
                     ClearAllControls();
                 }
@@ -120,7 +122,7 @@ namespace Sick_Bed_Terminal_2019
             {
                 lblMsg.Content = "2. " + ex.Message;
             }
-            
+
         }
         /// <summary>
         /// Call AcquireToken - to acquire a token requiring user to sign-in
@@ -275,7 +277,7 @@ namespace Sick_Bed_Terminal_2019
                         //txtCardNumber.Password = "8213";
                         long.TryParse(txtCardNumber.Password, out studentId);
                         //StudentId = studentId;
-                        
+
                         DisplayStudentDetails(studentId, token); // use the local variable.
                         _LastActivityTime = System.DateTime.Now; // stop initializing the screen.
                         DisplayStudentMedicalIncidentStatus(StudentId, token); // use the variable returned from api in DisplayStudentDetails().
@@ -310,7 +312,7 @@ namespace Sick_Bed_Terminal_2019
                 string url = _WebApiBaseAddress + "/api/Students/{0}";
                 //url = WebApiBaseAddress + "/api/values";
                 url = string.Format(url, Id);
-                               
+
 
                 var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, url);
                 //Add the token in Authorization header
@@ -391,7 +393,7 @@ namespace Sick_Bed_Terminal_2019
                 response = await httpClient.SendAsync(request);
 
 
-                pos = 4 ;
+                pos = 4;
                 SickBayStatusDTO status;
                 if (response.IsSuccessStatusCode)
                 {
@@ -412,7 +414,7 @@ namespace Sick_Bed_Terminal_2019
                         {
                             RequestedJobCode = "SO"; // need this code when update requested.
                         }
-                            
+
                         else if (status.Code == "SO")
                             RequestedJobCode = "SI"; // need this code when update requested.
                         else
@@ -420,10 +422,10 @@ namespace Sick_Bed_Terminal_2019
 
                         if (status.Code == "SI" || status.Code == "SO")
                         {
-                            btnSignInOut.Content = RequestedJobCode == "SO"? "Sign Out": "Sign In";
+                            btnSignInOut.Content = RequestedJobCode == "SO" ? "Sign Out" : "Sign In";
                             btnSignInOut.IsEnabled = true;
                             btnCancel.IsEnabled = true;
-                            
+
                         }
 
                         else //if (status.Code == "PN" || "ER" )
@@ -461,16 +463,16 @@ namespace Sick_Bed_Terminal_2019
 
                 lblMsg.Content = message;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 lblMsg.Content = "11. " + e.Message;
             }
-            
+
 
         }
         private void ActionWhenSucceeded()
         {
-            try { 
+            try {
                 Uri uri = ResourceAccessor.GetFileUri("Assets/You win sound effect 3.wav");
                 PlaySound(uri);
 
@@ -491,8 +493,8 @@ namespace Sick_Bed_Terminal_2019
             try
             {
 
-            
-                //txtCardNumber.Password = "";
+
+                txtCardNumber.Password = "";
                 Uri uri = ResourceAccessor.GetFileUri("Assets/student.png");
                 imgStudentPhoto.Source = new BitmapImage(uri);
 
@@ -509,31 +511,41 @@ namespace Sick_Bed_Terminal_2019
             }
             catch (Exception e)
             {
-                lblMsg.Content = "13. " + e.Message;
+                lblMsg.Content = e.Message + ". (13)";
             }
         }
-        async private void PlaySound(Uri uri)//            --async private Task PlaySound(Uri uri)
+        //private void Media_Ended(object sender, EventArgs e)
+        //{
+        //    //_mediaPlayer.Open( SoundUri );
+        //    _mediaPlayer.Position = TimeSpan.Zero;
+        //    //_mediaPlayer.Play();
+        //}
+        //private Uri SoundUri {get;set;}
+        private void PlaySound(Uri uri)//            --async private Task PlaySound(Uri uri)
         {
             try
             {
 
-            
-                Debug.Print(uri.ToString());
+                //SoundUri = uri;
 
-                _MediaPlayer.MediaFailed += (o, args) =>
+                _mediaPlayer.MediaFailed += (o, args) =>
                 {
                     MessageBox.Show("Media Failed!!" + args.ErrorException.Message);
                 };
-                
-                _MediaPlayer.Open(uri);
-                _MediaPlayer.Volume = 1.0f;
-                _MediaPlayer.Play();
+                _mediaPlayer.Open(uri);
+                //_mediaPlayer.MediaEnded += new EventHandler(Media_Ended);
+                _mediaPlayer.Play();
 
-                await Task.Delay(1500);
+                //MediaElement media = new MediaElement();
+                //media.LoadedBehavior = MediaState.Manual;
+                //media.UnloadedBehavior = MediaState.Manual;
+                //media.Source = uri; // new Uri("ding.wav", UriKind.Relative);
+                //media.Play();
+                                
             }
             catch (Exception e)
             {
-                lblMsg.Content = "14. " + e.Message;
+                lblMsg.Content =  e.Message + ". (14)";
             }
 
 
@@ -669,6 +681,7 @@ namespace Sick_Bed_Terminal_2019
 
             await GetToken();
 
+            ActionWhenSucceeded();
 
         }
     }

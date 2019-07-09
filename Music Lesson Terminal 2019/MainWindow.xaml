@@ -156,11 +156,6 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="110" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-        
                 <Image x:Name="imgSuccess" Grid.Row="0" Height="100" Width="100"  Source="/Assets/success.png"  Margin="10,10,0,10.2"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
                 <TextBlock x:Name="textBlockSuccess"  Grid.Row="1" TextWrapping="Wrap" Foreground="Green" Text="Welcome to C# Corner" FontSize="50" VerticalAlignment="Center" TextAlignment="Center" Margin="03" />
             </Grid>

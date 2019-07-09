@@ -125,6 +125,7 @@
   </data>
   <data name="TerminalCode" xml:space="preserve">
     <value>HEALTH_CENTRE1</value>
+    <comment>Health Centre not Counselling Dept.</comment>
   </data>
   <data name="ClientId" xml:space="preserve">
     <value>d446190b-740f-4ec3-b249-fc0b85f2ebbf</value>
