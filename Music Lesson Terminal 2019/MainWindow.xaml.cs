@@ -18,6 +18,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -203,36 +204,36 @@ namespace Music_Lesson_Terminal_2019
         /// <summary>
         /// Sign out the current user
         /// </summary>
-        private async void SignOutButton_Click(object sender, RoutedEventArgs e)
-        {
-            var accounts = await App.PublicClientApp.GetAccountsAsync();
-            if (accounts.Any())
-            {
-                try
-                {
-                    await App.PublicClientApp.RemoveAsync(accounts.FirstOrDefault());
-                    //this.ResultText.Text = "User has signed-out";
-                    //this.CallGraphButton.Visibility = Visibility.Visible;
-                    //this.SignOutButton.Visibility = Visibility.Collapsed;
-                }
-                catch (MsalException ex)
-                {
-                    lblMsg.Content = $"Error signing-out user: {ex.Message}";
-                }
-            }
-        }
+        //private async void SignOutButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var accounts = await App.PublicClientApp.GetAccountsAsync();
+        //    if (accounts.Any())
+        //    {
+        //        try
+        //        {
+        //            await App.PublicClientApp.RemoveAsync(accounts.FirstOrDefault());
+        //            //this.ResultText.Text = "User has signed-out";
+        //            //this.CallGraphButton.Visibility = Visibility.Visible;
+        //            //this.SignOutButton.Visibility = Visibility.Collapsed;
+        //        }
+        //        catch (MsalException ex)
+        //        {
+        //            lblMsg.Content = $"Error signing-out user: {ex.Message}";
+        //        }
+        //    }
+        //}
         /// <summary>
         /// Display basic information contained in the token
         /// </summary>
-        private void DisplayBasicTokenInfo(AuthenticationResult authResult)
-        {
-            //TokenInfoText.Text = "";
-            if (authResult != null)
-            {
-                //TokenInfoText.Text += $"Username: {authResult.Account.Username}" + Environment.NewLine;
-                //TokenInfoText.Text += $"Token Expires: {authResult.ExpiresOn.ToLocalTime()}" + Environment.NewLine;
-            }
-        }
+        //private void DisplayBasicTokenInfo(AuthenticationResult authResult)
+        //{
+        //    //TokenInfoText.Text = "";
+        //    if (authResult != null)
+        //    {
+        //        //TokenInfoText.Text += $"Username: {authResult.Account.Username}" + Environment.NewLine;
+        //        //TokenInfoText.Text += $"Token Expires: {authResult.ExpiresOn.ToLocalTime()}" + Environment.NewLine;
+        //    }
+        //}
         private async void txtCardNumber_KeyUp(object sender, KeyEventArgs e)
         {
             try
@@ -311,7 +312,7 @@ namespace Music_Lesson_Terminal_2019
                     if (student == null)
                     {
 
-                        ActionWhenFailed(true, "8. " + "Student Not found");
+                        ActionWhenFailed(true, "Student Not found. (8)");
 
                         return false;
                     }
@@ -343,12 +344,12 @@ namespace Music_Lesson_Terminal_2019
                 }
                 else
                 {
-                    ActionWhenFailed(true, "9. " + response.StatusCode.ToString());
+                    ActionWhenFailed(true, response.StatusCode.ToString() + ".(9)");
                 }
             }
             catch (Exception e)
             {
-                ActionWhenFailed(true, "10. " + e.Message);
+                ActionWhenFailed(true, e.Message + ". (10)");
             }
             return false;
         }
@@ -407,8 +408,7 @@ namespace Music_Lesson_Terminal_2019
                     // Show Failed message.
                     if (status == null)
                     {
-                        ActionWhenFailed(true, "6. " + status.Description);
-
+                        ActionWhenFailed(true, status.Description + ". (6)");
                         return;
                     }
                     else
@@ -437,14 +437,14 @@ namespace Music_Lesson_Terminal_2019
                             btnSignInOut.IsEnabled = false;
                             lblMsg.Content = status.Description;
                             pos = pos + 1;
-                            ActionWhenFailed(true, "7. " + status.Description);
+                            ActionWhenFailed(true, status.Description + ". (7)");
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                ActionWhenFailed(true, pos.ToString() + "=> 5. " + ex.Message);
+                ActionWhenFailed(true, ex.Message + ". (5) position: " + pos.ToString());
             }
         }
         private void ActionWhenFailed(bool clearAllFlag, string message)
@@ -453,8 +453,11 @@ namespace Music_Lesson_Terminal_2019
             {
                 Uri uri = ResourceAccessor.GetFileUri("Assets/Fail sound effect 3.wav");
                 PlaySound(uri);
-                textBlockStop.Text = "Failed! ";
-                BlinkPopupStop.Begin();
+
+                // display error message.
+                textBlockFail.Text = message;
+                var storyboard = (Storyboard)Resources["storyBoardFail"];
+                storyboard.Begin();
                 
 
                 if (clearAllFlag)
@@ -462,7 +465,7 @@ namespace Music_Lesson_Terminal_2019
                     ClearAllControls();
                 }
 
-                lblMsg.Content = message;
+                //lblMsg.Content = message;
             }
             catch (Exception e)
             {
@@ -478,6 +481,10 @@ namespace Music_Lesson_Terminal_2019
                 Uri uri = ResourceAccessor.GetFileUri("Assets/You win sound effect 3.wav");
                 PlaySound(uri);
 
+                // display error message.
+                textBlockSuccess.Text = "Done";
+                var storyboard = (Storyboard)Resources["storyBoardSuccess"];
+                storyboard.Begin();
 
                 ClearAllControls();
             }
@@ -512,7 +519,7 @@ namespace Music_Lesson_Terminal_2019
                 lblMsg.Content = "13. " + e.Message;
             }
         }
-        private void PlaySound(Uri uri)//            --async private Task PlaySound(Uri uri)
+        async private void PlaySound(Uri uri)//            --async private Task PlaySound(Uri uri)
         {
             try
             {
@@ -525,7 +532,10 @@ namespace Music_Lesson_Terminal_2019
                     MessageBox.Show("Media Failed!!" + args.ErrorException.Message);                    
                 };
                 _MediaPlayer.Open(uri);
+                _MediaPlayer.Volume = 1.0f;
                 _MediaPlayer.Play();
+
+                await Task.Delay(1500);
             }
             catch (Exception e)
             {
@@ -575,12 +585,12 @@ namespace Music_Lesson_Terminal_2019
                     if (musicLesson != null)
                         ActionWhenFailed(false, musicLesson.Description);
                     else
-                        ActionWhenFailed(false, "15. " + "Failed. Try again");
+                        ActionWhenFailed(false, "Failed. Try again. (15)" );
                 }
             }
             catch (Exception e)
             {
-                ActionWhenFailed(false, "16. " + e.Message);
+                ActionWhenFailed(false, e.Message + ". (16)");
             }
 
 

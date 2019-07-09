@@ -10,14 +10,47 @@
         ResizeMode="NoResize"
         Title="MainWindow" GotFocus="Window_GotFocus" Loaded="Window_Loaded"                 
         >
-    
+    <Window.Resources>
+        <!-- Animates the rectangle's opacity. -->
+        <Storyboard x:Name="blinkPopupSimpleMessage" x:Key="blinkPopupSimpleMessage">
+            <DoubleAnimation
+              Storyboard.TargetName="popupSimpleMessage"
+              Storyboard.TargetProperty="Opacity"
+              From="2.0" To="0.0" Duration="0:0:2"/>
+        </Storyboard>
+        <Storyboard x:Name="storyBoardFail" x:Key="storyBoardFail">
+            <DoubleAnimation
+              Storyboard.TargetName="popupFail"
+              Storyboard.TargetProperty="Opacity"
+              From="2.0" To="0.0" Duration="0:0:1.2"/>
+        </Storyboard>
+        <Storyboard x:Name="storyBoardSuccess" x:Key="storyBoardSuccess">
+            <DoubleAnimation
+              Storyboard.TargetName="popupSuccess"
+              Storyboard.TargetProperty="Opacity"
+              From="2.0" To="0.0" Duration="0:0:1.2"/>
+        </Storyboard>
+        <Storyboard x:Name="storyBoardPopupPhoto" x:Key="storyBoardPopupPhoto">
+            <DoubleAnimation
+              Storyboard.TargetName="popupPhoto"
+              Storyboard.TargetProperty="Opacity"
+              From="2.0" To="0.0" Duration="0:0:2.5"/>
+        </Storyboard>
+        <Storyboard x:Name="blinkPopupStudentName" x:Key="blinkPopupStudentName">
+            <DoubleAnimation
+              Storyboard.TargetName="popupStudentName"
+              Storyboard.TargetProperty="Opacity"
+              From="2.0" To="0.0" Duration="0:0:3.5"/>
+        </Storyboard>
+    </Window.Resources>
     <Grid>
         <!--<Grid.Background>
             <ImageBrush ImageSource="/Assets/Joeys Terminal.JPG" Stretch="UniformToFill" ></ImageBrush>
         </Grid.Background>-->
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>
-            <RowDefinition Height="13*"/>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="7*"/>
             <RowDefinition Height="3*" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">                        
@@ -34,7 +67,7 @@
                 </Border>
             
         </Grid>
-        <Grid Margin="0,0,0,0" Grid.Row="1">
+        <Grid Margin="0,0,0,0" Grid.Row="1" Grid.RowSpan="2">
             
             <Grid.RowDefinitions>
                 <RowDefinition Height="10*"/>
@@ -46,7 +79,7 @@
                 <ColumnDefinition Width="5*" />
                 <ColumnDefinition Width="5*" />
             </Grid.ColumnDefinitions>
-            <Image x:Name="imgStudentPhoto" Source="/Assets/Joeys Terminal.JPG" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" />
+            <Image x:Name="imgStudentPhoto" Source="/Assets/student.png" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" />
             <TextBlock x:Name="txtStudentName" FontSize="25"   Text="txtStudentName" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center"
                             FontWeight="Bold" KeyboardNavigation.IsTabStop="False" />
             <Border Name="popupButtonSignInOut" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" VerticalAlignment="Center" Padding="0,0,13,0" >
@@ -73,7 +106,7 @@
             
         </Grid>
 
-        <Grid Margin="0,0,0,0" Grid.Row="2">
+        <Grid Margin="0,0,0,0" Grid.Row="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>                    
                 <RowDefinition Height="*"/>
@@ -119,7 +152,26 @@
                 <TextBlock x:Name="textBlockSuccess"  Grid.Row="1" TextWrapping="Wrap" Foreground="Green" Text="Welcome to C# Corner" FontSize="50" VerticalAlignment="Center" TextAlignment="Center" Margin="03" />
             </Grid>
         </StackPanel>-->
-        
+        <StackPanel x:Name="popupFail" Grid.Row="2" VerticalAlignment="Center" Opacity="0" Visibility="Visible" HorizontalAlignment="Stretch" Background="White" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Image x:Name="imgStop" Grid.Row="0" Height="100" Width="100"  Source="/Assets/stop2.png"  Margin="10,10,0,10.2"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+                <TextBlock x:Name="textBlockFail"  Grid.Row="1" TextWrapping="Wrap" Foreground="Red" Text="" FontSize="50" VerticalAlignment="Center" TextAlignment="Center" Margin="03" />
+            </Grid>
+        </StackPanel>
+        <StackPanel x:Name="popupSuccess" Grid.Row="2" VerticalAlignment="Center" Opacity="0" Visibility="Visible" HorizontalAlignment="Stretch" Background="White" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Image x:Name="imgSuccess" Grid.Row="0" Height="100" Width="100"  Source="/Assets/success.png"  Margin="10,10,0,10.2"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+                <TextBlock x:Name="textBlockSuccess"  Grid.Row="1" TextWrapping="Wrap" Foreground="Green" Text="" FontSize="50" VerticalAlignment="Center" TextAlignment="Center" Margin="03" />
+            </Grid>
+        </StackPanel>
     </Grid>
     
     

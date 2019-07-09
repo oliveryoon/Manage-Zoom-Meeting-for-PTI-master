@@ -106,7 +106,7 @@ namespace Sick_Bed_Terminal_2019 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://localhost:5000.
+        ///   Looks up a localized string similar to https://webapi.joeys.org.
         /// </summary>
         internal static string WebApiBaseAddress {
             get {
@@ -115,11 +115,11 @@ namespace Sick_Bed_Terminal_2019 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://webapi.joeys.org.
+        ///   Looks up a localized string similar to http://localhost:5000.
         /// </summary>
-        internal static string WebApiBaseAddress3 {
+        internal static string WebApiBaseAddress1 {
             get {
-                return ResourceManager.GetString("WebApiBaseAddress3", resourceCulture);
+                return ResourceManager.GetString("WebApiBaseAddress1", resourceCulture);
             }
         }
     }

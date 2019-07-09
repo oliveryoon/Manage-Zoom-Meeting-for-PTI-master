@@ -224,36 +224,36 @@ namespace Sick_Bed_Terminal_2019
         /// <summary>
         /// Sign out the current user
         /// </summary>
-        private async void SignOutButton_Click(object sender, RoutedEventArgs e)
-        {
-            var accounts = await App.PublicClientApp.GetAccountsAsync();
-            if (accounts.Any())
-            {
-                try
-                {
-                    await App.PublicClientApp.RemoveAsync(accounts.FirstOrDefault());
-                    //this.ResultText.Text = "User has signed-out";
-                    //this.CallGraphButton.Visibility = Visibility.Visible;
-                    //this.SignOutButton.Visibility = Visibility.Collapsed;
-                }
-                catch (MsalException ex)
-                {
-                    lblMsg.Content = $"Error signing-out user: {ex.Message}";
-                }
-            }
-        }
+        //private async void SignOutButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var accounts = await App.PublicClientApp.GetAccountsAsync();
+        //    if (accounts.Any())
+        //    {
+        //        try
+        //        {
+        //            await App.PublicClientApp.RemoveAsync(accounts.FirstOrDefault());
+        //            //this.ResultText.Text = "User has signed-out";
+        //            //this.CallGraphButton.Visibility = Visibility.Visible;
+        //            //this.SignOutButton.Visibility = Visibility.Collapsed;
+        //        }
+        //        catch (MsalException ex)
+        //        {
+        //            lblMsg.Content = $"Error signing-out user: {ex.Message}";
+        //        }
+        //    }
+        //}
         /// <summary>
         /// Display basic information contained in the token
         /// </summary>
-        private void DisplayBasicTokenInfo(AuthenticationResult authResult)
-        {
-            //TokenInfoText.Text = "";
-            if (authResult != null)
-            {
-                //TokenInfoText.Text += $"Username: {authResult.Account.Username}" + Environment.NewLine;
-                //TokenInfoText.Text += $"Token Expires: {authResult.ExpiresOn.ToLocalTime()}" + Environment.NewLine;
-            }
-        }
+        //private void DisplayBasicTokenInfo(AuthenticationResult authResult)
+        //{
+        //    //TokenInfoText.Text = "";
+        //    if (authResult != null)
+        //    {
+        //        //TokenInfoText.Text += $"Username: {authResult.Account.Username}" + Environment.NewLine;
+        //        //TokenInfoText.Text += $"Token Expires: {authResult.ExpiresOn.ToLocalTime()}" + Environment.NewLine;
+        //    }
+        //}
         private async void txtCardNumber_KeyUp(object sender, KeyEventArgs e)
         {
             try
@@ -327,7 +327,7 @@ namespace Sick_Bed_Terminal_2019
                     if (student == null)
                     {
 
-                        ActionWhenFailed(true, "8. " + "Student Not found");
+                        ActionWhenFailed(true, "Student Not found" + ". (8)");
 
                         return;
                     }
@@ -358,12 +358,12 @@ namespace Sick_Bed_Terminal_2019
                 }
                 else
                 {
-                    ActionWhenFailed(true, "9. " + response.StatusCode.ToString());
+                    ActionWhenFailed(true, response.StatusCode.ToString() + ". (9)");
                 }
             }
             catch (Exception e)
             {
-                ActionWhenFailed(true, "10. " + e.Message);
+                ActionWhenFailed(true, e.Message + ". (10)");
             }
         }
 
@@ -402,7 +402,7 @@ namespace Sick_Bed_Terminal_2019
                     // Show Failed message.
                     if (status == null)
                     {
-                        ActionWhenFailed(true, "6. " + status.Description);
+                        ActionWhenFailed(true, status.Description + ". (6)");
 
                         return;
                     }
@@ -432,14 +432,14 @@ namespace Sick_Bed_Terminal_2019
                             btnSignInOut.IsEnabled = false;
                             lblMsg.Content = status.Description;
                             pos = pos + 1;
-                            ActionWhenFailed(true, "7. " + status.Description);
+                            ActionWhenFailed(true, status.Description + ". (7)");
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                ActionWhenFailed(true, pos.ToString() + "=> 5. " + ex.Message);
+                ActionWhenFailed(true, pos.ToString() + "=> 5. " + ex.Message + ". (5) pos:" + pos.ToString());
             }
         }
         private void ActionWhenFailed(bool clearAllFlag, string message)
@@ -448,6 +448,11 @@ namespace Sick_Bed_Terminal_2019
             {
                 Uri uri = ResourceAccessor.GetFileUri("Assets/Fail sound effect 3.wav");
                 PlaySound(uri);
+
+                // display error message.
+                textBlockFail.Text = message;
+                var storyboard = (Storyboard)Resources["storyBoardFail"];
+                storyboard.Begin();
 
                 if (clearAllFlag)
                 {
@@ -469,6 +474,10 @@ namespace Sick_Bed_Terminal_2019
                 Uri uri = ResourceAccessor.GetFileUri("Assets/You win sound effect 3.wav");
                 PlaySound(uri);
 
+                // display error message.
+                textBlockSuccess.Text = "Done";
+                var storyboard = (Storyboard)Resources["storyBoardSuccess"];
+                storyboard.Begin();
 
                 ClearAllControls();
             }
@@ -503,7 +512,7 @@ namespace Sick_Bed_Terminal_2019
                 lblMsg.Content = "13. " + e.Message;
             }
         }
-        private void PlaySound(Uri uri)//            --async private Task PlaySound(Uri uri)
+        async private void PlaySound(Uri uri)//            --async private Task PlaySound(Uri uri)
         {
             try
             {
@@ -515,8 +524,12 @@ namespace Sick_Bed_Terminal_2019
                 {
                     MessageBox.Show("Media Failed!!" + args.ErrorException.Message);
                 };
+                
                 _MediaPlayer.Open(uri);
+                _MediaPlayer.Volume = 1.0f;
                 _MediaPlayer.Play();
+
+                await Task.Delay(1500);
             }
             catch (Exception e)
             {
@@ -567,12 +580,12 @@ namespace Sick_Bed_Terminal_2019
                     if (sickBay != null)
                         ActionWhenFailed(false, sickBay.Description);
                     else
-                        ActionWhenFailed(false, "15. " + "Failed. Try again");
+                        ActionWhenFailed(false, "Failed. Try again" + ". (15)");
                 }
             }
             catch (Exception e)
             {
-                ActionWhenFailed(false, "16. " + e.Message);
+                ActionWhenFailed(false, e.Message + ". (16)");
             }
 
 
@@ -590,7 +603,7 @@ namespace Sick_Bed_Terminal_2019
             }
             catch (Exception ex)
             {
-                lblMsg.Content = "17. " + ex.Message;
+                lblMsg.Content = ex.Message + ". (17)";
             }
         }
 
@@ -602,7 +615,7 @@ namespace Sick_Bed_Terminal_2019
             }
             catch (Exception ex)
             {
-                lblMsg.Content = "18. " + ex.Message;
+                lblMsg.Content = ex.Message + ". (18)";
             }
         }
 
@@ -620,7 +633,7 @@ namespace Sick_Bed_Terminal_2019
                 }
                 catch (Exception e)
                 {
-                    throw new Exception("19. " + e.Message);
+                    throw new Exception(e.Message + ". (19)");
                 }
                 
             }
