@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SchoolWebApi.Models.MusicLessons
 {
-    public class UspMusicLessonInOutUpdate
+    public class UspMusicLessonSignInOutUpdate
     {
         public int Seq { get; set; } // staff schedule seq.
         public int Id { get; set; }

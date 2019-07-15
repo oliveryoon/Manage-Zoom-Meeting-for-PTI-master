@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SchoolWebApi.Models.SickBays
 {
-    public class UspSickBayInOutUpdate
+    public class UspSickBaySignInOutUpdate
     {
         
         public int Seq { get; set; }

@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace School_Web_Api.Controllers
 {
-    //[Authorize(Roles = "sec.All Staff")]
+    [Authorize(Roles = "sec.All Staff")]
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
@@ -170,7 +170,7 @@ namespace School_Web_Api.Controllers
         {
             try
             {
-                _context.UpdateSickBayInOutAsync(sickBay);
+                _context.UpdateSickBaySignInOutAsync(sickBay);
                 await _context.SaveChangesAsync();
                 return CreatedAtAction("GetSickBay", new { seq = sickBay.Seq }, sickBay);
             }

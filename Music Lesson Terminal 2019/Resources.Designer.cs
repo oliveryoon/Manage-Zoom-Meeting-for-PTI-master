@@ -61,6 +61,15 @@ namespace Music_Lesson_Terminal_2019 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to true.
+        /// </summary>
+        internal static string AbsenceRecordUsedFlag {
+            get {
+                return ResourceManager.GetString("AbsenceRecordUsedFlag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to d446190b-740f-4ec3-b249-fc0b85f2ebbf.
         /// </summary>
         internal static string ClientId {
@@ -88,7 +97,7 @@ namespace Music_Lesson_Terminal_2019 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MUSIC_CENTRE1.
+        ///   Looks up a localized string similar to MUSIC-CENTRE1.
         /// </summary>
         internal static string TerminalCode {
             get {

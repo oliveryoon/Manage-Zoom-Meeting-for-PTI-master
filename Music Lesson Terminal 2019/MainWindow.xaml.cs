@@ -78,6 +78,8 @@ namespace Music_Lesson_Terminal_2019
         private int _IntervalSecondsClearControls = 5;
         private string _TerminalCode = "";
 
+        // Absence or Staff Schedule 
+        private bool _AbsenceRecordUsedFlag = true;
         public MainWindow()
         {
             try
@@ -261,7 +263,11 @@ namespace Music_Lesson_Terminal_2019
                         {
                             _LastActivityTime = System.DateTime.Now; // stop initializing the screen.
 
-                            DisplayMusicLessonStatus(StudentId, token); // use the variable returned from api in DisplayStudentDetails().
+                            if (_AbsenceRecordUsedFlag)
+                                DisplayMusicLessonAbsenceStatus(StudentId, token);
+                            else
+                                DisplayMusicLessonStatus(StudentId, token); // use the variable returned from api in DisplayStudentDetails().
+
                             _LastActivityTime = System.DateTime.Now; // stop initializing the screen.
                                                                     
                         }
@@ -335,6 +341,8 @@ namespace Music_Lesson_Terminal_2019
                                 // Assign the Source property of your image
                                 imgStudentPhoto.Source = imageSource;
 
+                                var storyboard = (Storyboard)Resources["storyBoardPopupPhoto"];
+                                storyboard.Begin();
 
                             }
                         }
@@ -399,6 +407,90 @@ namespace Music_Lesson_Terminal_2019
 
                 pos = 4;
                 
+                if (response.IsSuccessStatusCode)
+                {
+
+                    var content = await response.Content.ReadAsStringAsync();
+                    status = JsonConvert.DeserializeObject<MusicLessonStatusDTO>(content);
+                    pos = pos + 1;
+                    // Show Failed message.
+                    if (status == null)
+                    {
+                        ActionWhenFailed(true, status.Description + ". (6)");
+                        return;
+                    }
+                    else
+                    {
+                        if (status.Code == "SI") // current status is SI, then requested job will be sign out.
+                        {
+                            RequestedJobCode = "SO"; // need this code when update requested.
+                        }
+
+                        else if (status.Code == "SO")
+                            RequestedJobCode = "SI"; // need this code when update requested.
+                        else
+                            RequestedJobCode = "";
+
+                        if (status.Code == "SI" || status.Code == "SO")
+                        {
+                            btnSignInOut.Content = RequestedJobCode == "SO" ? "Sign Out" : "Sign In";
+                            btnSignInOut.IsEnabled = true;
+                            btnCancel.IsEnabled = true;
+
+                        }
+
+                        else //if (status.Code == "PN" || "ER" )
+                        {
+                            btnCancel.IsEnabled = true;
+                            btnSignInOut.IsEnabled = false;
+                            lblMsg.Content = status.Description;
+                            pos = pos + 1;
+                            ActionWhenFailed(true, status.Description + ". (7)");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ActionWhenFailed(true, ex.Message + ". (5) position: " + pos.ToString());
+            }
+        }
+        private async void DisplayMusicLessonAbsenceStatus(int Id, string token)
+        {
+
+            var httpClient = new System.Net.Http.HttpClient();
+            System.Net.Http.HttpResponseMessage response;
+
+            int pos = 0;
+            try
+            {
+                // Initialize buttons.
+                btnSignInOut.IsEnabled = false;
+                btnCancel.IsEnabled = false;
+                lblMsg.Content = "";
+                pos = 1;
+
+                MusicLessonStatusDTO status = new MusicLessonStatusDTO();
+                status.Id = Id;
+                status.TerminalCode = GetResource("TerminalCode");
+                //StringContent statusContent = new StringContent(JsonConvert.SerializeObject(status), Encoding.UTF8, "application/json");
+                string statusContent = string.Format("?Id={0}&TerminalCode={1}", status.Id, status.TerminalCode);
+
+                string url = _WebApiBaseAddress + "/api/MusicLessons/AbsenceStatus{0}";
+
+
+                url = string.Format(url, statusContent);
+                pos = 2;
+                var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, url);
+
+                //Add the token in Authorization header
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                pos = 3;
+                response = await httpClient.SendAsync(request);
+
+
+                pos = 4;
+
                 if (response.IsSuccessStatusCode)
                 {
 
@@ -596,7 +688,55 @@ namespace Music_Lesson_Terminal_2019
 
 
         }
+        private async void UpdateMusicLessonAbsence(int Id)
+        {
 
+            var httpClient = new System.Net.Http.HttpClient();
+            System.Net.Http.HttpResponseMessage response;
+
+            try
+            {
+                MusicLessonDTO data = new MusicLessonDTO();
+                data.Id = Id; // Student ID.                                
+                data.RequestedJobCode = RequestedJobCode;
+                data.TerminalCode = GetResource("TerminalCode");
+                data.DateTimeCardSwiped = System.DateTime.Now;
+
+                string url = _WebApiBaseAddress + "/api/MusicLessons/MusicLessonAbsence";
+                //url = string.Format(url, Id);
+
+                //get a token.
+                string token = await GetToken();
+
+                var strContent = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+                var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Post, url);
+                request.Content = strContent;
+
+                //Add the token in Authorization header
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                response = await httpClient.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    ActionWhenSucceeded();
+                }
+                else
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    MusicLesson musicLesson = JsonConvert.DeserializeObject<MusicLesson>(content);
+                    if (musicLesson != null)
+                        ActionWhenFailed(false, musicLesson.Description);
+                    else
+                        ActionWhenFailed(false, "Failed. Try again. (15)");
+                }
+            }
+            catch (Exception e)
+            {
+                ActionWhenFailed(false, e.Message + ". (16)");
+            }
+
+
+        }
 
 
         private void BtnSignInOut_Click(object sender, RoutedEventArgs e)
@@ -605,7 +745,11 @@ namespace Music_Lesson_Terminal_2019
             {
                 txtCardNumber.Focus();
                 _LastActivityTime = System.DateTime.Now; // stop initializing the screen.
-                UpdateMusicLesson(StudentId);
+                if (_AbsenceRecordUsedFlag)
+                    UpdateMusicLessonAbsence(StudentId);
+                else
+                    UpdateMusicLesson(StudentId);
+
                 ClearAllControls();
             }
             catch (Exception ex)
@@ -670,6 +814,11 @@ namespace Music_Lesson_Terminal_2019
             _WebApiBaseAddress = GetResource("WebApiBaseAddress");
 
             int.TryParse(GetResource("IntervalSecondsClearControls"), out tempInt);
+
+            bool tempBool;
+            bool.TryParse(GetResource("AbsenceRecordUsedFlag"), out tempBool);
+
+            _AbsenceRecordUsedFlag = tempBool;
             _IntervalSecondsClearControls = tempInt;
             _TerminalCode = GetResource("TerminalCode");
 

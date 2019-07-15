@@ -78,7 +78,28 @@ namespace School_Web_Api.Controllers
             }
 
         }
+        // GET: api/MusicLessons/5/StatusById
+        // This will return the current acceptable sick bay status by student Id.       
+        [HttpGet]
+        [Route("absencestatus")]
+        public async Task<ActionResult<MusicLessonStatusDTO>> GetMusicLessonAbsence([FromQuery] MusicLessonStatusDTO status)
+        {
 
+
+            try
+            {
+
+                MusicLessonStatusDTO dto = _context.GetMusicLessonAbsenceStatusAsync(status);
+                await _context.SaveChangesAsync();
+                return dto;
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+        }
 
         // PUT: api/MusicLessons/5
         [HttpPut("{id}")]
@@ -127,7 +148,7 @@ namespace School_Web_Api.Controllers
         {
             try
             {
-                _context.UpdateMusicLessonInOutAsync(musicLesson);
+                _context.UpdateMusicLessonSignInOutAsync(musicLesson);
                 await _context.SaveChangesAsync();
                 return CreatedAtAction("GetMusicLesson", new { seq = musicLesson.Seq }, musicLesson);
             }
@@ -137,7 +158,22 @@ namespace School_Web_Api.Controllers
                 
             }
         }
+        [HttpPost]
+        [Route("MusicLessonAbsence")]
+        public async Task<ActionResult<MusicLesson>> PostMusicLessonAbsence(MusicLessonDTO musicLesson)
+        {
+            try
+            {
+                _context.UpdateMusicLessonAbsenceSignInOutAsync(musicLesson);
+                await _context.SaveChangesAsync();
+                return CreatedAtAction("GetMusicLesson", new { seq = musicLesson.Seq }, musicLesson);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
 
+            }
+        }
         // DELETE: api/MusicLessons/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<MusicLesson>> DeleteMusicLesson(int id)

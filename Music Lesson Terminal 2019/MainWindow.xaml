@@ -40,7 +40,7 @@
         </Storyboard>
         <Storyboard x:Name="storyBoardPopupPhoto" x:Key="storyBoardPopupPhoto">
             <DoubleAnimation
-              Storyboard.TargetName="popupPhoto"
+              Storyboard.TargetName="imgStudentPhoto"
               Storyboard.TargetProperty="Opacity"
               From="2.0" To="0.0" Duration="0:0:2.5"/>
         </Storyboard>

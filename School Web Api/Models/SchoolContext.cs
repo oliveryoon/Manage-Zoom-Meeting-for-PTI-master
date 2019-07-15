@@ -24,11 +24,13 @@ namespace SchoolWebAPI.Models
         /// Gets or sets to product detail by product Id property.  
         /// </summary>  
         [Display(Name = "SickBay Simple")]
-        public UspSickBayInOutUpdate SickBayUpdate { get; set; }
+        public UspSickBaySignInOutUpdate SickBayUpdate { get; set; }
         [Display(Name = "SickBay Simple")]
         public UspSickBayStatusSelect SickBayStatus { get; set; }
         public UspMusicLessonStatusSelect SickMusicLessonStatus { get; set; }
-        public UspMusicLessonInOutUpdate MusicLessonUpdate { get; set; }
+        public UspMusicLessonSignInOutUpdate MusicLessonUpdate { get; set; }
+        public UspMusicLessonStatusSelect SickMusicLessonAbsenceStatus { get; set; }
+        public UspMusicLessonSignInOutUpdate MusicLessonAbsenceUpdate { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Student>().ToTable("uvStudents", "webapi"); //8213
@@ -62,18 +64,53 @@ namespace SchoolWebAPI.Models
             //modelBuilder.Entity<SickBay>().Property(s => s.Code).HasColumnName("Code");
             //modelBuilder.Entity<SickBay>().Property(s => s.Description).HasColumnName("Description");
 
-            modelBuilder.Query<UspSickBayInOutUpdate>();
+            modelBuilder.Query<UspSickBaySignInOutUpdate>();
             modelBuilder.Query<UspSickBayStatusSelect>();
-            modelBuilder.Query<UspMusicLessonInOutUpdate>();
-            modelBuilder.Query<UspMusicLessonStatusSelect>();
+            modelBuilder.Query<UspMusicLessonSignInOutUpdate>();
+            modelBuilder.Query<UspMusicLessonStatusSelect>();            
         }
         #region Create Sign In and Sign Out.  
+        /// <summary>  
+        /// Create Sign In and Sign Out.  
+        /// </summary>  
+        /// <returns>Returns - Music Lesson Record created or updated.</returns>  
+        public MusicLessonDTO UpdateMusicLessonAbsenceSignInOutAsync(MusicLessonDTO musicLessonDTO)
+        {
+            // Initialization.              
+
+            try
+            {
+                // Set params.
+                SqlParameter iDParam = new SqlParameter("@ID", musicLessonDTO.Id);
+
+                SqlParameter DateTimeCardSwipedParam = new SqlParameter("@DateTimeCardSwiped", musicLessonDTO.DateTimeCardSwiped);
+                SqlParameter RequestedJobCodeParam = new SqlParameter("@RequestedJobCode", musicLessonDTO.RequestedJobCode);
+                SqlParameter TerminalCodeParam = new SqlParameter("@TerminalCode", musicLessonDTO.TerminalCode);
+
+                // Processing.  
+                //;Workstation ID={0}|{1}\{2}
+
+                string sqlQuery = "EXEC webapi.uspMusicLessonAbsenceSignInOutUpdate @ID, @RequestedJobCode, @TerminalCode, @DateTimeCardSwiped";
+
+                //Task<int> x = this.Database.ExecuteSqlCommandAsync(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam);
+                //await this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam).ToListAsync();
+                var sickbayInOut = this.Query<UspMusicLessonSignInOutUpdate>().FromSql(sqlQuery, iDParam, RequestedJobCodeParam, TerminalCodeParam, DateTimeCardSwipedParam).FirstOrDefault();
+                musicLessonDTO.Seq = sickbayInOut.Seq;
+                return musicLessonDTO;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+        }
 
         /// <summary>  
         /// Create Sign In and Sign Out.  
         /// </summary>  
         /// <returns>Returns - Music Lesson Record created or updated.</returns>  
-        public MusicLessonDTO UpdateMusicLessonInOutAsync(MusicLessonDTO musicLessonDTO)
+        public MusicLessonDTO UpdateMusicLessonSignInOutAsync(MusicLessonDTO musicLessonDTO)
         {
             // Initialization.              
 
@@ -89,11 +126,11 @@ namespace SchoolWebAPI.Models
                 // Processing.  
                 //;Workstation ID={0}|{1}\{2}
                 
-                string sqlQuery = "EXEC webapi.uspMusicLessonInOutUpdate @ID, @RequestedJobCode, @TerminalCode, @DateTimeCardSwiped";
+                string sqlQuery = "EXEC webapi.uspMusicLessonSignInOutUpdate @ID, @RequestedJobCode, @TerminalCode, @DateTimeCardSwiped";
 
                 //Task<int> x = this.Database.ExecuteSqlCommandAsync(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam);
                 //await this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam).ToListAsync();
-                var sickbayInOut = this.Query<UspMusicLessonInOutUpdate>().FromSql(sqlQuery, iDParam, RequestedJobCodeParam, TerminalCodeParam, DateTimeCardSwipedParam).FirstOrDefault();
+                var sickbayInOut = this.Query<UspMusicLessonSignInOutUpdate>().FromSql(sqlQuery, iDParam, RequestedJobCodeParam, TerminalCodeParam, DateTimeCardSwipedParam).FirstOrDefault();
                 musicLessonDTO.Seq = sickbayInOut.Seq;
                 return musicLessonDTO;
             }
@@ -109,7 +146,7 @@ namespace SchoolWebAPI.Models
         /// Create Sign In and Sign Out.  
         /// </summary>  
         /// <returns>Returns - Incident Record created or updated.</returns>  
-        public SickBayDTO UpdateSickBayInOutAsync(SickBayDTO sickBaySimple)
+        public SickBayDTO UpdateSickBaySignInOutAsync(SickBayDTO sickBaySimple)
         {
             // Initialization.              
 
@@ -124,11 +161,11 @@ namespace SchoolWebAPI.Models
                 SqlParameter TerminalCodeParam = new SqlParameter("@TerminalCode", sickBaySimple.TerminalCode);
 
                 // Processing.  
-                string sqlQuery = "EXEC webapi.uspSickBayInOutUpdate @ID, @IncidentDate, @Time, @Username, @RequestedJobCode, @TerminalCode";
+                string sqlQuery = "EXEC webapi.uspSickBaySignInOutUpdate @ID, @IncidentDate, @Time, @Username, @RequestedJobCode, @TerminalCode";
 
                 //Task<int> x = this.Database.ExecuteSqlCommandAsync(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam);
                 //await this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam).ToListAsync();
-                var sickbayInOut = this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, RequestedJobCodeParam, TerminalCodeParam).FirstOrDefault();
+                var sickbayInOut = this.Query<UspSickBaySignInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, RequestedJobCodeParam, TerminalCodeParam).FirstOrDefault();
                 sickBaySimple.Seq = sickbayInOut.Seq;
                 return sickBaySimple;
             }
@@ -139,6 +176,40 @@ namespace SchoolWebAPI.Models
 
             
         }
+        /// <summary>  
+        /// Get a status.  
+        /// </summary>  
+        /// <returns>Returns - Music Lesson Record created or updated.</returns>  
+        public MusicLessonStatusDTO GetMusicLessonAbsenceStatusAsync(MusicLessonStatusDTO status)
+        {
+            // Initialization.              
+
+            try
+            {
+                // Set params.
+                SqlParameter iDParam = new SqlParameter("@ID", status.Id);
+                SqlParameter terminalCodeParam = new SqlParameter("@TerminalCode", status.TerminalCode);
+
+                // Processing.  
+                string sqlQuery = "EXEC webapi.uspMusicLessonAbsenceStatusSelect @ID, @TerminalCode";
+
+                //Task<int> x = this.Database.ExecuteSqlCommandAsync(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam);
+                //await this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam).ToListAsync();
+                var musicLessonStatusSelect = this.Query<UspMusicLessonStatusSelect>().FromSql(sqlQuery, iDParam, terminalCodeParam).FirstOrDefault();
+                status = new MusicLessonStatusDTO() { Id = musicLessonStatusSelect.Id, Seq = musicLessonStatusSelect.Seq, Code = musicLessonStatusSelect.Code, Description = musicLessonStatusSelect.Description, TerminalCode = status.TerminalCode };
+
+                return status;
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+        }
+
         /// <summary>  
         /// Get a status.  
         /// </summary>  
