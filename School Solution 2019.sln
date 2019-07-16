@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "School Web Api", "School Web Api\School Web Api.csproj", "{2D2C5608-82A4-4EE2-9AE0-3233BA073A61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "School Web Api 2019", "School Web Api 2019\School Web Api 2019.csproj", "{2D2C5608-82A4-4EE2-9AE0-3233BA073A61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sick Bed Terminal 2019", "Sick Bed Terminal 2019\Sick Bed Terminal 2019.csproj", "{1E229D12-8577-40B5-9C31-72CF7C4BAF1B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sick Bay Terminal 2019", "Sick Bay Terminal 2019\Sick Bay Terminal 2019.csproj", "{1E229D12-8577-40B5-9C31-72CF7C4BAF1B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Identity.Web", "Microsoft.Identity.Web\Microsoft.Identity.Web.csproj", "{83EDBEA0-CBED-433E-8DE2-4AD6CBFE657A}"
 EndProject

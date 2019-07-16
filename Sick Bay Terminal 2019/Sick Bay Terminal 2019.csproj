@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1E229D12-8577-40B5-9C31-72CF7C4BAF1B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Sick_Bed_Terminal_2019</RootNamespace>
-    <AssemblyName>Sick Bed Terminal 2019</AssemblyName>
+    <RootNamespace>Sick_Bay_Terminal_2019</RootNamespace>
+    <AssemblyName>Sick Bay Terminal 2019</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

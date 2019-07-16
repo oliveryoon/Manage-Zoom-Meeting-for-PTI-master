@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sick_Bed_Terminal_2019.Properties {
+namespace Sick_Bay_Terminal_2019 {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Sick_Bed_Terminal_2019.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sick_Bed_Terminal_2019.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sick_Bay_Terminal_2019.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,11 +61,74 @@ namespace Sick_Bed_Terminal_2019.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to /Assets/Fail sound effect 3.wav.
+        ///   Looks up a localized string similar to 199b1437-8b42-476f-ad09-b61e5150f7bf.
         /// </summary>
-        internal static string Sick_Bed_Terminal_2019 {
+        internal static string ClientId {
             get {
-                return ResourceManager.GetString("Sick Bed Terminal 2019", resourceCulture);
+                return ResourceManager.GetString("ClientId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to false.
+        /// </summary>
+        internal static string DebugFlag {
+            get {
+                return ResourceManager.GetString("DebugFlag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 5.
+        /// </summary>
+        internal static string IntervalSecondsClearControls {
+            get {
+                return ResourceManager.GetString("IntervalSecondsClearControls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://joeysorg.onmicrosoft.com/WebApi/user_impersonation.
+        /// </summary>
+        internal static string Scope {
+            get {
+                return ResourceManager.GetString("Scope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 315c37fc-27dc-4021-9c67-a92e8878d455.
+        /// </summary>
+        internal static string Tenant {
+            get {
+                return ResourceManager.GetString("Tenant", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HEALTH_CENTRE1.
+        /// </summary>
+        internal static string TerminalCode {
+            get {
+                return ResourceManager.GetString("TerminalCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to http://localhost:5000.
+        /// </summary>
+        internal static string WebApiBaseAddress {
+            get {
+                return ResourceManager.GetString("WebApiBaseAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://webapi.joeys.org.
+        /// </summary>
+        internal static string WebApiBaseAddress3 {
+            get {
+                return ResourceManager.GetString("WebApiBaseAddress3", resourceCulture);
             }
         }
     }
