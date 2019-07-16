@@ -63,7 +63,7 @@ namespace Music_Lesson_Terminal_2019
 
         //Set the scope for API call to user.read
         //string[] scopes = new string[] { "user.read" };
-        string[] _Scopes = new string[] { "https://joeysorg.onmicrosoft.com/WebApi/user_impersonation" };
+        string[] _Scopes; // = new string[] { "https://joeysorg.onmicrosoft.com/WebApi/user_impersonation" };
 
 
         private MediaPlayer _MediaPlayer = new MediaPlayer();
@@ -894,6 +894,9 @@ namespace Music_Lesson_Terminal_2019
             _AbsenceRecordUsedFlag = tempBool;
             _IntervalSecondsClearControls = tempInt;
             _TerminalCode = GetResource("TerminalCode");
+
+            string scope = GetResource("Scopes");
+            _Scopes = new string[] { scope };
 
             bool.TryParse(GetResource("DebugFlag"), out tempBool);
             _DebugFlag = tempBool;

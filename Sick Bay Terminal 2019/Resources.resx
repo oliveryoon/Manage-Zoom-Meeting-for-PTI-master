@@ -133,8 +133,8 @@
   <data name="IntervalSecondsClearControls" xml:space="preserve">
     <value>5</value>
   </data>
-  <data name="Scope" xml:space="preserve">
-    <value>https://joeysorg.onmicrosoft.com/WebApi/user_impersonation</value>
+  <data name="Scopes" xml:space="preserve">
+    <value>https://joeysorg.onmicrosoft.com/WebApi/access_as_user</value>
   </data>
   <data name="WebApiBaseAddress" xml:space="preserve">
     <value>http://localhost:5000</value>

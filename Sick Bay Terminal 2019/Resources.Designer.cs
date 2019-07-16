@@ -88,11 +88,11 @@ namespace Sick_Bay_Terminal_2019 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://joeysorg.onmicrosoft.com/WebApi/user_impersonation.
+        ///   Looks up a localized string similar to https://joeysorg.onmicrosoft.com/WebApi/access_as_user.
         /// </summary>
-        internal static string Scope {
+        internal static string Scopes {
             get {
-                return ResourceManager.GetString("Scope", resourceCulture);
+                return ResourceManager.GetString("Scopes", resourceCulture);
             }
         }
         

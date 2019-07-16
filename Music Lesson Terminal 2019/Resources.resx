@@ -122,13 +122,16 @@
     <comment>If false, Staff Schedule will be used.</comment>
   </data>
   <data name="ClientId" xml:space="preserve">
-    <value>d446190b-740f-4ec3-b249-fc0b85f2ebbf</value>
+    <value>48f89a46-a742-4f4f-b8f8-477932c73651</value>
   </data>
   <data name="DebugFlag" xml:space="preserve">
     <value>false</value>
   </data>
   <data name="IntervalSecondsClearControls" xml:space="preserve">
     <value>5</value>
+  </data>
+  <data name="Scopes" xml:space="preserve">
+    <value>https://joeysorg.onmicrosoft.com/WebApi/access_as_user</value>
   </data>
   <data name="Tenant" xml:space="preserve">
     <value>315c37fc-27dc-4021-9c67-a92e8878d455</value>

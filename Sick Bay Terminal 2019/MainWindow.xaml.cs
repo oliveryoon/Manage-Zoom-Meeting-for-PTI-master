@@ -1,8 +1,8 @@
 ﻿using Microsoft.Identity.Client;
 using Newtonsoft.Json;
-using Sick_Bed_Terminal_2019.Models;
-using Sick_Bed_Terminal_2019.Models.SickBays;
-using Sick_Bed_Terminal_2019.Models.Students;
+using Sick_Bay_Terminal_2019.Models;
+using Sick_Bay_Terminal_2019.Models.SickBays;
+using Sick_Bay_Terminal_2019.Models.Students;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -72,7 +72,7 @@ namespace Sick_Bay_Terminal_2019
 
         //Set the scope for API call to user.read
         //string[] scopes = new string[] { "user.read" };
-        string[] _Scopes = new string[] { "https://joeysorg.onmicrosoft.com/WebApi/user_impersonation" };
+        string[] _Scopes; // = new string[] { "https://joeysorg.onmicrosoft.com/WebApi/user_impersonation" };
 
 
 
@@ -703,8 +703,8 @@ namespace Sick_Bay_Terminal_2019
             int.TryParse(GetResource("IntervalSecondsClearControls"), out tempInt);
             _IntervalSecondsClearControls = tempInt;
             _TerminalCode = GetResource("TerminalCode");
-            string scope = GetResource("Scope");
-            string[] _Scopes = new string[] { scope };
+            string scope = GetResource("Scopes");
+            _Scopes = new string[] { scope };
 
             bool tempBool;
             bool.TryParse(GetResource("DebugFlag"), out tempBool);
