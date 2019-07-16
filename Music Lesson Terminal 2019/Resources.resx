@@ -124,6 +124,9 @@
   <data name="ClientId" xml:space="preserve">
     <value>d446190b-740f-4ec3-b249-fc0b85f2ebbf</value>
   </data>
+  <data name="DebugFlag" xml:space="preserve">
+    <value>false</value>
+  </data>
   <data name="IntervalSecondsClearControls" xml:space="preserve">
     <value>5</value>
   </data>

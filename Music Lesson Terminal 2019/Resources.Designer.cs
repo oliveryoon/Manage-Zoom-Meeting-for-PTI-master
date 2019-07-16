@@ -79,6 +79,15 @@ namespace Music_Lesson_Terminal_2019 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to false.
+        /// </summary>
+        internal static string DebugFlag {
+            get {
+                return ResourceManager.GetString("DebugFlag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 5.
         /// </summary>
         internal static string IntervalSecondsClearControls {

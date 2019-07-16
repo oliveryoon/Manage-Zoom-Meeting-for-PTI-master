@@ -80,6 +80,9 @@ namespace Music_Lesson_Terminal_2019
 
         // Absence or Staff Schedule 
         private bool _AbsenceRecordUsedFlag = true;
+
+        private bool _DebugFlag = false;
+
         public MainWindow()
         {
             try
@@ -101,7 +104,7 @@ namespace Music_Lesson_Terminal_2019
         {
             try
             {
-                lblTime.Content = DateTime.Now.ToString("HH:mm:ss");
+                lblTime.Content = DateTime.Now.ToString("dd MMM yyyy HH:mm:ss");
 
                 if ((System.DateTime.Now - _LastActivityTime).TotalSeconds > _IntervalSecondsClearControls)
                 {
@@ -318,7 +321,7 @@ namespace Music_Lesson_Terminal_2019
                     if (student == null)
                     {
 
-                        ActionWhenFailed(true, "Student Not found. (8)");
+                        ActionWhenFailed(true, "Student Not found." + (_DebugFlag?"(8)":""));
 
                         return false;
                     }
@@ -354,12 +357,12 @@ namespace Music_Lesson_Terminal_2019
                 }
                 else
                 {
-                    ActionWhenFailed(true, response.StatusCode.ToString() + ".(9)");
+                    ActionWhenFailed(true, response.StatusCode.ToString() + (_DebugFlag ? "(8)" : "")); 
                 }
             }
             catch (Exception e)
             {
-                ActionWhenFailed(true, e.Message + ". (10)");
+                ActionWhenFailed(true, e.Message + (_DebugFlag ? "(8)" : ""));
             }
             return false;
         }
@@ -418,7 +421,7 @@ namespace Music_Lesson_Terminal_2019
                     // Show Failed message.
                     if (status == null)
                     {
-                        ActionWhenFailed(true, status.Description + ". (6)");
+                        ActionWhenFailed(true, status.Description + (_DebugFlag ? "(6)" : ""));
                         return;
                     }
                     else
@@ -466,14 +469,14 @@ namespace Music_Lesson_Terminal_2019
                             btnSignInOut.IsEnabled = false;
                             lblMsg.Content = status.Description;
                             pos = pos + 1;
-                            ActionWhenFailed(true, status.Description + ". (7)");
+                            ActionWhenFailed(true, status.Description + (_DebugFlag ? "(7)" : ""));
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                ActionWhenFailed(true, ex.Message + ". (5) position: " + pos.ToString());
+                ActionWhenFailed(true, ex.Message + (_DebugFlag ? ". (5) position: " + pos.ToString(): ""));
             }
         }
         private async void DisplayMusicLessonAbsenceStatus(int Id, string token)
@@ -521,7 +524,7 @@ namespace Music_Lesson_Terminal_2019
                     // Show Failed message.
                     if (status == null)
                     {
-                        ActionWhenFailed(true, status.Description + ". (6)");
+                        ActionWhenFailed(true, status.Description + (_DebugFlag ? ". (6)" : ""));
                         return;
                     }
                     else
@@ -552,7 +555,7 @@ namespace Music_Lesson_Terminal_2019
                                     break;
                                 case "DE":
                                     btnSignInOut.Content = "Delete";
-                                    this.ActionWhenDisplayingSimpleMessage("Already Signed In. Click Delete Button to remove your sign in.");
+                                    this.ActionWhenDisplayingSimpleMessage("Already Signed In. Click Delete button to remove your sign in.");
                                     break;
                                 default:
                                     btnSignInOut.Content = "";
@@ -571,21 +574,21 @@ namespace Music_Lesson_Terminal_2019
                             btnSignInOut.IsEnabled = false;
                             lblMsg.Content = status.Description;
                             pos = pos + 1;
-                            ActionWhenFailed(true, status.Description + ". (7)");
+                            ActionWhenFailed(true, status.Description + (_DebugFlag ? ". (7)" : ""));
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                ActionWhenFailed(true, ex.Message + ". (5) position: " + pos.ToString());
+                ActionWhenFailed(true, ex.Message + (_DebugFlag ? ". (5) position: " + pos.ToString() : ""));  
             }
         }
         private void ActionWhenFailed(bool clearAllFlag, string message)
         {
             try
             {
-                Uri uri = ResourceAccessor.GetFileUri("Assets/Fail sound effect 3.wav");
+                Uri uri = ResourceAccessor.GetFileUri("Assets/Fail sound effect 3.wav", _DebugFlag);
                 PlaySound(uri);
 
                 // display error message.
@@ -626,15 +629,15 @@ namespace Music_Lesson_Terminal_2019
 
 
         }
-        private void ActionWhenSucceeded()
+        private void ActionWhenSucceeded(string description)
         {
             try
             {
-                Uri uri = ResourceAccessor.GetFileUri("Assets/You win sound effect 3.wav");
+                Uri uri = ResourceAccessor.GetFileUri("Assets/You win sound effect 3.wav", _DebugFlag);
                 PlaySound(uri);
 
                 // display error message.
-                textBlockSuccess.Text = "Done";
+                textBlockSuccess.Text = description;
                 var storyboard = (Storyboard)Resources["storyBoardSuccess"];
                 storyboard.Begin();
 
@@ -652,7 +655,7 @@ namespace Music_Lesson_Terminal_2019
 
 
                 txtCardNumber.Password = "";
-                Uri uri = ResourceAccessor.GetFileUri("Assets/student.png");
+                //Uri uri = ResourceAccessor.GetFileUri("Assets/student.png", _DebugFlag);
                 //imgStudentPhoto.Source = new BitmapImage(uri);
                 imgStudentPhoto2.Visibility = Visibility.Visible;
 
@@ -663,13 +666,14 @@ namespace Music_Lesson_Terminal_2019
                 RequestedJobCode = string.Empty;
                 lblMsg.Content = string.Empty;
                 btnCancel.IsEnabled = false;
+                btnSignInOut.Content = "Sign In";
                 btnSignInOut.IsEnabled = false;
 
                 txtCardNumber.Focus();
             }
             catch (Exception e)
             {
-                lblMsg.Content = e.Message + ". (13)";
+                lblMsg.Content = e.Message + (_DebugFlag ? ". (13)" : "");
             }
         }
         async private void PlaySound(Uri uri)//            --async private Task PlaySound(Uri uri)
@@ -693,7 +697,7 @@ namespace Music_Lesson_Terminal_2019
             }
             catch (Exception e)
             {
-                lblMsg.Content = e.Message + ". (14)";
+                lblMsg.Content = e.Message + (_DebugFlag ? ". (14)" : "");
             }
 
 
@@ -730,7 +734,9 @@ namespace Music_Lesson_Terminal_2019
 
                 if (response.IsSuccessStatusCode)
                 {
-                    ActionWhenSucceeded();
+                    var content = await response.Content.ReadAsStringAsync();
+                    MusicLesson musicLesson = JsonConvert.DeserializeObject<MusicLesson>(content);
+                    ActionWhenSucceeded(musicLesson.Description);
                 }
                 else
                 {
@@ -739,12 +745,12 @@ namespace Music_Lesson_Terminal_2019
                     if (musicLesson != null)
                         ActionWhenFailed(false, musicLesson.Description);
                     else
-                        ActionWhenFailed(false, "Failed. Try again. (15)" );
+                        ActionWhenFailed(false, "Failed. Try again. " + (_DebugFlag ? ". (15)" : "")); 
                 }
             }
             catch (Exception e)
             {
-                ActionWhenFailed(false, e.Message + ". (16)");
+                ActionWhenFailed(false, e.Message + (_DebugFlag ? ". (16)" : ""));
             }
 
 
@@ -779,7 +785,9 @@ namespace Music_Lesson_Terminal_2019
 
                 if (response.IsSuccessStatusCode)
                 {
-                    ActionWhenSucceeded();
+                    var content = await response.Content.ReadAsStringAsync();
+                    MusicLesson musicLesson = JsonConvert.DeserializeObject<MusicLesson>(content);
+                    ActionWhenSucceeded(musicLesson.Description);
                 }
                 else
                 {
@@ -788,12 +796,12 @@ namespace Music_Lesson_Terminal_2019
                     if (musicLesson != null)
                         ActionWhenFailed(false, musicLesson.Description);
                     else
-                        ActionWhenFailed(false, "Failed. Try again. (15)");
+                        ActionWhenFailed(false, "Failed. Try again." + (_DebugFlag ? ". (155)" : ""));
                 }
             }
             catch (Exception e)
             {
-                ActionWhenFailed(false, e.Message + ". (16)");
+                ActionWhenFailed(false, e.Message + (_DebugFlag ? ". (16)" : ""));
             }
 
 
@@ -815,7 +823,7 @@ namespace Music_Lesson_Terminal_2019
             }
             catch (Exception ex)
             {
-                lblMsg.Content = "17. " + ex.Message;
+                lblMsg.Content =  ex.Message + (_DebugFlag ? ". (17)" : "");
             }
         }
 
@@ -828,13 +836,13 @@ namespace Music_Lesson_Terminal_2019
             }
             catch (Exception ex)
             {
-                lblMsg.Content = "18. " + ex.Message;
+                lblMsg.Content = ex.Message + (_DebugFlag ? ". (18)" : ""); ;
             }
         }
 
         internal static class ResourceAccessor
         {
-            public static Uri GetFileUri(string path)
+            public static Uri GetFileUri(string path, bool debugFlag )
             {
                 try
                 {
@@ -847,7 +855,8 @@ namespace Music_Lesson_Terminal_2019
                 }
                 catch (Exception e)
                 {
-                    throw new Exception("19. " + e.Message);
+                    
+                    throw new Exception(e.Message + (debugFlag?". (19)":""));
                 }
 
             }
@@ -883,9 +892,12 @@ namespace Music_Lesson_Terminal_2019
             _IntervalSecondsClearControls = tempInt;
             _TerminalCode = GetResource("TerminalCode");
 
+            bool.TryParse(GetResource("AbsenceRecordUsedFlag"), out tempBool);
+            _DebugFlag = tempBool;
+
             await GetToken();
 
-            ActionWhenSucceeded();
+            ActionWhenSucceeded("Started");
         }       
     }
 }

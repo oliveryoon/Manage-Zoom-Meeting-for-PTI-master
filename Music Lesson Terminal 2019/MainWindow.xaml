@@ -170,6 +170,7 @@
         <StackPanel x:Name="popupSimpleMessage" Grid.Row="2"  VerticalAlignment="Center" Opacity="0" Visibility="Visible" HorizontalAlignment="Stretch" Background="White" >
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>                    
                 </Grid.RowDefinitions>                
                 <TextBlock x:Name="textBlockSimpleMessage"  Grid.Row="1" TextWrapping="Wrap" Foreground="Green" Text="" FontSize="50" VerticalAlignment="Center" TextAlignment="Center" Margin="03" />

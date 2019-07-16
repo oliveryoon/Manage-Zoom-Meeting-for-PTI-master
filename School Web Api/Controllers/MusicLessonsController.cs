@@ -160,13 +160,16 @@ namespace School_Web_Api.Controllers
         }
         [HttpPost]
         [Route("MusicLessonAbsence")]
-        public async Task<ActionResult<MusicLesson>> PostMusicLessonAbsence(MusicLessonDTO musicLesson)
+        public async Task<ActionResult<MusicLesson>> PostMusicLessonAbsence(MusicLessonDTO musicLessonDTO)
         {
             try
             {
-                _context.UpdateMusicLessonAbsenceSignInOutAsync(musicLesson);
+                MusicLesson musicLesson =  _context.UpdateMusicLessonAbsenceSignInOutAsync(musicLessonDTO);
                 await _context.SaveChangesAsync();
-                return CreatedAtAction("GetMusicLesson", new { seq = musicLesson.Seq }, musicLesson);
+
+                
+                //return CreatedAtAction(ActionResult<MusicLesson>) musicLessonDTO; 
+                return CreatedAtAction("GetMusicLesson", musicLesson);
             }
             catch (Exception e)
             {
