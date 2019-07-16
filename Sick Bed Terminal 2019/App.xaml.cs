@@ -8,7 +8,7 @@ using System.Resources;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Sick_Bed_Terminal_2019
+namespace Sick_Bay_Terminal_2019
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -17,8 +17,8 @@ namespace Sick_Bed_Terminal_2019
     {
         static App()
         {
-            //ClientId = GetResource("ClientId");
-            //Tenant = GetResource("Tenant");
+            ClientId = GetResource("ClientId");
+            Tenant = GetResource("Tenant");
 
             _clientApp = PublicClientApplicationBuilder.Create(ClientId)
                 .WithAuthority(AzureCloudInstance.AzurePublic, Tenant)

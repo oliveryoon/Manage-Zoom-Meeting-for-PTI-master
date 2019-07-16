@@ -51,7 +51,7 @@
               From="2.0" To="0.0" Duration="0:0:3.5"/>
         </Storyboard>
     </Window.Resources>
-    <Grid>
+    <Grid Height="507" VerticalAlignment="Top">
         <!--<Grid.Background>
             <ImageBrush ImageSource="/Assets/Joeys Terminal.JPG" Stretch="UniformToFill" ></ImageBrush>
         </Grid.Background>-->
@@ -61,21 +61,26 @@
             <RowDefinition Height="7*"/>
             <RowDefinition Height="3*" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180*" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="180*" />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0" Grid.ColumnSpan="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150*" />
+                <ColumnDefinition Width="180*" />
                 <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="150*" />
+                <ColumnDefinition Width="180*" />
             </Grid.ColumnDefinitions>
 
             <TextBlock FontSize="48" FontWeight="Bold" Text="Music Centre Terminal" Grid.Column="1" TextAlignment="Center" />
             <Border Grid.Column="2" HorizontalAlignment="Right">
                 <!--<TextBlock x:Name="clock"  TextWrapping="Wrap" Foreground="Black" VerticalAlignment="Center" Text="5:00" TextAlignment="Right" Margin="01" FontSize="30" />-->
-                <Label Name="lblTime" FontSize="48" HorizontalAlignment="Right" VerticalAlignment="Center" Content="5:00" />
+                <Label Name="lblTime" FontSize="28" HorizontalAlignment="Right" VerticalAlignment="Center" Content="5:00" />
             </Border>
 
         </Grid>
-        <Grid Margin="0,0,0,0" Grid.Row="1" Grid.RowSpan="2">
+        <Grid Margin="0,0,0,0" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="10*"/>
@@ -123,7 +128,7 @@
 
         </Grid>
 
-        <Grid Margin="0,0,0,0" Grid.Row="3">
+        <Grid Margin="0,0,0,0" Grid.Row="3"  Grid.ColumnSpan="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
@@ -132,7 +137,7 @@
                 Scan your student card or enter your Student ID
             </TextBlock>-->
             <Border Background="Pink"  Grid.Row="1"  Visibility="Visible">
-                <PasswordBox x:Name="txtCardNumber" InputScope="Number" FontSize="30" Password="70479" HorizontalContentAlignment="Center" MaxLength="10" PasswordChar="X" IsTabStop="True" 
+                <PasswordBox x:Name="txtCardNumber" InputScope="Number" FontSize="30" Password="" HorizontalContentAlignment="Center" MaxLength="10" PasswordChar="&#x26AB;" IsTabStop="True" 
                     KeyUp="txtCardNumber_KeyUp" />
             </Border>
             <Label Name="lblMsg" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="Error Message" FontSize="30"></Label>
@@ -145,7 +150,7 @@
         <!--<Border x:Name="ErrorBorder" Background="Red" Grid.Row="2"/>
         <TextBlock x:Name="StatusBlock" Grid.Row="2" Margin="12, 10, 12, 10" Visibility="Collapsed"/>-->
 
-        <StackPanel x:Name="popupFail" Grid.Row="2"  VerticalAlignment="Center" Opacity="0" Visibility="Visible" HorizontalAlignment="Stretch" Background="White" >
+        <StackPanel x:Name="popupFail" Grid.Row="2"  Grid.ColumnSpan="3" VerticalAlignment="Center" Opacity="0" Visibility="Visible" HorizontalAlignment="Stretch" Background="White" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -155,7 +160,7 @@
                 <TextBlock x:Name="textBlockFail"  Grid.Row="1" TextWrapping="Wrap" Foreground="Red" Text="" FontSize="50" VerticalAlignment="Center" TextAlignment="Center" Margin="03" />
             </Grid>
         </StackPanel>
-        <StackPanel x:Name="popupSuccess" Grid.Row="2"  VerticalAlignment="Center" Opacity="0" Visibility="Visible" HorizontalAlignment="Stretch" Background="White" >
+        <StackPanel x:Name="popupSuccess" Grid.Row="2"  Grid.ColumnSpan="3" VerticalAlignment="Center" Opacity="0" Visibility="Visible" HorizontalAlignment="Stretch" Background="White" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -167,7 +172,7 @@
             </Grid>
         </StackPanel>
 
-        <StackPanel x:Name="popupSimpleMessage" Grid.Row="2"  VerticalAlignment="Center" Opacity="0" Visibility="Visible" HorizontalAlignment="Stretch" Background="White" >
+        <StackPanel x:Name="popupSimpleMessage" Grid.Row="1" Grid.Column="2"  VerticalAlignment="Center" Opacity="0" Visibility="Visible" HorizontalAlignment="Stretch" Background="White" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

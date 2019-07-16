@@ -31,7 +31,7 @@ using System.IO;
 using System.Security.Cryptography;
 using Microsoft.Identity.Client;
 
-namespace Sick_Bed_Terminal_2019
+namespace Sick_Bay_Terminal_2019
 {
     //static class TokenCacheHelper
     //{

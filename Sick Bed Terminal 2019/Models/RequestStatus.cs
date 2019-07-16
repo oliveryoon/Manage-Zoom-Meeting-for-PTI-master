@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sick_Bed_Terminal_2019.Models
+namespace Sick_Bay_Terminal_2019.Models
 {
     //public class RequestStatus
     //{

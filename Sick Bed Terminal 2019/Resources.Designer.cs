@@ -61,11 +61,20 @@ namespace Sick_Bed_Terminal_2019 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to d446190b-740f-4ec3-b249-fc0b85f2ebbf.
+        ///   Looks up a localized string similar to 199b1437-8b42-476f-ad09-b61e5150f7bf.
         /// </summary>
         internal static string ClientId {
             get {
                 return ResourceManager.GetString("ClientId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to false.
+        /// </summary>
+        internal static string DebugFlag {
+            get {
+                return ResourceManager.GetString("DebugFlag", resourceCulture);
             }
         }
         
@@ -117,9 +126,9 @@ namespace Sick_Bed_Terminal_2019 {
         /// <summary>
         ///   Looks up a localized string similar to https://webapi.joeys.org.
         /// </summary>
-        internal static string WebApiBaseAddress12 {
+        internal static string WebApiBaseAddress3 {
             get {
-                return ResourceManager.GetString("WebApiBaseAddress12", resourceCulture);
+                return ResourceManager.GetString("WebApiBaseAddress3", resourceCulture);
             }
         }
     }

@@ -182,7 +182,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Sick Bed Terminal 2019_TemporaryKey.pfx" />
+    <None Include="Sick Bay Terminal 2019_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

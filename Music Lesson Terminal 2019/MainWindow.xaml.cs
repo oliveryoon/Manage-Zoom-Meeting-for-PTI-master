@@ -558,7 +558,7 @@ namespace Music_Lesson_Terminal_2019
                                     this.ActionWhenDisplayingSimpleMessage("Already Signed In. Click Delete button to remove your sign in.");
                                     break;
                                 default:
-                                    btnSignInOut.Content = "";
+                                    btnSignInOut.Content = "Sign In";
                                     btnSignInOut.IsEnabled = false;
                                     break;
                             }
@@ -572,6 +572,8 @@ namespace Music_Lesson_Terminal_2019
                         {
                             btnCancel.IsEnabled = true;
                             btnSignInOut.IsEnabled = false;
+
+                            btnSignInOut.Content = "Sign In";
                             lblMsg.Content = status.Description;
                             pos = pos + 1;
                             ActionWhenFailed(true, status.Description + (_DebugFlag ? ". (7)" : ""));
@@ -606,7 +608,7 @@ namespace Music_Lesson_Terminal_2019
             }
             catch (Exception e)
             {
-                lblMsg.Content = "11. " + e.Message;
+                lblMsg.Content =  e.Message + (_DebugFlag ? ". (11)" : "");
             }
 
 
@@ -624,7 +626,7 @@ namespace Music_Lesson_Terminal_2019
             }
             catch (Exception e)
             {
-                lblMsg.Content = "111. " + e.Message;
+                lblMsg.Content = e.Message + (_DebugFlag ? ". (111)" : "");
             }
 
 
@@ -645,7 +647,7 @@ namespace Music_Lesson_Terminal_2019
             }
             catch (Exception e)
             {
-                lblMsg.Content = "12. " + e.Message;
+                lblMsg.Content = e.Message + (_DebugFlag ? ". (12)" : "");
             }
         }
         private void ClearAllControls()
@@ -690,7 +692,7 @@ namespace Music_Lesson_Terminal_2019
                 };
                 
                 _MediaPlayer.Open(uri);
-                await Task.Delay(500);
+                //await Task.Delay(500);
                 _MediaPlayer.Play();
 
                 
@@ -825,6 +827,7 @@ namespace Music_Lesson_Terminal_2019
             {
                 lblMsg.Content =  ex.Message + (_DebugFlag ? ". (17)" : "");
             }
+          
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
@@ -892,7 +895,7 @@ namespace Music_Lesson_Terminal_2019
             _IntervalSecondsClearControls = tempInt;
             _TerminalCode = GetResource("TerminalCode");
 
-            bool.TryParse(GetResource("AbsenceRecordUsedFlag"), out tempBool);
+            bool.TryParse(GetResource("DebugFlag"), out tempBool);
             _DebugFlag = tempBool;
 
             await GetToken();

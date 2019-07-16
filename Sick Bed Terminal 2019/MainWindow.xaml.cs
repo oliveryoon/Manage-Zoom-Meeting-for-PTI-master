@@ -30,7 +30,7 @@ using System.Diagnostics;
 using System.Windows.Interop;
 using System.Resources;
 
-namespace Sick_Bed_Terminal_2019
+namespace Sick_Bay_Terminal_2019
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -87,7 +87,9 @@ namespace Sick_Bed_Terminal_2019
         private int _IntervalSecondsClearControls = 5;
         private string _TerminalCode = "";
 
-        static MediaPlayer _mediaPlayer = new MediaPlayer();
+        static MediaPlayer _MediaPlayer = new MediaPlayer();
+
+        private bool _DebugFlag = false;
         public MainWindow()
         {
             try
@@ -102,7 +104,7 @@ namespace Sick_Bed_Terminal_2019
             }
             catch (Exception e)
             {
-                lblMsg.Content = "1. " + e.Message;
+                lblMsg.Content = e.Message + (_DebugFlag ? ". (-1)" : "");
             }
 
 
@@ -111,7 +113,7 @@ namespace Sick_Bed_Terminal_2019
         {
             try
             {
-                lblTime.Content = DateTime.Now.ToString("HH:mm:ss");
+                lblTime.Content = DateTime.Now.ToString("dd MMM yyyy HH:mm:ss");
 
                 if ((System.DateTime.Now - _LastActivityTime).TotalSeconds > _IntervalSecondsClearControls)
                 {
@@ -120,7 +122,7 @@ namespace Sick_Bed_Terminal_2019
             }
             catch (Exception ex)
             {
-                lblMsg.Content = "2. " + ex.Message;
+                lblMsg.Content =  ex.Message + (_DebugFlag ? ". (2)" : "");
             }
 
         }
@@ -180,7 +182,7 @@ namespace Sick_Bed_Terminal_2019
             }
             catch (Exception e)
             {
-                lblMsg.Content = e.Message;
+                lblMsg.Content = e.Message + (_DebugFlag ? ". (0)" : "");
             }
 
             return "";
@@ -292,7 +294,7 @@ namespace Sick_Bed_Terminal_2019
             }
             catch (Exception ex)
             {
-                lblMsg.Content = "1. " + ex.Message;
+                lblMsg.Content =  ex.Message + (_DebugFlag ? ". (1)" : "");
             }
 
         }
@@ -329,7 +331,7 @@ namespace Sick_Bed_Terminal_2019
                     if (student == null)
                     {
 
-                        ActionWhenFailed(true, "Student Not found" + ". (8)");
+                        ActionWhenFailed(true, "Student Not found" + (_DebugFlag ? ". (8)" : ""));
 
                         return;
                     }
@@ -352,6 +354,10 @@ namespace Sick_Bed_Terminal_2019
                                 // Assign the Source property of your image
                                 imgStudentPhoto.Source = imageSource;
 
+                                imgStudentPhoto2.Visibility = Visibility.Collapsed;
+                                var storyboard = (Storyboard)Resources["storyBoardPopupPhoto"];
+                                storyboard.Begin();
+
 
                             }
                         }
@@ -360,12 +366,12 @@ namespace Sick_Bed_Terminal_2019
                 }
                 else
                 {
-                    ActionWhenFailed(true, response.StatusCode.ToString() + ". (9)");
+                    ActionWhenFailed(true, response.StatusCode.ToString() + (_DebugFlag ? ". (9)" : ""));
                 }
             }
             catch (Exception e)
             {
-                ActionWhenFailed(true, e.Message + ". (10)");
+                ActionWhenFailed(true, e.Message + (_DebugFlag ? ". (7)" : ""));
             }
         }
 
@@ -432,23 +438,25 @@ namespace Sick_Bed_Terminal_2019
                         {
                             btnCancel.IsEnabled = true;
                             btnSignInOut.IsEnabled = false;
+                            btnSignInOut.Content = "Sign In";
+
                             lblMsg.Content = status.Description;
                             pos = pos + 1;
-                            ActionWhenFailed(true, status.Description + ". (7)");
+                            ActionWhenFailed(true, status.Description + (_DebugFlag ? ". (7)" : "")); 
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                ActionWhenFailed(true, pos.ToString() + "=> 5. " + ex.Message + ". (5) pos:" + pos.ToString());
+                ActionWhenFailed(true, ex.Message + (_DebugFlag ? ". (7) pos:" + pos.ToString() : ""));
             }
         }
         private void ActionWhenFailed(bool clearAllFlag, string message)
         {
             try
             {
-                Uri uri = ResourceAccessor.GetFileUri("Assets/Fail sound effect 3.wav");
+                Uri uri = ResourceAccessor.GetFileUri("Assets/Fail sound effect 3.wav", _DebugFlag);
                 PlaySound(uri);
 
                 // display error message.
@@ -461,23 +469,41 @@ namespace Sick_Bed_Terminal_2019
                     ClearAllControls();
                 }
 
-                lblMsg.Content = message;
+                //lblMsg.Content = message;
             }
             catch (Exception e)
             {
-                lblMsg.Content = "11. " + e.Message;
+                lblMsg.Content =  e.Message + (_DebugFlag ? ". (11)" : "");
             }
 
 
         }
-        private void ActionWhenSucceeded()
+        private void ActionWhenDisplayingSimpleMessage(string message)
+        {
+            try
+            {
+                // display error message.
+                textBlockSimpleMessage.Text = message;
+                var storyboard = (Storyboard)Resources["storyBoardSimpleMessage"];
+                storyboard.Begin();
+
+                //lblMsg.Content = message;
+            }
+            catch (Exception e)
+            {
+                lblMsg.Content = e.Message + (_DebugFlag ? ". (111)" : "");
+            }
+
+
+        }
+        private void ActionWhenSucceeded(string Description)
         {
             try {
-                Uri uri = ResourceAccessor.GetFileUri("Assets/You win sound effect 3.wav");
+                Uri uri = ResourceAccessor.GetFileUri("Assets/You win sound effect 3.wav", _DebugFlag);
                 PlaySound(uri);
 
                 // display error message.
-                textBlockSuccess.Text = "Done";
+                textBlockSuccess.Text = Description;
                 var storyboard = (Storyboard)Resources["storyBoardSuccess"];
                 storyboard.Begin();
 
@@ -485,7 +511,7 @@ namespace Sick_Bed_Terminal_2019
             }
             catch (Exception e)
             {
-                lblMsg.Content = "12. " + e.Message;
+                lblMsg.Content = e.Message + (_DebugFlag ? ". (12)" : "");
             }
         }
         private void ClearAllControls()
@@ -494,9 +520,10 @@ namespace Sick_Bed_Terminal_2019
             {
 
 
-                //txtCardNumber.Password = "";
-                Uri uri = ResourceAccessor.GetFileUri("Assets/student.png");
-                imgStudentPhoto.Source = new BitmapImage(uri);
+                txtCardNumber.Password = "";
+                //Uri uri = ResourceAccessor.GetFileUri("Assets/student.png", _DebugFlag);
+                //imgStudentPhoto.Source = new BitmapImage(uri);
+                imgStudentPhoto2.Visibility = Visibility.Visible;
 
                 txtStudentName.Text = string.Empty;
 
@@ -506,12 +533,13 @@ namespace Sick_Bed_Terminal_2019
                 lblMsg.Content = string.Empty;
                 btnCancel.IsEnabled = false;
                 btnSignInOut.IsEnabled = false;
+                btnSignInOut.Content = "Sign In";
 
                 txtCardNumber.Focus();
             }
             catch (Exception e)
             {
-                lblMsg.Content = e.Message + ". (13)";
+                lblMsg.Content = e.Message + (_DebugFlag ? ". (13)" : "");
             }
         }
         //private void Media_Ended(object sender, EventArgs e)
@@ -526,26 +554,23 @@ namespace Sick_Bed_Terminal_2019
             try
             {
 
-                //SoundUri = uri;
 
-                _mediaPlayer.MediaFailed += (o, args) =>
+                Debug.Print(uri.ToString());
+
+                _MediaPlayer.MediaFailed += (o, args) =>
                 {
                     MessageBox.Show("Media Failed!!" + args.ErrorException.Message);
                 };
-                _mediaPlayer.Open(uri);
-                //_mediaPlayer.MediaEnded += new EventHandler(Media_Ended);
-                _mediaPlayer.Play();
 
-                //MediaElement media = new MediaElement();
-                //media.LoadedBehavior = MediaState.Manual;
-                //media.UnloadedBehavior = MediaState.Manual;
-                //media.Source = uri; // new Uri("ding.wav", UriKind.Relative);
-                //media.Play();
-                                
+                _MediaPlayer.Open(uri);
+                //await Task.Delay(500);
+                _MediaPlayer.Play();
+
+
             }
             catch (Exception e)
             {
-                lblMsg.Content =  e.Message + ". (14)";
+                lblMsg.Content = e.Message + (_DebugFlag ? ". (14)" : "");
             }
 
 
@@ -583,7 +608,9 @@ namespace Sick_Bed_Terminal_2019
 
                 if (response.IsSuccessStatusCode)
                 {
-                    ActionWhenSucceeded();
+                    var content = await response.Content.ReadAsStringAsync();
+                    SickBay sickBay = JsonConvert.DeserializeObject<SickBay>(content);
+                    ActionWhenSucceeded(sickBay.Description);
                 }
                 else
                 {
@@ -592,12 +619,12 @@ namespace Sick_Bed_Terminal_2019
                     if (sickBay != null)
                         ActionWhenFailed(false, sickBay.Description);
                     else
-                        ActionWhenFailed(false, "Failed. Try again" + ". (15)");
+                        ActionWhenFailed(false, "Failed. Try again" + (_DebugFlag ? ". (15)" : "")); 
                 }
             }
             catch (Exception e)
             {
-                ActionWhenFailed(false, e.Message + ". (16)");
+                ActionWhenFailed(false, e.Message + (_DebugFlag ? ". (16)" : ""));
             }
 
 
@@ -615,7 +642,7 @@ namespace Sick_Bed_Terminal_2019
             }
             catch (Exception ex)
             {
-                lblMsg.Content = ex.Message + ". (17)";
+                lblMsg.Content = ex.Message + (_DebugFlag ? ". (17)" : "");
             }
         }
 
@@ -627,13 +654,13 @@ namespace Sick_Bed_Terminal_2019
             }
             catch (Exception ex)
             {
-                lblMsg.Content = ex.Message + ". (18)";
+                lblMsg.Content = ex.Message + (_DebugFlag ? ". (18)" : "");
             }
         }
 
         internal static class ResourceAccessor
         {
-            public static Uri GetFileUri(string path)
+            public static Uri GetFileUri(string path, bool debugFlag)
             {
                 try {
                     var uri = string.Format(
@@ -645,7 +672,7 @@ namespace Sick_Bed_Terminal_2019
                 }
                 catch (Exception e)
                 {
-                    throw new Exception(e.Message + ". (19)");
+                    throw new Exception(e.Message + (debugFlag ? ". (19)" : ""));
                 }
                 
             }
@@ -679,9 +706,14 @@ namespace Sick_Bed_Terminal_2019
             string scope = GetResource("Scope");
             string[] _Scopes = new string[] { scope };
 
+            bool tempBool;
+            bool.TryParse(GetResource("DebugFlag"), out tempBool);
+            _DebugFlag = tempBool;
+
+
             await GetToken();
 
-            ActionWhenSucceeded();
+            ActionWhenSucceeded("Started");
 
         }
     }

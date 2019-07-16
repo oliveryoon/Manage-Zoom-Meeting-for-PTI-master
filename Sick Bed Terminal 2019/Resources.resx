@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="WebApiBaseAddress12" xml:space="preserve">
+  <data name="WebApiBaseAddress3" xml:space="preserve">
     <value>https://webapi.joeys.org</value>
   </data>
   <data name="Tenant" xml:space="preserve">
@@ -128,7 +128,7 @@
     <comment>Health Centre not Counselling Dept.</comment>
   </data>
   <data name="ClientId" xml:space="preserve">
-    <value>d446190b-740f-4ec3-b249-fc0b85f2ebbf</value>
+    <value>199b1437-8b42-476f-ad09-b61e5150f7bf</value>
   </data>
   <data name="IntervalSecondsClearControls" xml:space="preserve">
     <value>5</value>
@@ -138,5 +138,8 @@
   </data>
   <data name="WebApiBaseAddress" xml:space="preserve">
     <value>http://localhost:5000</value>
+  </data>
+  <data name="DebugFlag" xml:space="preserve">
+    <value>false</value>
   </data>
 </root>
