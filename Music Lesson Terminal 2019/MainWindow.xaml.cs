@@ -341,11 +341,13 @@ namespace Music_Lesson_Terminal_2019
                                 // Assign the Source property of your image
                                 imgStudentPhoto.Source = imageSource;
 
+                                imgStudentPhoto2.Visibility = Visibility.Collapsed;
                                 var storyboard = (Storyboard)Resources["storyBoardPopupPhoto"];
                                 storyboard.Begin();
 
                             }
                         }
+                        
                         return true;
                     }
 
@@ -421,19 +423,38 @@ namespace Music_Lesson_Terminal_2019
                     }
                     else
                     {
-                        if (status.Code == "SI") // current status is SI, then requested job will be sign out.
+                        if (_AbsenceRecordUsedFlag && status.Code == "SI") // If the current status is in Sign In and absence records are used, the student will have only option to delete the existing ones.
+                        {
+                            RequestedJobCode = "DE"; // need this code when update requested.
+                        }
+                        else if ( status.Code == "SI") // current status is SI, then requested job will be sign out.
                         {
                             RequestedJobCode = "SO"; // need this code when update requested.
                         }
-
                         else if (status.Code == "SO")
                             RequestedJobCode = "SI"; // need this code when update requested.
                         else
                             RequestedJobCode = "";
-
-                        if (status.Code == "SI" || status.Code == "SO")
+                        
+                        if (RequestedJobCode != "")
                         {
-                            btnSignInOut.Content = RequestedJobCode == "SO" ? "Sign Out" : "Sign In";
+                            switch (RequestedJobCode)
+                            {
+                                case "SI":
+                                    btnSignInOut.Content = "Sign In";
+                                    break;
+                                case "SO":
+                                    btnSignInOut.Content = "Sign Out";
+                                    break;
+                                case "DE":
+                                    btnSignInOut.Content = "Delete";
+                                    break;
+                                default:
+                                    btnSignInOut.Content = "";
+                                    btnSignInOut.IsEnabled = false;
+                                    break;
+                            }
+                            
                             btnSignInOut.IsEnabled = true;
                             btnCancel.IsEnabled = true;
 
@@ -505,7 +526,11 @@ namespace Music_Lesson_Terminal_2019
                     }
                     else
                     {
-                        if (status.Code == "SI") // current status is SI, then requested job will be sign out.
+                        if (_AbsenceRecordUsedFlag && status.Code == "SI") // If the current status is in Sign In and absence records are used, the student will have only option to delete the existing ones.
+                        {
+                            RequestedJobCode = "DE"; // need this code when update requested.
+                        }
+                        else if (status.Code == "SI") // current status is SI, then requested job will be sign out.
                         {
                             RequestedJobCode = "SO"; // need this code when update requested.
                         }
@@ -515,9 +540,26 @@ namespace Music_Lesson_Terminal_2019
                         else
                             RequestedJobCode = "";
 
-                        if (status.Code == "SI" || status.Code == "SO")
+                        if (RequestedJobCode != "")
                         {
-                            btnSignInOut.Content = RequestedJobCode == "SO" ? "Sign Out" : "Sign In";
+                            switch (RequestedJobCode)
+                            {
+                                case "SI":
+                                    btnSignInOut.Content = "Sign In";
+                                    break;
+                                case "SO":
+                                    btnSignInOut.Content = "Sign Out";
+                                    break;
+                                case "DE":
+                                    btnSignInOut.Content = "Delete";
+                                    this.ActionWhenDisplayingSimpleMessage("Already Signed In. Click Delete Button to remove your sign in.");
+                                    break;
+                                default:
+                                    btnSignInOut.Content = "";
+                                    btnSignInOut.IsEnabled = false;
+                                    break;
+                            }
+
                             btnSignInOut.IsEnabled = true;
                             btnCancel.IsEnabled = true;
 
@@ -566,6 +608,24 @@ namespace Music_Lesson_Terminal_2019
 
 
         }
+        private void ActionWhenDisplayingSimpleMessage(string message)
+        {
+            try
+            {
+                // display error message.
+                textBlockSimpleMessage.Text = message;
+                var storyboard = (Storyboard)Resources["storyBoardSimpleMessage"];
+                storyboard.Begin();
+
+                //lblMsg.Content = message;
+            }
+            catch (Exception e)
+            {
+                lblMsg.Content = "111. " + e.Message;
+            }
+
+
+        }
         private void ActionWhenSucceeded()
         {
             try
@@ -593,7 +653,8 @@ namespace Music_Lesson_Terminal_2019
 
                 txtCardNumber.Password = "";
                 Uri uri = ResourceAccessor.GetFileUri("Assets/student.png");
-                imgStudentPhoto.Source = new BitmapImage(uri);
+                //imgStudentPhoto.Source = new BitmapImage(uri);
+                imgStudentPhoto2.Visibility = Visibility.Visible;
 
                 txtStudentName.Text = string.Empty;
 

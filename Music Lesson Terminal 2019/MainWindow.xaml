@@ -20,29 +20,29 @@
         </ResourceDictionary>-->
         
         <!-- Animates the rectangle's opacity. -->
-        <Storyboard x:Name="blinkPopupSimpleMessage" x:Key="blinkPopupSimpleMessage">
+        <Storyboard x:Name="storyBoardSimpleMessage" x:Key="storyBoardSimpleMessage">
             <DoubleAnimation
               Storyboard.TargetName="popupSimpleMessage"
               Storyboard.TargetProperty="Opacity"
-              From="2.0" To="0.0" Duration="0:0:2"/>
+              From="2.0" To="0.0" Duration="0:0:4"/>
         </Storyboard>
         <Storyboard x:Name="storyBoardFail" x:Key="storyBoardFail">
             <DoubleAnimation
               Storyboard.TargetName="popupFail"
               Storyboard.TargetProperty="Opacity"
-              From="2.0" To="0.0" Duration="0:0:1.2"/>
+              From="2.0" To="0.0" Duration="0:0:2.2"/>
         </Storyboard>
         <Storyboard x:Name="storyBoardSuccess" x:Key="storyBoardSuccess">
             <DoubleAnimation
               Storyboard.TargetName="popupSuccess"
               Storyboard.TargetProperty="Opacity"
-              From="2.0" To="0.0" Duration="0:0:1.2"/>
+              From="2.0" To="0.0" Duration="0:0:2.2"/>
         </Storyboard>
         <Storyboard x:Name="storyBoardPopupPhoto" x:Key="storyBoardPopupPhoto">
             <DoubleAnimation
-              Storyboard.TargetName="imgStudentPhoto"
+              Storyboard.TargetName="popupStudentPhoto"
               Storyboard.TargetProperty="Opacity"
-              From="2.0" To="0.0" Duration="0:0:2.5"/>
+              From="2.0" To="0.0" Duration="0:0:7.5"/>
         </Storyboard>
         <Storyboard x:Name="blinkPopupStudentName" x:Key="blinkPopupStudentName">
             <DoubleAnimation
@@ -87,7 +87,13 @@
                 <ColumnDefinition Width="5*" />
                 <ColumnDefinition Width="5*" />
             </Grid.ColumnDefinitions>
-            <Image x:Name="imgStudentPhoto" Source="/Assets/student.png" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" />
+            <Image x:Name="imgStudentPhoto2" Source="/Assets/student.png" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="Auto" Height="Auto" Opacity="0.2" />
+            <Border Name="popupStudentPhoto" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"  VerticalAlignment="Center" Opacity="0" Visibility="Visible" HorizontalAlignment="Center" CornerRadius="0" >
+                <!--Margin="-19,412,-20,237.2">-->
+                <Image x:Name="imgStudentPhoto" Source="/Assets/student.png" Margin="10,10,0,10.2"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="Auto" Height="Auto" />
+            </Border>
+            <!--<Image x:Name="imgStudentPhoto" Source="/Assets/student.png" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" />-->
+            
             <TextBlock x:Name="txtStudentName" FontSize="25"   Text="txtStudentName" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center"
                             FontWeight="Bold" KeyboardNavigation.IsTabStop="False" />
             <Border Name="popupButtonSignInOut" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" VerticalAlignment="Center" Padding="0,0,13,0" >
@@ -157,10 +163,18 @@
                 </Grid.RowDefinitions>
                 
                 <Image x:Name="imgSuccess" Grid.Row="0" Height="100" Width="100"  Source="/Assets/success.png"  Margin="10,10,0,10.2"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
-                <TextBlock x:Name="textBlockSuccess"  Grid.Row="1" TextWrapping="Wrap" Foreground="Green" Text="Welcome to C# Corner" FontSize="50" VerticalAlignment="Center" TextAlignment="Center" Margin="03" />
+                <TextBlock x:Name="textBlockSuccess"  Grid.Row="1" TextWrapping="Wrap" Foreground="Green" Text="" FontSize="50" VerticalAlignment="Center" TextAlignment="Center" Margin="03" />
             </Grid>
         </StackPanel>
 
+        <StackPanel x:Name="popupSimpleMessage" Grid.Row="2"  VerticalAlignment="Center" Opacity="0" Visibility="Visible" HorizontalAlignment="Stretch" Background="White" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>                    
+                </Grid.RowDefinitions>                
+                <TextBlock x:Name="textBlockSimpleMessage"  Grid.Row="1" TextWrapping="Wrap" Foreground="Green" Text="" FontSize="50" VerticalAlignment="Center" TextAlignment="Center" Margin="03" />
+            </Grid>
+        </StackPanel>
     </Grid>
 
 
