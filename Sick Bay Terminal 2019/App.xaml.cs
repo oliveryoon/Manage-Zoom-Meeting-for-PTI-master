@@ -17,8 +17,8 @@ namespace Sick_Bay_Terminal_2019
     {
         static App()
         {
-            ClientId = GetResource("ClientId");
-            Tenant = GetResource("Tenant");
+            //ClientId = GetResource("ClientId");
+            //Tenant = GetResource("Tenant");
 
             _clientApp = PublicClientApplicationBuilder.Create(ClientId)
                 .WithAuthority(AzureCloudInstance.AzurePublic, Tenant)
@@ -36,12 +36,12 @@ namespace Sick_Bay_Terminal_2019
         //   - for any Work or School accounts, or Microsoft personal account, use common
         //   - for Microsoft Personal account, use consumers
 
-        private static string ClientId = "";//  "d446190b-740f-4ec3-b249-fc0b85f2ebbf";
+        private static string ClientId = "d446190b-740f-4ec3-b249-fc0b85f2ebbf";
 
 
         // Note: Tenant is important for the quickstart. We'd need to check with Andre/Portal if we
         // want to change to the AadAuthorityAudience.
-        private static string Tenant = "";/// "315c37fc-27dc-4021-9c67-a92e8878d455";
+        private static string Tenant = "315c37fc-27dc-4021-9c67-a92e8878d455";
 
         private static IPublicClientApplication _clientApp;
 
