@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace School_Web_Api.Controllers
 {
-    [Authorize(Roles = "sec.All Staff")]
+    //[Authorize(Roles = "sec.All Staff")]
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
@@ -80,6 +80,9 @@ namespace School_Web_Api.Controllers
 
             try
             {
+                //tring user = User.Identity.Name;
+
+                
 
                 SickBayStatusDTO dto = _context.GetSickBayStatusAsync(id);
                 await _context.SaveChangesAsync();
@@ -166,13 +169,14 @@ namespace School_Web_Api.Controllers
         // POST: api/SickBays
         // Create a sick bay entry in Synergetic and sign out a student as well.
         [HttpPost]
-        public async Task<ActionResult<SickBay>> PostSickBay(SickBayDTO sickBay)
+        public async Task<ActionResult<SickBay>> PostSickBay(SickBayDTO sickBayDTO)
         {
             try
             {
-                _context.UpdateSickBaySignInOutAsync(sickBay);
+                SickBay sickBay = _context.UpdateSickBaySignInOutAsync(sickBayDTO);
                 await _context.SaveChangesAsync();
-                return CreatedAtAction("GetSickBay", new { seq = sickBay.Seq }, sickBay);
+                //return CreatedAtAction("GetSickBay", sickBay);
+                return Ok(sickBay);
             }
             catch (Exception e)
             {

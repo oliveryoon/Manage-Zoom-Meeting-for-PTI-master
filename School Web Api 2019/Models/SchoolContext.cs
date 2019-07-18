@@ -94,24 +94,24 @@ namespace SchoolWebAPI.Models
 
                 //Task<int> x = this.Database.ExecuteSqlCommandAsync(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam);
                 //await this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam).ToListAsync();
-                var sickbayInOut = this.Query<UspMusicLessonSignInOutUpdate>().FromSql(sqlQuery, iDParam, RequestedJobCodeParam, TerminalCodeParam, DateTimeCardSwipedParam).FirstOrDefault();
+                var musicLessonInOut = this.Query<UspMusicLessonSignInOutUpdate>().FromSql(sqlQuery, iDParam, RequestedJobCodeParam, TerminalCodeParam, DateTimeCardSwipedParam).FirstOrDefault();
                 MusicLesson musicLesson = new MusicLesson()
                 {
-                    Id = sickbayInOut.Id
+                    Id = musicLessonInOut.Id
                     ,
-                    Code = sickbayInOut.Code
+                    Code = musicLessonInOut.Code
                     ,
-                    DateTimeCreated = sickbayInOut.DateTimeCreated
+                    DateTimeCreated = musicLessonInOut.DateTimeCreated
                     ,
-                    DateTimeIn = sickbayInOut.DateTimeIn
+                    DateTimeIn = musicLessonInOut.DateTimeIn
                     ,
-                    DateTimeModified = sickbayInOut.DateTimeModified
+                    DateTimeModified = musicLessonInOut.DateTimeModified
                     ,
-                    DateTimeOut = sickbayInOut.DateTimeOut
+                    DateTimeOut = musicLessonInOut.DateTimeOut
                     ,
-                    Description = sickbayInOut.Description
+                    Description = musicLessonInOut.Description
                     ,
-                    Seq = sickbayInOut.Seq
+                    Seq = musicLessonInOut.Seq
                 };                
                 return musicLesson;
             }
@@ -163,7 +163,7 @@ namespace SchoolWebAPI.Models
         /// Create Sign In and Sign Out.  
         /// </summary>  
         /// <returns>Returns - Incident Record created or updated.</returns>  
-        public SickBayDTO UpdateSickBaySignInOutAsync(SickBayDTO sickBaySimple)
+        public SickBay UpdateSickBaySignInOutAsync(SickBayDTO sickBaySimple)
         {
             // Initialization.              
 
@@ -183,8 +183,20 @@ namespace SchoolWebAPI.Models
                 //Task<int> x = this.Database.ExecuteSqlCommandAsync(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam);
                 //await this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam).ToListAsync();
                 var sickbayInOut = this.Query<UspSickBaySignInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, RequestedJobCodeParam, TerminalCodeParam).FirstOrDefault();
-                sickBaySimple.Seq = sickbayInOut.Seq;
-                return sickBaySimple;
+                SickBay sickBay = new SickBay()
+                {
+                    Seq = sickbayInOut.Seq
+                    , Id = sickbayInOut.Id
+                    , IncidentDate = sickbayInOut.IncidentDate
+                    , TimeIn= sickbayInOut.TimeIn
+                    , TimeOut = sickbayInOut.TimeOut
+                    , DateTimeModified = sickbayInOut.DateTimeModified
+                    , UsernameModified = sickbayInOut.UsernameModified
+                    , Code = sickbayInOut.Code
+                    , Description = sickbayInOut.Description
+                };
+                
+                return sickBay;
             }
             catch (Exception ex)
             {

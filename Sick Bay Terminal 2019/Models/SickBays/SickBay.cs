@@ -17,6 +17,7 @@ namespace Sick_Bay_Terminal_2019.Models.SickBays
         public string UsernameModified { get; set; }
         public string Code { get; set; }
         public string Description { get; set; }
+
     }
     public class SickBayDTO // for Time in/out SickBay.
     {
