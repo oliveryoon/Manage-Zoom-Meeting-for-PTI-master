@@ -70,7 +70,7 @@ namespace Music_Lesson_Terminal_2019 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 48f89a46-a742-4f4f-b8f8-477932c73651.
+        ///   Looks up a localized string similar to d446190b-740f-4ec3-b249-fc0b85f2ebbf.
         /// </summary>
         internal static string ClientId {
             get {
