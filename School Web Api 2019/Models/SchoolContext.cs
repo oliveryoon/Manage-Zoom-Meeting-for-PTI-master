@@ -44,7 +44,7 @@ namespace SchoolWebAPI.Models
             modelBuilder.Entity<Student>().Property(s => s.Barcode).HasColumnName("StudentBarcode");
             modelBuilder.Entity<Student>().Property(s => s.Photo).HasColumnName("Photo");
 
-            modelBuilder.Entity<SickBay>().ToTable("uvMedicalIncidents", "webapi"); //8213
+            modelBuilder.Entity<SickBay>().ToTable("uvMedical_Incidents", "webapi"); //8213
             modelBuilder.Entity<SickBay>().Property(s => s.Seq).HasColumnName("Seq");
             modelBuilder.Entity<SickBay>().Property(s => s.Id).HasColumnName("ID");
             modelBuilder.Entity<SickBay>().Property(s => s.IncidentDate).HasColumnName("IncidentDate");
@@ -53,7 +53,7 @@ namespace SchoolWebAPI.Models
             modelBuilder.Entity<SickBay>().Property(s => s.DateTimeModified).HasColumnName("DateTimeModified");
             modelBuilder.Entity<SickBay>().Property(s => s.UsernameModified).HasColumnName("UsernameModified");
 
-            modelBuilder.Entity<MusicLesson>().ToTable("uvMusicLessons", "webapi"); //8213            
+            modelBuilder.Entity<MusicLesson>().ToTable("uvMusic_Lessons", "webapi"); //8213            
             modelBuilder.Entity<MusicLesson>().Property(s => s.Seq).HasColumnName("Seq"); // staff schedule seq.
             modelBuilder.Entity<MusicLesson>().Property(s => s.Id).HasColumnName("ID");
             modelBuilder.Entity<MusicLesson>().Property(s => s.DateTimeIn).HasColumnName("DateTimeIn");
@@ -90,7 +90,7 @@ namespace SchoolWebAPI.Models
                 // Processing.  
                 //;Workstation ID={0}|{1}\{2}
 
-                string sqlQuery = "EXEC webapi.uspMusicLessonAbsenceSignInOutUpdate @ID, @RequestedJobCode, @TerminalCode, @DateTimeCardSwiped";
+                string sqlQuery = "EXEC webapi.uspMusic_LessonAbsenceSignInOutUpdate @ID, @RequestedJobCode, @TerminalCode, @DateTimeCardSwiped";
 
                 //Task<int> x = this.Database.ExecuteSqlCommandAsync(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam);
                 //await this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam).ToListAsync();
@@ -143,7 +143,7 @@ namespace SchoolWebAPI.Models
                 // Processing.  
                 //;Workstation ID={0}|{1}\{2}
                 
-                string sqlQuery = "EXEC webapi.uspMusicLessonSignInOutUpdate @ID, @RequestedJobCode, @TerminalCode, @DateTimeCardSwiped";
+                string sqlQuery = "EXEC webapi.uspMusic_LessonSignInOutUpdate @ID, @RequestedJobCode, @TerminalCode, @DateTimeCardSwiped";
 
                 //Task<int> x = this.Database.ExecuteSqlCommandAsync(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam);
                 //await this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam).ToListAsync();
@@ -178,7 +178,7 @@ namespace SchoolWebAPI.Models
                 SqlParameter TerminalCodeParam = new SqlParameter("@TerminalCode", sickBaySimple.TerminalCode);
 
                 // Processing.  
-                string sqlQuery = "EXEC webapi.uspSickBaySignInOutUpdate @ID, @IncidentDate, @Time, @Username, @RequestedJobCode, @TerminalCode";
+                string sqlQuery = "EXEC webapi.uspMedical_SickBaySignInOutUpdate @ID, @IncidentDate, @Time, @Username, @RequestedJobCode, @TerminalCode";
 
                 //Task<int> x = this.Database.ExecuteSqlCommandAsync(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam);
                 //await this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam).ToListAsync();
@@ -220,7 +220,7 @@ namespace SchoolWebAPI.Models
                 SqlParameter terminalCodeParam = new SqlParameter("@TerminalCode", status.TerminalCode);
 
                 // Processing.  
-                string sqlQuery = "EXEC webapi.uspMusicLessonAbsenceStatusSelect @ID, @TerminalCode";
+                string sqlQuery = "EXEC webapi.uspMusic_LessonAbsenceStatusSelect @ID, @TerminalCode";
 
                 //Task<int> x = this.Database.ExecuteSqlCommandAsync(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam);
                 //await this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam).ToListAsync();
@@ -254,7 +254,7 @@ namespace SchoolWebAPI.Models
                 SqlParameter terminalCodeParam = new SqlParameter("@TerminalCode", status.TerminalCode);
 
                 // Processing.  
-                string sqlQuery = "EXEC webapi.uspMusicLessonStatusSelect @ID, @TerminalCode";
+                string sqlQuery = "EXEC webapi.uspMusic_LessonStatusSelect @ID, @TerminalCode";
 
                 //Task<int> x = this.Database.ExecuteSqlCommandAsync(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam);
                 //await this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam).ToListAsync();
@@ -286,7 +286,7 @@ namespace SchoolWebAPI.Models
                 SqlParameter iDParam = new SqlParameter("@ID", Id);
                 
                 // Processing.  
-                string sqlQuery = "EXEC webapi.uspSickBayStatusSelect @ID";
+                string sqlQuery = "EXEC webapi.uspMedical_SickBayStatusSelect @ID";
 
                 //Task<int> x = this.Database.ExecuteSqlCommandAsync(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam);
                 //await this.Query<UspSickBayInOutUpdate>().FromSql(sqlQuery, iDParam, incidentDateParam, timeParam, usernameParam, venueCodeParam).ToListAsync();

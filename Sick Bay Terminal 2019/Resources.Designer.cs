@@ -126,9 +126,9 @@ namespace Sick_Bay_Terminal_2019 {
         /// <summary>
         ///   Looks up a localized string similar to https://webapi.joeys.org.
         /// </summary>
-        internal static string WebApiBaseAddress3 {
+        internal static string WebApiBaseAddress2 {
             get {
-                return ResourceManager.GetString("WebApiBaseAddress3", resourceCulture);
+                return ResourceManager.GetString("WebApiBaseAddress2", resourceCulture);
             }
         }
     }

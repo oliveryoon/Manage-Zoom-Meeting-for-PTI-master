@@ -13,11 +13,6 @@
     
     <Window.Resources>
         
-        <!--<ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Styles\Style.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>-->
         
         <!-- Animates the rectangle's opacity. -->
         <Storyboard x:Name="storyBoardSimpleMessage" x:Key="storyBoardSimpleMessage">
@@ -51,10 +46,7 @@
               From="2.0" To="0.0" Duration="0:0:3.5"/>
         </Storyboard>
     </Window.Resources>
-    <Grid Height="507" VerticalAlignment="Top">
-        <!--<Grid.Background>
-            <ImageBrush ImageSource="/Assets/Joeys Terminal.JPG" Stretch="UniformToFill" ></ImageBrush>
-        </Grid.Background>-->
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="7*"/>
@@ -75,7 +67,7 @@
 
             <TextBlock FontSize="48" FontWeight="Bold" Text="Music Centre Terminal" Grid.Column="1" TextAlignment="Center" />
             <Border Grid.Column="2" HorizontalAlignment="Right">
-                <!--<TextBlock x:Name="clock"  TextWrapping="Wrap" Foreground="Black" VerticalAlignment="Center" Text="5:00" TextAlignment="Right" Margin="01" FontSize="30" />-->
+
                 <Label Name="lblTime" FontSize="28" HorizontalAlignment="Right" VerticalAlignment="Center" Content="5:00" />
             </Border>
 
@@ -94,11 +86,9 @@
             </Grid.ColumnDefinitions>
             <Image x:Name="imgStudentPhoto2" Source="/Assets/student.png" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="Auto" Height="Auto" Opacity="0.2" />
             <Border Name="popupStudentPhoto" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"  VerticalAlignment="Center" Opacity="0" Visibility="Visible" HorizontalAlignment="Center" CornerRadius="0" >
-                <!--Margin="-19,412,-20,237.2">-->
+
                 <Image x:Name="imgStudentPhoto" Source="/Assets/student.png" Margin="10,10,0,10.2"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="Auto" Height="Auto" />
             </Border>
-            <!--<Image x:Name="imgStudentPhoto" Source="/Assets/student.png" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" />-->
-            
             <TextBlock x:Name="txtStudentName" FontSize="25"   Text="txtStudentName" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center"
                             FontWeight="Bold" KeyboardNavigation.IsTabStop="False" />
             <Border Name="popupButtonSignInOut" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" VerticalAlignment="Center" Padding="0,0,13,0" >
@@ -108,23 +98,6 @@
                 <Button Name="btnCancel" KeyboardNavigation.IsTabStop="False" Content="Cancel" FontSize="50" Click="BtnCancel_Click" IsCancel="True" IsEnabled="False"></Button>
             </Border>
 
-            <!--<Image x:Name="imgStudentPhoto2" Source="/Assets/Joeys Terminal.JPG" Grid.Row="2"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="Auto" Height="Auto" Opacity="0.2" />-->
-            <!--
-                
-                <Border Name="popupPhoto" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" VerticalAlignment="Center" Opacity="1" Visibility="Visible" HorizontalAlignment="Center" CornerRadius="0" >
-                    -->
-            <!--Margin="-19,412,-20,237.2">-->
-            <!--
-                    <Image x:Name="imgStudentPhoto" Source="/Assets/Joeys Terminal.JPG" Height="auto" />
-                </Border>
-                <Border Name="popupStudentName" Grid.Row="2" Grid.Column="0"  VerticalAlignment="Center" Opacity="1" Visibility="Visible" 
-                        HorizontalAlignment="Stretch" CornerRadius="0" >
-                    <TextBlock x:Name="txtStudentName" FontSize="25"  HorizontalAlignment="Stretch"   Text="txtStudentName" 
-                                FontWeight="Bold"  />
-                </Border>-->
-
-
-
 
         </Grid>
 
@@ -133,9 +106,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <!--<TextBlock TextWrapping="Wrap"  Grid.Row="0" FontSize="26" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Center">
-                Scan your student card or enter your Student ID
-            </TextBlock>-->
+          
             <Border Background="Pink"  Grid.Row="1"  Visibility="Visible">
                 <PasswordBox x:Name="txtCardNumber" InputScope="Number" FontSize="30" Password="" HorizontalContentAlignment="Center" MaxLength="10" PasswordChar="&#x26AB;" IsTabStop="True" 
                     KeyUp="txtCardNumber_KeyUp" />
@@ -143,12 +114,6 @@
             <Label Name="lblMsg" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="Error Message" FontSize="30"></Label>
 
         </Grid>
-
-
-        <!-- Status Block for providing messages to the user.  Use the
-            NotifyUser() method to populate the message -->
-        <!--<Border x:Name="ErrorBorder" Background="Red" Grid.Row="2"/>
-        <TextBlock x:Name="StatusBlock" Grid.Row="2" Margin="12, 10, 12, 10" Visibility="Collapsed"/>-->
 
         <StackPanel x:Name="popupFail" Grid.Row="2"  Grid.ColumnSpan="3" VerticalAlignment="Center" Opacity="0" Visibility="Visible" HorizontalAlignment="Stretch" Background="White" >
             <Grid>

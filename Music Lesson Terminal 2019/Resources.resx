@@ -140,9 +140,9 @@
     <value>MUSIC-CENTRE1</value>
   </data>
   <data name="WebApiBaseAddress" xml:space="preserve">
-    <value>https://webapi.joeys.org</value>
-  </data>
-  <data name="WebApiBaseAddress1" xml:space="preserve">
     <value>http://localhost:5000</value>
+  </data>
+  <data name="WebApiBaseAddress12" xml:space="preserve">
+    <value>https://webapi.joeys.org</value>
   </data>
 </root>

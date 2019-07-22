@@ -36,17 +36,25 @@ namespace School_Web_Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Student>> GetStudent(long id)
         {
-            //var student = await _context.Students.FindAsync(id);
-            int localId = 0;
-            int.TryParse(id.ToString(), out localId);
-            Student student = await _context.Students.FirstOrDefaultAsync(x=>x.Id == localId || x.Barcode == id.ToString());
-
-            if (student == null)
+            try
             {
-                return NotFound();
-            }
+                //var student = await _context.Students.FindAsync(id);
+                int localId = 0;
+                int.TryParse(id.ToString(), out localId);
+                Student student = await _context.Students.FirstOrDefaultAsync(x => x.Id == localId || x.Barcode == id.ToString());
 
-            return student;
+                if (student == null)
+                {
+                    return NotFound();
+                }
+
+                return student;
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            
         }
 
         // PUT: api/Students/5
