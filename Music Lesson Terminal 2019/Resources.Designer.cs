@@ -124,7 +124,7 @@ namespace Music_Lesson_Terminal_2019 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://localhost:5000.
+        ///   Looks up a localized string similar to https://webapi.joeys.org.
         /// </summary>
         internal static string WebApiBaseAddress {
             get {
@@ -133,11 +133,11 @@ namespace Music_Lesson_Terminal_2019 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://webapi.joeys.org.
+        ///   Looks up a localized string similar to http://localhost:5000.
         /// </summary>
-        internal static string WebApiBaseAddress12 {
+        internal static string WebApiBaseAddress2 {
             get {
-                return ResourceManager.GetString("WebApiBaseAddress12", resourceCulture);
+                return ResourceManager.GetString("WebApiBaseAddress2", resourceCulture);
             }
         }
     }

@@ -42,7 +42,7 @@ namespace SchoolWebApi
             
             services.AddProtectWebApiWithMicrosoftIdentityPlatformV2(Configuration);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
-            
+            services.AddCors();
             services.AddMvc();
         }
 
@@ -60,6 +60,12 @@ namespace SchoolWebApi
             //    routeBuilder.Expand().Select().OrderBy().Filter();
 
             //});
+            //exceptions for web origins for script calls.
+            string[] origins = { "http://localhost:4200", "https://*.joeys.org" };
+            app.UseCors(options =>
+                options.WithOrigins(origins).AllowAnyMethod().AllowAnyHeader());
+
+
             app.UseAuthentication();
             app.UseMvc();
         }

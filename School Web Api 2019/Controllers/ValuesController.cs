@@ -18,6 +18,7 @@ namespace School_Web_Api.Controllers
         {
             List<Hero> heroes = new List<Hero>();
             heroes.Add(new Hero() { id = 1, name = "Dr XXX" });
+            heroes.Add(new Hero() { id = 2, name = "Dr Yoon" });
 
             return heroes;
         }
